@@ -16,19 +16,8 @@ export default function SourceFund() {
   return (
     <MobileLayout title="Source of Funds">
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-        <div className="text-center py-2 space-y-4">
+        <div className="text-center py-2">
            <p className="text-sm text-gray-500">Please declare the source of these funds</p>
-           
-           {/* Current Payment Method Display */}
-           <div className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 max-w-[280px] mx-auto shadow-sm">
-             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-               <Wallet className="h-5 w-5" />
-             </div>
-             <div className="text-left">
-               <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Paying with</p>
-               <p className="font-bold text-gray-900">MyPCS Wallet</p>
-             </div>
-           </div>
         </div>
 
         <div className="space-y-3">
