@@ -27,9 +27,19 @@ export default function Preview() {
 
         {/* Details List */}
         <Card className="p-5 space-y-4 border-gray-100 shadow-sm">
-          <h3 className="font-semibold text-gray-900">Transaction Details</h3>
+          <h3 className="font-semibold text-gray-900">Transfer Details</h3>
           
           <div className="space-y-3 text-sm">
+            <div className="flex justify-between items-start">
+              <span className="text-gray-500">Recipient Bank</span>
+              <div className="text-right">
+                <p className="font-bold text-gray-900">Chase Bank</p>
+                <p className="text-[10px] text-gray-400 font-medium tracking-wide uppercase">Acc: **** 1234</p>
+              </div>
+            </div>
+            
+            <Separator className="bg-gray-50" />
+
             <div className="flex justify-between">
               <span className="text-gray-500">You Send</span>
               <span className="font-medium">€ 1,000.00</span>
