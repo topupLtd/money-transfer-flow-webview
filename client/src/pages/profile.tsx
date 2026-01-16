@@ -34,72 +34,23 @@ export default function Profile() {
         </div>
 
         {/* Info Section */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center px-1">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Personal Information</h3>
-            <button 
-              onClick={() => setLocation("/edit-profile")}
-              className="text-xs font-bold text-primary hover:underline"
-            >
-              Edit
-            </button>
-          </div>
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-300 uppercase">First Name</p>
-                <p className="font-semibold text-gray-900">John</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-300 uppercase">Last Name</p>
-                <p className="font-semibold text-gray-900">Doe</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-300 uppercase">Date of Birth</p>
-                <p className="font-semibold text-gray-900">Jan 1, 1990</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-300 uppercase">Gender</p>
-                <p className="font-semibold text-gray-900">Male</p>
-              </div>
-            </div>
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-gray-300 uppercase">Nationality</p>
-               <p className="font-semibold text-gray-900">French</p>
-            </div>
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-gray-300 uppercase">Email Address</p>
-               <p className="font-semibold text-gray-900">john.doe@example.com</p>
-            </div>
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-gray-300 uppercase">Mobile Number</p>
-               <p className="font-semibold text-gray-900">+33 6 12 34 56 78</p>
-            </div>
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-gray-300 uppercase">Occupation</p>
-               <p className="font-semibold text-gray-900">Software Engineer</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-300 uppercase">Expected Monthly</p>
-                <p className="font-semibold text-gray-900">€ 2,000</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-300 uppercase">Times / Month</p>
-                <p className="font-semibold text-gray-900">4</p>
-              </div>
-            </div>
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-gray-300 uppercase">Address</p>
-               <p className="font-semibold text-gray-900">123 Rue de la Paix, Paris, France</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Menu Items */}
         <div className="space-y-3">
+          <button 
+            onClick={() => setLocation("/profile-details")}
+            className="w-full flex items-center justify-between p-4 bg-white border border-gray-50 rounded-xl shadow-sm hover:border-primary/20 transition-all group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center text-primary bg-primary/10">
+                <User className="h-5 w-5" />
+              </div>
+              <div className="text-left">
+                <span className="font-bold text-gray-900 text-sm block">Personal Information</span>
+                <span className="text-[10px] text-gray-400 font-medium">View and manage your details</span>
+              </div>
+            </div>
+            <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-primary" />
+          </button>
+
           {menuItems.map((item, idx) => (
             <button 
               key={idx}
