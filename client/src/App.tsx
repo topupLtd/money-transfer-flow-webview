@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import SendMoney from "@/pages/send-money";
+import SelectRecipient from "@/pages/select-recipient";
 import Recipients from "@/pages/recipients";
 import RecipientDetail from "@/pages/recipient-detail";
 import SourceFund from "@/pages/source-fund";
@@ -20,6 +21,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={SendMoney} />
+      <Route path="/select-recipient" component={SelectRecipient} />
       <Route path="/recipients" component={Recipients} />
       <Route path="/recipients/:id" component={RecipientDetail} />
       <Route path="/source" component={SourceFund} />

@@ -4,7 +4,7 @@ import { Search, Plus, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-export default function Recipients() {
+export default function SelectRecipient() {
   const [, setLocation] = useLocation();
 
   const recipients = [
@@ -15,7 +15,7 @@ export default function Recipients() {
   ];
 
   return (
-    <MobileLayout title="Recipients">
+    <MobileLayout title="Select Recipient">
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Search */}
@@ -37,13 +37,13 @@ export default function Recipients() {
 
         {/* Recipient List */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">My Recipients</h3>
+          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Recent Recipients</h3>
           
           <div className="space-y-2">
             {recipients.map((recipient) => (
               <div 
                 key={recipient.id}
-                onClick={() => setLocation(`/recipients/${recipient.id}`)}
+                onClick={() => setLocation("/source")}
                 className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
               >
                 <Avatar className="h-12 w-12 border-2 border-white shadow-sm">

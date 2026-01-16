@@ -228,7 +228,7 @@ export default function SendMoney() {
         <Button 
           className="w-full h-12 text-base font-semibold rounded-xl shadow-md mt-4 bg-primary hover:bg-primary/90" 
           size="lg"
-          onClick={() => setLocation("/recipients")}
+          onClick={() => setLocation("/select-recipient")}
         >
           Continue
         </Button>
