@@ -6,24 +6,28 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import SendMoney from "@/pages/send-money";
 import Recipients from "@/pages/recipients";
+import RecipientDetail from "@/pages/recipient-detail";
 import SourceFund from "@/pages/source-fund";
 import TransferReason from "@/pages/transfer-reason";
 import Preview from "@/pages/preview";
 import Success from "@/pages/success";
 import Transactions from "@/pages/transactions";
-import Settings from "@/pages/settings";
+import TransactionDetail from "@/pages/transaction-detail";
+import Profile from "@/pages/profile";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={SendMoney} />
       <Route path="/recipients" component={Recipients} />
+      <Route path="/recipients/:id" component={RecipientDetail} />
       <Route path="/source" component={SourceFund} />
       <Route path="/reason" component={TransferReason} />
       <Route path="/preview" component={Preview} />
       <Route path="/success" component={Success} />
       <Route path="/transactions" component={Transactions} />
-      <Route path="/settings" component={Settings} />
+      <Route path="/transactions/:id" component={TransactionDetail} />
+      <Route path="/profile" component={Profile} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Send, Users, List, Settings } from "lucide-react";
+import { Send, Users, List, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MobileLayout({ children, title }: { children: React.ReactNode; title?: string }) {
@@ -9,7 +9,7 @@ export default function MobileLayout({ children, title }: { children: React.Reac
     { href: "/", icon: Send, label: "Send" },
     { href: "/recipients", icon: Users, label: "Recipients" },
     { href: "/transactions", icon: List, label: "History" },
-    { href: "/settings", icon: Settings, label: "Settings" },
+    { href: "/profile", icon: User, label: "Profile" },
   ];
 
   return (

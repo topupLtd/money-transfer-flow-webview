@@ -1,8 +1,10 @@
 import MobileLayout from "@/components/layout/MobileLayout";
 import { CheckCircle2, ChevronRight, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useLocation } from "wouter";
 
 export default function Transactions() {
+  const [, setLocation] = useLocation();
   const transactions = [
     { id: 1, recipient: "Maria Garcia", amount: "€ 950.00", date: "Jan 16, 2026", status: "Completed", type: "Bank Deposit" },
     { id: 2, recipient: "Jean Pierre", amount: "€ 1,200.00", date: "Jan 12, 2026", status: "Processing", type: "Wallet" },
@@ -27,6 +29,7 @@ export default function Transactions() {
             {transactions.map((tx) => (
               <div 
                 key={tx.id}
+                onClick={() => setLocation(`/transactions/${tx.id}`)}
                 className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:shadow-md transition-all cursor-pointer group"
               >
                 <div className={`h-12 w-12 rounded-full flex items-center justify-center shrink-0 ${
