@@ -14,6 +14,7 @@ import Success from "@/pages/success";
 import Transactions from "@/pages/transactions";
 import TransactionDetail from "@/pages/transaction-detail";
 import Profile from "@/pages/profile";
+import EditProfile from "@/pages/edit-profile";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/transactions" component={Transactions} />
       <Route path="/transactions/:id" component={TransactionDetail} />
       <Route path="/profile" component={Profile} />
+      <Route path="/edit-profile" component={EditProfile} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -35,15 +35,31 @@ export default function Profile() {
 
         {/* Info Section */}
         <div className="space-y-4">
-          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Personal Information</h3>
+          <div className="flex justify-between items-center px-1">
+            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Personal Information</h3>
+            <button 
+              onClick={() => setLocation("/edit-profile")}
+              className="text-xs font-bold text-primary hover:underline"
+            >
+              Edit
+            </button>
+          </div>
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-            <div className="space-y-1.5">
-               <Label className="text-[10px] font-bold text-gray-300 uppercase">Full Name</Label>
-               <Input defaultValue="John Doe" className="h-10 border-none bg-gray-50 rounded-lg font-medium text-sm" />
+            <div className="space-y-1">
+               <p className="text-[10px] font-bold text-gray-300 uppercase">Full Name</p>
+               <p className="font-semibold text-gray-900">John Doe</p>
             </div>
-            <div className="space-y-1.5">
-               <Label className="text-[10px] font-bold text-gray-300 uppercase">Phone Number</Label>
-               <Input defaultValue="+33 6 12 34 56 78" className="h-10 border-none bg-gray-50 rounded-lg font-medium text-sm" />
+            <div className="space-y-1">
+               <p className="text-[10px] font-bold text-gray-300 uppercase">Mobile Number</p>
+               <p className="font-semibold text-gray-900">+33 6 12 34 56 78</p>
+            </div>
+            <div className="space-y-1">
+               <p className="text-[10px] font-bold text-gray-300 uppercase">Address</p>
+               <p className="font-semibold text-gray-900">123 Rue de la Paix, Paris, France</p>
+            </div>
+            <div className="space-y-1">
+               <p className="text-[10px] font-bold text-gray-300 uppercase">Date of Birth</p>
+               <p className="font-semibold text-gray-900">Jan 1, 1990</p>
             </div>
           </div>
         </div>
