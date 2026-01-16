@@ -57,7 +57,7 @@ export default function Recipients() {
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
-                    setLocation(`/recipients/${recipient.id}`);
+                    setLocation(`/transactions`);
                   }}
                   className="h-10 w-10 rounded-full flex items-center justify-center text-gray-300 hover:text-primary hover:bg-primary/5 transition-all"
                 >
