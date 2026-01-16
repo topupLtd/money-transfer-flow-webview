@@ -6,12 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function SendMoney() {
   const [, setLocation] = useLocation();
   const [sendAmount, setSendAmount] = useState("1000");
   const [receiveAmount, setReceiveAmount] = useState("950");
+  const [deliveryMethod, setDeliveryMethod] = useState("bank");
   const exchangeRate = 0.95;
 
   const handleSendChange = (val: string) => {
@@ -87,16 +94,35 @@ export default function SendMoney() {
         {/* Delivery Method */}
         <div className="space-y-3">
           <Label className="text-base font-semibold text-gray-900">Delivery Method</Label>
-          <div className="grid grid-cols-2 gap-3">
-            <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 border-primary bg-primary/5 text-primary transition-all">
-              <Building2 className="h-6 w-6" />
-              <span className="font-medium text-sm">Bank Deposit</span>
-            </button>
-            <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-gray-200 bg-white text-gray-600 hover:border-gray-300 transition-all">
-              <Wallet className="h-6 w-6" />
-              <span className="font-medium text-sm">Mobile Wallet</span>
-            </button>
-          </div>
+          <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
+            <SelectTrigger className="w-full h-14 bg-white rounded-xl border-gray-200 focus:ring-primary">
+              <SelectValue placeholder="Select delivery method" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+              <SelectItem value="bank" className="py-3 cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <Building2 className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="font-semibold text-sm">Bank Deposit</span>
+                    <span className="text-[10px] text-gray-400">Arrives in 1-2 business days</span>
+                  </div>
+                </div>
+              </SelectItem>
+              <SelectItem value="wallet" className="py-3 cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                    <Wallet className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="font-semibold text-sm">Mobile Wallet</span>
+                    <span className="text-[10px] text-gray-400">Arrives instantly</span>
+                  </div>
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Promo Code */}
