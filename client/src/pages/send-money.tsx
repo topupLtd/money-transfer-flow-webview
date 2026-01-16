@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { ArrowRightLeft, ChevronDown, Wallet, Building2, Tag } from "lucide-react";
+import { ArrowRightLeft, ChevronDown, Wallet, Building2, Tag, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -13,22 +13,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
+const COUNTRIES = [
+  { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", rate: 1450 },
+  { code: "KE", name: "Kenya", currency: "KES", flag: "https://flagcdn.com/w40/ke.png", rate: 130 },
+  { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5 },
+  { code: "PH", name: "Philippines", currency: "PHP", flag: "https://flagcdn.com/w40/ph.png", rate: 56.2 },
+  { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", rate: 83.1 },
+  { code: "VN", name: "Vietnam", currency: "VND", flag: "https://flagcdn.com/w40/vn.png", rate: 24500 },
+];
+
+const PROMOS = [
+  { id: "FIRSTFREE", label: "First Transfer Free", discount: "100% Fee Off" },
+  { id: "WELCOME5", label: "Welcome Bonus", discount: "$5.00 Off" },
+  { id: "SAVE10", label: "Summer Special", discount: "10% Off Fee" },
+];
 
 export default function SendMoney() {
   const [, setLocation] = useLocation();
   const [sendAmount, setSendAmount] = useState("1000");
-  const [receiveAmount, setReceiveAmount] = useState("950");
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
   const [deliveryMethod, setDeliveryMethod] = useState("bank");
-  const exchangeRate = 0.95;
+  const [promoCode, setPromoCode] = useState("");
 
-  const handleSendChange = (val: string) => {
-    setSendAmount(val);
-    if (!isNaN(parseFloat(val))) {
-      setReceiveAmount((parseFloat(val) * exchangeRate).toFixed(2));
-    } else {
-      setReceiveAmount("");
-    }
-  };
+  const receiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toLocaleString();
 
   return (
     <MobileLayout title="Send Money">
@@ -41,20 +59,19 @@ export default function SendMoney() {
               <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">You Send</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative">
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">$</span>
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">€</span>
                   <Input 
                     type="number" 
                     value={sendAmount}
-                    onChange={(e) => handleSendChange(e.target.value)}
+                    onChange={(e) => setSendAmount(e.target.value)}
                     className="border-none shadow-none text-3xl font-bold p-0 pl-6 h-auto focus-visible:ring-0" 
                     placeholder="0.00"
                   />
                 </div>
-                <Button variant="outline" className="rounded-full px-3 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100">
-                  <img src="https://flagcdn.com/w40/us.png" className="w-5 h-5 rounded-full object-cover" alt="USD" />
-                  <span className="font-semibold">USD</span>
-                  <ChevronDown className="h-4 w-4 opacity-50" />
-                </Button>
+                <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
+                  <img src="https://flagcdn.com/w40/eu.png" className="w-5 h-5 rounded-full object-cover" alt="EUR" />
+                  <span className="font-semibold text-sm">EUR</span>
+                </div>
               </div>
             </div>
 
@@ -67,27 +84,42 @@ export default function SendMoney() {
             <div className="space-y-2">
               <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">They Receive</Label>
               <div className="flex items-center gap-3">
-                <div className="flex-1 relative">
-                   <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">€</span>
+                <div className="flex-1 relative overflow-hidden">
                   <Input 
-                    type="number" 
                     value={receiveAmount}
                     readOnly
-                    className="border-none shadow-none text-3xl font-bold p-0 pl-6 h-auto focus-visible:ring-0 text-primary" 
-                    placeholder="0.00"
+                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate" 
                   />
                 </div>
-                 <Button variant="outline" className="rounded-full px-3 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100">
-                  <img src="https://flagcdn.com/w40/eu.png" className="w-5 h-5 rounded-full object-cover" alt="EUR" />
-                  <span className="font-semibold">EUR</span>
-                  <ChevronDown className="h-4 w-4 opacity-50" />
-                </Button>
+                <Select 
+                  value={selectedCountry.code} 
+                  onValueChange={(code) => setSelectedCountry(COUNTRIES.find(c => c.code === code) || COUNTRIES[0])}
+                >
+                  <SelectTrigger className="w-auto h-auto rounded-full px-3 py-2 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100 border focus:ring-0">
+                    <SelectValue>
+                      <div className="flex items-center gap-2">
+                        <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.name} />
+                        <span className="font-semibold text-sm">{selectedCountry.currency}</span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-gray-100">
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c.code} value={c.code}>
+                        <div className="flex items-center gap-2">
+                          <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt={c.name} />
+                          <span>{c.name} ({c.currency})</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
           <div className="bg-gray-50 px-5 py-3 text-xs text-gray-500 flex justify-between items-center">
             <span>Exchange Rate</span>
-            <span className="font-medium text-gray-900">1 USD = {exchangeRate} EUR</span>
+            <span className="font-medium text-gray-900">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
           </div>
         </Card>
 
@@ -125,20 +157,76 @@ export default function SendMoney() {
           </Select>
         </div>
 
-        {/* Promo Code */}
+        {/* Promo Code Drawer */}
         <div className="space-y-3">
            <Label className="text-base font-semibold text-gray-900">Promo Code</Label>
-           <div className="flex gap-2">
-             <div className="relative flex-1">
-               <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-               <Input placeholder="Enter code (optional)" className="pl-9 bg-white" />
-             </div>
-             <Button variant="outline" className="text-primary border-primary/20 hover:bg-primary/5">Apply</Button>
-           </div>
+           <Drawer>
+             <DrawerTrigger asChild>
+               <button className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                 <div className="flex items-center gap-3">
+                   <Tag className="h-5 w-5 text-primary" />
+                   <span className={promoCode ? "font-semibold text-primary" : "text-gray-400"}>
+                     {promoCode ? `Applied: ${promoCode}` : "Apply Promo Code"}
+                   </span>
+                 </div>
+                 <ChevronDown className="h-4 w-4 text-gray-400" />
+               </button>
+             </DrawerTrigger>
+             <DrawerContent className="max-w-md mx-auto">
+               <DrawerHeader>
+                 <DrawerTitle>Promotions</DrawerTitle>
+                 <DrawerDescription>Enter a code or select from the list below</DrawerDescription>
+               </DrawerHeader>
+               <div className="px-4 py-4 space-y-6">
+                 <div className="flex gap-2">
+                   <Input 
+                     placeholder="Enter code" 
+                     className="bg-gray-50 border-none h-12 rounded-xl"
+                     value={promoCode}
+                     onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                   />
+                   <DrawerClose asChild>
+                     <Button className="h-12 px-6 rounded-xl">Apply</Button>
+                   </DrawerClose>
+                 </div>
+                 
+                 <div className="space-y-3">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Available Offers</p>
+                    {PROMOS.map((promo) => (
+                      <button 
+                        key={promo.id}
+                        onClick={() => setPromoCode(promo.id)}
+                        className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left ${
+                          promoCode === promo.id ? "border-primary bg-primary/5" : "border-gray-100 bg-white"
+                        }`}
+                      >
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                          promoCode === promo.id ? "bg-primary text-white" : "bg-gray-100 text-gray-400"
+                        }`}>
+                          <Percent className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-bold text-gray-900">{promo.label}</p>
+                          <p className="text-xs text-gray-500">{promo.discount}</p>
+                        </div>
+                        {promoCode === promo.id && (
+                          <div className="h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-bold">✓</div>
+                        )}
+                      </button>
+                    ))}
+                 </div>
+               </div>
+               <DrawerFooter>
+                 <DrawerClose asChild>
+                   <Button variant="ghost">Close</Button>
+                 </DrawerClose>
+               </DrawerFooter>
+             </DrawerContent>
+           </Drawer>
         </div>
 
         <Button 
-          className="w-full h-12 text-base font-semibold rounded-xl shadow-md mt-4" 
+          className="w-full h-12 text-base font-semibold rounded-xl shadow-md mt-4 bg-primary hover:bg-primary/90" 
           size="lg"
           onClick={() => setLocation("/recipients")}
         >

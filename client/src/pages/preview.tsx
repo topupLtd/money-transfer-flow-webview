@@ -3,7 +3,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, Wallet } from "lucide-react";
 
 export default function Preview() {
   const [, setLocation] = useLocation();
@@ -32,26 +32,26 @@ export default function Preview() {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-500">You Send</span>
-              <span className="font-medium">$ 1,000.00</span>
+              <span className="font-medium">€ 1,000.00</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Exchange Rate</span>
-              <span className="font-medium">1 USD = 0.95 EUR</span>
+              <span className="font-medium text-primary">1 EUR = 0.95 EUR</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Transfer Fee</span>
-              <span className="font-medium text-green-600">Free</span>
+              <span className="font-medium text-secondary">Free</span>
             </div>
              <div className="flex justify-between">
               <span className="text-gray-500">Discount</span>
-              <span className="font-medium text-green-600">-$ 5.00</span>
+              <span className="font-medium text-secondary">-€ 5.00</span>
             </div>
             
             <Separator />
             
             <div className="flex justify-between items-center pt-1">
               <span className="font-semibold text-gray-900">Total to Pay</span>
-              <span className="text-xl font-bold text-primary">$ 995.00</span>
+              <span className="text-xl font-bold text-primary">€ 995.00</span>
             </div>
           </div>
         </Card>
@@ -59,18 +59,18 @@ export default function Preview() {
         {/* Payment Method */}
         <Card className="p-4 flex items-center justify-between border-gray-100 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center">
-              <span className="font-bold text-gray-600">V</span>
+            <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+              <Wallet className="h-5 w-5" />
             </div>
             <div>
-               <p className="font-medium text-gray-900">Visa Debit</p>
-               <p className="text-xs text-gray-500">**** 4582</p>
+               <p className="font-bold text-gray-900 text-sm">MyPCS Wallet</p>
+               <p className="text-xs text-gray-500">Balance: € 1,240.50</p>
             </div>
           </div>
-          <Button variant="ghost" className="text-primary text-sm h-auto p-0 hover:bg-transparent">Change</Button>
+          <Button variant="ghost" className="text-primary text-xs font-bold h-auto p-0 hover:bg-transparent">Change</Button>
         </Card>
 
-        <div className="bg-blue-50 p-3 rounded-lg flex gap-3 items-start">
+        <div className="bg-blue-50 p-3 rounded-xl flex gap-3 items-start">
            <ShieldCheck className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
            <p className="text-xs text-blue-700 leading-tight">
              Your transfer is encrypted and secure. By tapping "Send Now", you agree to our Terms of Service.
