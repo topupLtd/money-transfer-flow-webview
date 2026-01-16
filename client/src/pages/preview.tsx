@@ -64,10 +64,9 @@ export default function Preview() {
             </div>
             <div>
                <p className="font-bold text-gray-900 text-sm">MyPCS Wallet</p>
-               <p className="text-xs text-gray-500">Balance: € 1,240.50</p>
+               <p className="text-[10px] text-gray-400 font-medium">Payment will be deducted from your app wallet</p>
             </div>
           </div>
-          <Button variant="ghost" className="text-primary text-xs font-bold h-auto p-0 hover:bg-transparent">Change</Button>
         </Card>
 
         <div className="bg-blue-50 p-3 rounded-xl flex gap-3 items-start">
