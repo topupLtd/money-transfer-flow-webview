@@ -17,6 +17,7 @@ import TransactionDetail from "@/pages/transaction-detail";
 import Profile from "@/pages/profile";
 import ProfileDetails from "@/pages/profile-details";
 import EditProfile from "@/pages/edit-profile";
+import TransferLimits from "@/pages/transfer-limits";
 
 function Router() {
   return (
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path="/profile-details" component={ProfileDetails} />
       <Route path="/edit-profile" component={EditProfile} />
+      <Route path="/transfer-limits" component={TransferLimits} />
       <Route component={NotFound} />
     </Switch>
   );

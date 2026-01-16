@@ -51,6 +51,22 @@ export default function Profile() {
             <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-primary" />
           </button>
 
+          <button 
+            onClick={() => setLocation("/transfer-limits")}
+            className="w-full flex items-center justify-between p-4 bg-white border border-gray-50 rounded-xl shadow-sm hover:border-primary/20 transition-all group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center text-secondary bg-secondary/10">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div className="text-left">
+                <span className="font-bold text-gray-900 text-sm block">Transfer Limits</span>
+                <span className="text-[10px] text-gray-400 font-medium">Daily, monthly & yearly allowances</span>
+              </div>
+            </div>
+            <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-primary" />
+          </button>
+
           {menuItems.map((item, idx) => (
             <button 
               key={idx}
