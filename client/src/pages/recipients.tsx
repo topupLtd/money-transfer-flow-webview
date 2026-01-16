@@ -45,7 +45,7 @@ export default function Recipients() {
                 key={recipient.id}
                 className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
               >
-                <div onClick={() => setLocation("/source")} className="flex flex-1 items-center gap-4">
+                <div onClick={() => setLocation(`/recipients/${recipient.id}`)} className="flex flex-1 items-center gap-4">
                   <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
                     <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
                   </Avatar>
@@ -57,7 +57,7 @@ export default function Recipients() {
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
-                    setLocation(`/transactions`);
+                    setLocation(`/source`);
                   }}
                   className="h-10 w-10 rounded-full flex items-center justify-center text-gray-300 hover:text-primary hover:bg-primary/5 transition-all"
                 >
