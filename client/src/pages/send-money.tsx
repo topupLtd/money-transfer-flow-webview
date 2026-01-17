@@ -143,7 +143,7 @@ export default function SendMoney() {
                       </div>
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+                  <SelectContent className="rounded-xl border-gray-100 shadow-xl max-h-[300px] overflow-y-auto">
                     {COUNTRIES.map((c) => (
                       <SelectItem key={c.code} value={c.code}>
                         <div className="flex items-center gap-2">
