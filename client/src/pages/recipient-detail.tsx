@@ -265,25 +265,25 @@ export default function RecipientDetail() {
 
         {/* Personal Details Section */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 px-1">
+          <div className="flex items-center gap-2 px-1 border-b border-gray-100 pb-2">
             <User className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Personal Details</h3>
           </div>
-          <Card className="p-5 space-y-4 border-gray-100">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase">First Name</Label>
-                <Input defaultValue="Maria" className="h-11 border-none bg-gray-50 rounded-xl font-semibold" />
+          <div className="px-1 space-y-6 pt-2">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
+                <Input defaultValue="Maria" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
               </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase">Last Name</Label>
-                <Input defaultValue="Garcia" className="h-11 border-none bg-gray-50 rounded-xl font-semibold" />
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
+                <Input defaultValue="Garcia" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] font-bold text-gray-400 uppercase">Relationship</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
               <Select defaultValue="family">
-                <SelectTrigger className="h-11 border-none bg-gray-50 rounded-xl font-semibold">
+                <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
@@ -293,22 +293,22 @@ export default function RecipientDetail() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] font-bold text-gray-400 uppercase">Phone Number</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
               <div className="flex gap-2">
-                <div className="flex items-center gap-2 w-24 h-11 border-none bg-gray-50 rounded-xl px-3 opacity-70">
+                <div className="flex items-center gap-2 w-24 h-12 border-none bg-gray-100 rounded-xl px-3 opacity-70">
                   <img src={currentCountry.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
                   <span className="text-sm font-semibold">{currentCountry.dialCode}</span>
                 </div>
-                <Input defaultValue="8012345678" className="flex-1 h-11 border-none bg-gray-50 rounded-xl font-semibold" />
+                <Input defaultValue="8012345678" className="flex-1 h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
               </div>
             </div>
-          </Card>
+          </div>
         </section>
 
         {/* Delivery Accounts Section */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between px-1">
+        <section className="space-y-4 pt-4">
+          <div className="flex items-center justify-between px-1 border-b border-gray-100 pb-2">
             <div className="flex items-center gap-2">
               <CreditCard className="h-4 w-4 text-primary" />
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Delivery Accounts</h3>
@@ -322,25 +322,25 @@ export default function RecipientDetail() {
             </Button>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4 px-1">
             {accounts.map((account) => (
-              <Card key={account.id} className="p-4 border-gray-100 flex items-center gap-4 hover:border-primary/20 transition-all">
-                <div className="h-10 w-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
-                  {account.type === "bank" ? <Landmark className="h-5 w-5" /> : <Wallet className="h-5 w-5" />}
+              <div key={account.id} className="flex items-center gap-4 py-2 group">
+                <div className="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/5 group-hover:text-primary transition-colors">
+                  {account.type === "bank" ? <Landmark className="h-6 w-6" /> : <Wallet className="h-6 w-6" />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-gray-900">{account.provider}</p>
-                  <p className="text-[11px] text-gray-500 font-medium truncate">{account.identifier}</p>
+                  <p className="text-sm font-bold text-gray-900">{account.provider}</p>
+                  <p className="text-xs text-gray-500 font-medium">{account.identifier}</p>
                 </div>
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="h-8 w-8 text-gray-300 hover:text-red-500"
+                  className="h-9 w-9 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl"
                   onClick={() => removeAccount(account.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
-              </Card>
+              </div>
             ))}
           </div>
         </section>
