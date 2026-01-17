@@ -3,12 +3,20 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, Info, Landmark, Smartphone } from "lucide-react";
+import { ChevronLeft, Info, Landmark, Smartphone, ChevronDown } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectTrigger } from "@/components/ui/select";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState } from "react";
 
 export default function TransferLimits() {
   const [, setLocation] = useLocation();
+  const [openItems, setOpenItems] = useState<string[]>([]);
+
+  const toggleItem = (code: string) => {
+    setOpenItems(prev => 
+      prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
+    );
+  };
 
   const usageStats = [
     {
@@ -124,43 +132,47 @@ export default function TransferLimits() {
                   { country: "Nigeria", code: "NG", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "1,000,000 NGN" }] },
                   { country: "Senegal", code: "SN", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "1,000,000 XOF" }, { name: "Mobile Wallet", icon: Smartphone, limit: "500,000 XOF" }] },
                   { country: "Morocco", code: "MA", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "50,000 MAD" }] },
-                ].map((item, idx) => (
-                  <Card key={idx} className="border-gray-100 shadow-sm overflow-hidden">
-                    <Select>
-                      <SelectTrigger className="w-full h-auto p-5 border-none shadow-none flex items-center justify-between hover:bg-gray-50 transition-colors focus:ring-0">
-                        <div className="flex items-center gap-3">
-                          <img src={`https://flagcdn.com/w40/${item.code.toLowerCase()}.png`} className="w-6 h-6 rounded-full object-cover" alt={item.country} />
-                          <h3 className="font-bold text-gray-900">{item.country}</h3>
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent className="border-gray-100 shadow-xl rounded-xl">
-                        <div className="p-2 space-y-4">
-                          {item.methods.map((method, mIdx) => (
-                            <div key={mIdx} className="space-y-3 p-3 bg-gray-50 rounded-lg">
-                              <div className="flex items-center gap-2 border-b border-gray-200 pb-2 mb-2">
-                                <method.icon className="h-4 w-4 text-primary" />
-                                <span className="font-bold text-sm text-gray-900">{method.name}</span>
+                ].map((item, idx) => {
+                  const isOpen = openItems.includes(item.code);
+                  return (
+                    <Card key={idx} className="border-gray-100 shadow-sm overflow-hidden bg-white">
+                      <Collapsible open={isOpen} onOpenChange={() => toggleItem(item.code)}>
+                        <CollapsibleTrigger className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <img src={`https://flagcdn.com/w40/${item.code.toLowerCase()}.png`} className="w-6 h-6 rounded-full object-cover" alt={item.country} />
+                            <h3 className="font-bold text-gray-900">{item.country}</h3>
+                          </div>
+                          <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <div className="px-5 pb-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                            {item.methods.map((method, mIdx) => (
+                              <div key={mIdx} className="space-y-3 p-4 bg-gray-50 rounded-xl">
+                                <div className="flex items-center gap-2 border-b border-gray-200 pb-2 mb-2">
+                                  <method.icon className="h-4 w-4 text-primary" />
+                                  <span className="font-bold text-sm text-gray-900">{method.name}</span>
+                                </div>
+                                <div className="space-y-2">
+                                  {[
+                                    { label: "Single Transfer", value: method.limit },
+                                    { label: "Daily Limit", value: method.limit },
+                                    { label: "Monthly Limit", value: `5x ${method.limit}` },
+                                    { label: "Yearly Limit", value: `20x ${method.limit}` },
+                                  ].map((row, rIdx) => (
+                                    <div key={rIdx} className="flex justify-between items-center text-xs">
+                                      <span className="text-gray-500">{row.label}</span>
+                                      <span className="font-bold text-gray-900">{row.value}</span>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                              <div className="space-y-2">
-                                {[
-                                  { label: "Single Transfer", value: method.limit },
-                                  { label: "Daily Limit", value: method.limit },
-                                  { label: "Monthly Limit", value: `5x ${method.limit}` },
-                                  { label: "Yearly Limit", value: `20x ${method.limit}` },
-                                ].map((row, rIdx) => (
-                                  <div key={rIdx} className="flex justify-between items-center text-xs">
-                                    <span className="text-gray-500">{row.label}</span>
-                                    <span className="font-bold text-gray-900">{row.value}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </SelectContent>
-                    </Select>
-                  </Card>
-                ))}
+                            ))}
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           </TabsContent>
