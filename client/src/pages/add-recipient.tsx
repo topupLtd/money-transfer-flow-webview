@@ -44,16 +44,43 @@ export default function AddRecipient() {
   const searchParams = new URLSearchParams(window.location.search);
   
   const countries = [
+    { code: "AO", name: "Angola", currency: "AOA", flag: "https://flagcdn.com/w40/ao.png", dialCode: "+244" },
     { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png", dialCode: "+880" },
-    { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", dialCode: "+234" },
+    { code: "BJ", name: "Benin", currency: "XOF", flag: "https://flagcdn.com/w40/bj.png", dialCode: "+229" },
+    { code: "BR", name: "Brazil", currency: "BRL", flag: "https://flagcdn.com/w40/br.png", dialCode: "+55" },
+    { code: "BF", name: "Burkina Faso", currency: "XOF", flag: "https://flagcdn.com/w40/bf.png", dialCode: "+226" },
+    { code: "CM", name: "Cameroon", currency: "XAF", flag: "https://flagcdn.com/w40/cm.png", dialCode: "+237" },
+    { code: "TD", name: "Chad", currency: "XAF", flag: "https://flagcdn.com/w40/td.png", dialCode: "+235" },
+    { code: "CN", name: "China", currency: "CNY", flag: "https://flagcdn.com/w40/cn.png", dialCode: "+86" },
+    { code: "CO", name: "Colombia", currency: "COP", flag: "https://flagcdn.com/w40/co.png", dialCode: "+57" },
+    { code: "CG", name: "Congo", currency: "XAF", flag: "https://flagcdn.com/w40/cg.png", dialCode: "+242" },
+    { code: "CD", name: "Congo (DRC)", currency: "CDF", flag: "https://flagcdn.com/w40/cd.png", dialCode: "+243" },
+    { code: "CI", name: "Côte d'Ivoire", currency: "XOF", flag: "https://flagcdn.com/w40/ci.png", dialCode: "+225" },
+    { code: "DO", name: "Dominican Republic", currency: "DOP", flag: "https://flagcdn.com/w40/do.png", dialCode: "+1" },
+    { code: "EG", name: "Egypt", currency: "EGP", flag: "https://flagcdn.com/w40/eg.png", dialCode: "+20" },
+    { code: "GA", name: "Gabon", currency: "XAF", flag: "https://flagcdn.com/w40/ga.png", dialCode: "+241" },
+    { code: "GM", name: "Gambia", currency: "GMD", flag: "https://flagcdn.com/w40/gm.png", dialCode: "+220" },
     { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png", dialCode: "+233" },
-    { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png", dialCode: "+221" },
-    { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png", dialCode: "+92" },
-    { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png", dialCode: "+212" },
+    { code: "GN", name: "Guinea", currency: "GNF", flag: "https://flagcdn.com/w40/gn.png", dialCode: "+224" },
+    { code: "HT", name: "Haiti", currency: "HTG", flag: "https://flagcdn.com/w40/ht.png", dialCode: "+509" },
     { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", dialCode: "+91" },
+    { code: "MG", name: "Madagascar", currency: "MGA", flag: "https://flagcdn.com/w40/mg.png", dialCode: "+261" },
+    { code: "ML", name: "Mali", currency: "XOF", flag: "https://flagcdn.com/w40/ml.png", dialCode: "+223" },
+    { code: "MR", name: "Mauritania", currency: "MRU", flag: "https://flagcdn.com/w40/mr.png", dialCode: "+222" },
+    { code: "MD", name: "Moldova", currency: "MDL", flag: "https://flagcdn.com/w40/md.png", dialCode: "+373" },
+    { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png", dialCode: "+212" },
+    { code: "NE", name: "Niger", currency: "XOF", flag: "https://flagcdn.com/w40/ne.png", dialCode: "+227" },
+    { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", dialCode: "+234" },
+    { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png", dialCode: "+92" },
+    { code: "PH", name: "Philippines", currency: "PHP", flag: "https://flagcdn.com/w40/ph.png", dialCode: "+63" },
+    { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png", dialCode: "+221" },
+    { code: "RS", name: "Serbia", currency: "RSD", flag: "https://flagcdn.com/w40/rs.png", dialCode: "+381" },
+    { code: "TG", name: "Togo", currency: "XOF", flag: "https://flagcdn.com/w40/tg.png", dialCode: "+228" },
+    { code: "TR", name: "Turkey", currency: "TRY", flag: "https://flagcdn.com/w40/tr.png", dialCode: "+90" },
+    { code: "UA", name: "Ukraine", currency: "UAH", flag: "https://flagcdn.com/w40/ua.png", dialCode: "+380" },
   ];
 
-  const selectedCountry = searchParams.get("country") || countries[0].code;
+  const selectedCountry = searchParams.get("country") || "NG";
   const selectedMethod = searchParams.get("method") || "bank";
   const providers = COUNTRY_PROVIDERS[selectedCountry as keyof typeof COUNTRY_PROVIDERS] || {
     wallets: ["Orange Money", "MTN MoMo", "Wave"],
