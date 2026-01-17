@@ -130,43 +130,6 @@ export default function SendMoney() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">Recipient Country</Label>
-              <Select 
-                value={selectedCountry.code} 
-                onValueChange={(code) => {
-                  const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
-                  setSelectedCountry(country);
-                  // Reset delivery method if not available in new country
-                  if (!country.deliveryMethods.includes(deliveryMethod)) {
-                    setDeliveryMethod(country.deliveryMethods[0]);
-                  }
-                }}
-              >
-                <SelectTrigger className="w-full h-12 rounded-xl px-4 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100 border focus:ring-0">
-                  <SelectValue>
-                    <div className="flex items-center gap-3">
-                      <img src={selectedCountry.flag} className="w-6 h-6 rounded-full object-cover shadow-sm" alt={selectedCountry.name} />
-                      <span className="font-bold text-gray-900">{selectedCountry.name}</span>
-                    </div>
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent className="rounded-xl border-gray-100 shadow-2xl">
-                  {COUNTRIES.map((c) => (
-                    <SelectItem key={c.code} value={c.code} className="py-3">
-                      <div className="flex items-center gap-3">
-                        <img src={c.flag} className="w-6 h-6 rounded-full object-cover shadow-sm" alt={c.name} />
-                        <div className="flex flex-col">
-                          <span className="font-bold text-gray-900">{c.name}</span>
-                          <span className="text-[10px] text-gray-400 font-medium">{c.currency}</span>
-                        </div>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2 pt-2">
               <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">They Receive</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative overflow-hidden">
@@ -176,9 +139,35 @@ export default function SendMoney() {
                     className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
                   />
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-full border border-primary/10">
-                  <span className="font-bold text-sm text-primary">{selectedCountry.currency}</span>
-                </div>
+                <Select 
+                  value={selectedCountry.code} 
+                  onValueChange={(code) => {
+                    const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
+                    setSelectedCountry(country);
+                    if (!country.deliveryMethods.includes(deliveryMethod)) {
+                      setDeliveryMethod(country.deliveryMethods[0]);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-auto h-auto rounded-full px-3 py-2 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100 border focus:ring-0">
+                    <SelectValue>
+                      <div className="flex items-center gap-2">
+                        <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.name} />
+                        <span className="font-semibold text-sm">{selectedCountry.currency}</span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c.code} value={c.code}>
+                        <div className="flex items-center gap-2">
+                          <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt={c.name} />
+                          <span>{c.name} ({c.currency})</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
