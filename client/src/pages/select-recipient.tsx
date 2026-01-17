@@ -50,7 +50,7 @@ export default function SelectRecipient() {
 
         {/* New Recipient */}
         <button 
-          onClick={() => setLocation("/add-recipient")}
+          onClick={() => setLocation(`/add-recipient?country=${countryFilter || 'BD'}`)}
           className="w-full flex items-center gap-4 p-4 rounded-xl border border-dashed border-gray-300 hover:bg-gray-50 transition-colors text-left group"
         >
           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
