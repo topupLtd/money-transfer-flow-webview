@@ -12,19 +12,24 @@ export default function SelectRecipient() {
   const methodFilter = searchParams.get("method");
 
   const recipients = [
-    { id: 1, name: "Maria Garcia", account: "**** 1234", bank: "Chase Bank", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "BNP Paribas", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "wallet", methodLabel: "Mobile Wallet" },
-    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Barclays", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 4, name: "Sofia Rossi", account: "**** 3456", bank: "Intesa Sanpaolo", initials: "SR", color: "bg-orange-100 text-orange-700", country: "VN", method: "wallet", methodLabel: "Mobile Wallet" },
-    { id: 5, name: "Amadou Diallo", account: "**** 7788", bank: "Orange Money", initials: "AD", color: "bg-yellow-100 text-yellow-700", country: "SN", method: "wallet", methodLabel: "Mobile Wallet" },
+    { id: 1, name: "Maria Garcia", account: "08012345678", bank: "Opay", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "wallet", methodLabel: "Opay" },
+    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "UBA Nigeria", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Ecobank Ghana", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 4, name: "Sofia Rossi", account: "0912345678", bank: "MoMo Ghana", initials: "SR", color: "bg-orange-100 text-orange-700", country: "GH", method: "wallet", methodLabel: "MTN MoMo" },
+    { id: 5, name: "Amadou Diallo", account: "077889900", bank: "Orange Money", initials: "AD", color: "bg-yellow-100 text-yellow-700", country: "SN", method: "wallet", methodLabel: "Orange Money" },
     { id: 6, name: "Fatima Zahra", account: "**** 2233", bank: "Attijariwafa Bank", initials: "FZ", color: "bg-red-100 text-red-700", country: "MA", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 7, name: "Kofi Mensah", account: "**** 4455", bank: "MTN Mobile Money", initials: "KM", color: "bg-blue-100 text-blue-700", country: "GH", method: "wallet", methodLabel: "Mobile Wallet" },
-    { id: 8, name: "Suresh Kumar", account: "**** 6677", bank: "HDFC Bank", initials: "SK", color: "bg-indigo-100 text-indigo-700", country: "IN", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 9, name: "Binh Nguyen", account: "**** 8899", bank: "Vietcombank", initials: "BN", color: "bg-emerald-100 text-emerald-700", country: "VN", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 7, name: "Kofi Mensah", account: "055443322", bank: "Wave", initials: "KM", color: "bg-blue-100 text-blue-700", country: "SN", method: "wallet", methodLabel: "Wave" },
+    { id: 8, name: "Suresh Kumar", account: "**** 6677", bank: "State Bank of India", initials: "SK", color: "bg-indigo-100 text-indigo-700", country: "IN", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 9, name: "Binh Nguyen", account: "0988776655", bank: "Momo VN", initials: "BN", color: "bg-emerald-100 text-emerald-700", country: "VN", method: "wallet", methodLabel: "MoMo" },
     { id: 10, name: "Ricardo Silva", account: "**** 1122", bank: "Itaú Unibanco", initials: "RS", color: "bg-orange-100 text-orange-700", country: "BR", method: "bank", methodLabel: "Bank Deposit" },
     { id: 11, name: "Rahat Ahmed", account: "01712345678", bank: "bKash", initials: "RA", color: "bg-pink-100 text-pink-700", country: "BD", method: "wallet", methodLabel: "bKash" },
     { id: 12, name: "Nusrat Jahan", account: "01887654321", bank: "Nagad", initials: "NJ", color: "bg-orange-100 text-orange-700", country: "BD", method: "wallet", methodLabel: "Nagad" },
     { id: 13, name: "Mofizur Rahman", account: "**** 4455", bank: "Dutch-Bangla Bank", initials: "MR", color: "bg-blue-100 text-blue-700", country: "BD", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 14, name: "Alpha Diallo", account: "066123456", bank: "Orange Money", initials: "AD", color: "bg-orange-100 text-orange-700", country: "CI", method: "wallet", methodLabel: "Orange Money" },
+    { id: 15, name: "Jean Kouassi", account: "**** 9900", bank: "Société Générale", initials: "JK", color: "bg-blue-100 text-blue-700", country: "CI", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 16, name: "Kamran Akmal", account: "03001234567", bank: "JazzCash", initials: "KA", color: "bg-yellow-100 text-yellow-700", country: "PK", method: "wallet", methodLabel: "JazzCash" },
+    { id: 17, name: "Sajid Khan", account: "**** 7766", bank: "Habib Bank", initials: "SK", color: "bg-green-100 text-green-700", country: "PK", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 18, name: "M-Pesa User", account: "0712345678", bank: "Safaricom", initials: "MP", color: "bg-green-100 text-green-700", country: "KE", method: "wallet", methodLabel: "M-Pesa" },
   ];
 
   const filteredRecipients = recipients.filter(r => {
