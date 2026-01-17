@@ -34,10 +34,10 @@ export default function Profile() {
         </div>
 
         {/* Info Section */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <button 
             onClick={() => setLocation("/profile-details")}
-            className="w-full flex items-center justify-between p-4 bg-white border border-gray-50 rounded-xl shadow-sm hover:border-primary/20 transition-all group"
+            className="w-full flex items-center justify-between p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all group"
           >
             <div className="flex items-center gap-4">
               <div className="h-10 w-10 rounded-xl flex items-center justify-center text-primary bg-primary/10">
@@ -53,7 +53,7 @@ export default function Profile() {
 
           <button 
             onClick={() => setLocation("/transfer-limits")}
-            className="w-full flex items-center justify-between p-4 bg-white border border-gray-50 rounded-xl shadow-sm hover:border-primary/20 transition-all group"
+            className="w-full flex items-center justify-between p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all group"
           >
             <div className="flex items-center gap-4">
               <div className="h-10 w-10 rounded-xl flex items-center justify-center text-secondary bg-secondary/10">
@@ -70,7 +70,7 @@ export default function Profile() {
           {menuItems.map((item, idx) => (
             <button 
               key={idx}
-              className="w-full flex items-center justify-between p-4 bg-white border border-gray-50 rounded-xl shadow-sm hover:border-primary/20 transition-all group"
+              className="w-full flex items-center justify-between p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all group"
             >
               <div className="flex items-center gap-4">
                 <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${item.color}`}>
