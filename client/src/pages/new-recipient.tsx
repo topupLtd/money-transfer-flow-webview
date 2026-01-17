@@ -229,7 +229,6 @@ export default function NewRecipient() {
               <div className="flex items-center gap-2">
                 <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
                 <span className="text-xs font-bold text-secondary uppercase">{currentCountry.name} ({currentCountry.currency})</span>
-                <ChevronDown className="h-3 w-3 text-gray-400" />
               </div>
             </SelectTrigger>
             <SelectContent className="rounded-2xl max-h-80">
@@ -304,21 +303,10 @@ export default function NewRecipient() {
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
                   <div className="flex gap-2">
-                    <Select defaultValue={currentCountry.dialCode} disabled>
-                      <SelectTrigger className="w-24 h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20 opacity-70 cursor-not-allowed">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl">
-                        {COUNTRIES.map(c => (
-                          <SelectItem key={c.code} value={c.dialCode}>
-                            <div className="flex items-center gap-2">
-                              <img src={c.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
-                              <span>{c.dialCode}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-2 w-24 h-12 border-none bg-gray-100 rounded-xl px-3 opacity-70">
+                      <img src={currentCountry.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
+                      <span className="text-sm font-semibold">{currentCountry.dialCode}</span>
+                    </div>
                     <Input placeholder="123456789" className="flex-1 h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                   </div>
                 </div>
@@ -442,21 +430,10 @@ export default function NewRecipient() {
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Number / ID</Label>
                     <div className="flex gap-2">
-                      <Select defaultValue={currentCountry.dialCode} disabled>
-                        <SelectTrigger className="w-24 h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20 opacity-70 cursor-not-allowed">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-xl">
-                          {COUNTRIES.map(c => (
-                            <SelectItem key={c.code} value={c.dialCode}>
-                              <div className="flex items-center gap-2">
-                                <img src={c.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
-                                <span>{c.dialCode}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="flex items-center gap-2 w-24 h-12 border-none bg-gray-100 rounded-xl px-3 opacity-70">
+                        <img src={currentCountry.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
+                        <span className="text-sm font-semibold">{currentCountry.dialCode}</span>
+                      </div>
                       <Input placeholder="123456789" className="flex-1 h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                     </div>
                   </div>
