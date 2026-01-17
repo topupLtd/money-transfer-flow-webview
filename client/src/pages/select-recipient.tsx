@@ -1,8 +1,9 @@
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { Search, Plus, ChevronRight } from "lucide-react";
+import { Search, Plus, ChevronRight, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 export default function SelectRecipient() {
   const [location, setLocation] = useLocation();
@@ -11,10 +12,16 @@ export default function SelectRecipient() {
   const methodFilter = searchParams.get("method");
 
   const recipients = [
-    { id: 1, name: "Maria Garcia", account: "**** 1234", bank: "Chase Bank", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "bank" },
-    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "BNP Paribas", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "wallet" },
-    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Barclays", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank" },
-    { id: 4, name: "Sofia Rossi", account: "**** 3456", bank: "Intesa Sanpaolo", initials: "SR", color: "bg-orange-100 text-orange-700", country: "VN", method: "wallet" },
+    { id: 1, name: "Maria Garcia", account: "**** 1234", bank: "Chase Bank", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "BNP Paribas", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "wallet", methodLabel: "Mobile Wallet" },
+    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Barclays", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 4, name: "Sofia Rossi", account: "**** 3456", bank: "Intesa Sanpaolo", initials: "SR", color: "bg-orange-100 text-orange-700", country: "VN", method: "wallet", methodLabel: "Mobile Wallet" },
+    { id: 5, name: "Amadou Diallo", account: "**** 7788", bank: "Orange Money", initials: "AD", color: "bg-yellow-100 text-yellow-700", country: "SN", method: "wallet", methodLabel: "Mobile Wallet" },
+    { id: 6, name: "Fatima Zahra", account: "**** 2233", bank: "Attijariwafa Bank", initials: "FZ", color: "bg-red-100 text-red-700", country: "MA", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 7, name: "Kofi Mensah", account: "**** 4455", bank: "MTN Mobile Money", initials: "KM", color: "bg-blue-100 text-blue-700", country: "GH", method: "wallet", methodLabel: "Mobile Wallet" },
+    { id: 8, name: "Suresh Kumar", account: "**** 6677", bank: "HDFC Bank", initials: "SK", color: "bg-indigo-100 text-indigo-700", country: "IN", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 9, name: "Binh Nguyen", account: "**** 8899", bank: "Vietcombank", initials: "BN", color: "bg-emerald-100 text-emerald-700", country: "VN", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 10, name: "Ricardo Silva", account: "**** 1122", bank: "Itaú Unibanco", initials: "RS", color: "bg-orange-100 text-orange-700", country: "BR", method: "bank", methodLabel: "Bank Deposit" },
   ];
 
   const filteredRecipients = recipients.filter(r => {
@@ -51,32 +58,73 @@ export default function SelectRecipient() {
         <div className="space-y-3">
           <div className="flex justify-between items-center px-1">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-              {filteredRecipients.length > 0 ? "Filtered Recipients" : "Recent Recipients"}
+              {filteredRecipients.length > 0 ? "Available Recipients" : countryFilter ? "No Recipients Found" : "Recent Recipients"}
             </h3>
             {countryFilter && (
               <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
-                {countryFilter} • {methodFilter}
+                {countryFilter} • {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}
               </span>
             )}
           </div>
           
           <div className="space-y-2">
-            {(filteredRecipients.length > 0 ? filteredRecipients : recipients).map((recipient) => (
-              <div 
-                key={recipient.id}
-                onClick={() => setLocation("/source")}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
-              >
-                <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
-                  <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-900">{recipient.name}</h4>
-                  <p className="text-xs text-gray-500">{recipient.bank} • {recipient.account}</p>
+            {filteredRecipients.length > 0 ? (
+              filteredRecipients.map((recipient) => (
+                <div 
+                  key={recipient.id}
+                  onClick={() => setLocation("/source")}
+                  className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
+                >
+                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
+                    <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-gray-900">{recipient.name}</h4>
+                    <p className="text-xs text-gray-500">{recipient.bank} • {recipient.methodLabel}</p>
+                    <p className="text-[10px] text-gray-400 font-medium">{recipient.account}</p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
                 </div>
-                <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
+              ))
+            ) : countryFilter ? (
+              <div className="py-12 text-center space-y-3 bg-white rounded-2xl border border-dashed border-gray-200">
+                <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
+                  <User className="h-6 w-6 text-gray-300" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-gray-900">No matching recipients</p>
+                  <p className="text-xs text-gray-500 px-6 mt-1">
+                    We couldn't find any recipients for {countryFilter} via {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}.
+                  </p>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="rounded-full text-xs font-bold border-gray-200"
+                  onClick={() => setLocation("/add-recipient")}
+                >
+                  <Plus className="h-3 w-3 mr-1" /> Add New
+                </Button>
               </div>
-            ))}
+            ) : (
+              recipients.map((recipient) => (
+                <div 
+                  key={recipient.id}
+                  onClick={() => setLocation("/source")}
+                  className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
+                >
+                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
+                    <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-gray-900">{recipient.name}</h4>
+                    <p className="text-xs text-gray-500">{recipient.bank} • {recipient.methodLabel}</p>
+                    <p className="text-[10px] text-gray-400 font-medium">{recipient.account}</p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
+                </div>
+              ))
+            )}
           </div>
         </div>
 
