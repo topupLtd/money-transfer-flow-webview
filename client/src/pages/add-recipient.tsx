@@ -43,6 +43,7 @@ export default function AddRecipient() {
   const [location, setLocation] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const selectedCountry = searchParams.get("country") || "BD";
+  const selectedMethod = searchParams.get("method") || "bank";
   const providers = COUNTRY_PROVIDERS[selectedCountry as keyof typeof COUNTRY_PROVIDERS] || {
     wallets: ["Orange Money", "MTN MoMo", "Wave"],
     banks: ["Ecobank", "Standard Chartered", "United Bank for Africa", "Barclays", "Société Générale", "State Bank of India", "HDFC Bank", "ICICI Bank", "Axis Bank", "Punjab National Bank"]
@@ -75,7 +76,7 @@ export default function AddRecipient() {
           </div>
         </div>
 
-        <Tabs defaultValue="bank" className="w-full">
+        <Tabs defaultValue={selectedMethod} className="w-full">
           <TabsList className="w-full grid grid-cols-2 p-1 bg-gray-100 rounded-xl h-12">
             <TabsTrigger value="bank" className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm gap-2">
               <Landmark className="h-4 w-4" /> Bank
