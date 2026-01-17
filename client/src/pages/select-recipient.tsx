@@ -22,6 +22,9 @@ export default function SelectRecipient() {
     { id: 8, name: "Suresh Kumar", account: "**** 6677", bank: "HDFC Bank", initials: "SK", color: "bg-indigo-100 text-indigo-700", country: "IN", method: "bank", methodLabel: "Bank Deposit" },
     { id: 9, name: "Binh Nguyen", account: "**** 8899", bank: "Vietcombank", initials: "BN", color: "bg-emerald-100 text-emerald-700", country: "VN", method: "bank", methodLabel: "Bank Deposit" },
     { id: 10, name: "Ricardo Silva", account: "**** 1122", bank: "Itaú Unibanco", initials: "RS", color: "bg-orange-100 text-orange-700", country: "BR", method: "bank", methodLabel: "Bank Deposit" },
+    { id: 11, name: "Rahat Ahmed", account: "01712345678", bank: "bKash", initials: "RA", color: "bg-pink-100 text-pink-700", country: "BD", method: "wallet", methodLabel: "bKash" },
+    { id: 12, name: "Nusrat Jahan", account: "01887654321", bank: "Nagad", initials: "NJ", color: "bg-orange-100 text-orange-700", country: "BD", method: "wallet", methodLabel: "Nagad" },
+    { id: 13, name: "Mofizur Rahman", account: "**** 4455", bank: "Dutch-Bangla Bank", initials: "MR", color: "bg-blue-100 text-blue-700", country: "BD", method: "bank", methodLabel: "Bank Deposit" },
   ];
 
   const filteredRecipients = recipients.filter(r => {
