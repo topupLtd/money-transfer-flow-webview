@@ -73,6 +73,54 @@ const COUNTRIES = [
     rate: 24500,
     deliveryMethods: ["bank", "wallet"]
   },
+  {
+    code: "CI",
+    name: "Ivory Coast",
+    currency: "XOF",
+    flag: "https://flagcdn.com/w40/ci.png",
+    rate: 655.95,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  {
+    code: "SN",
+    name: "Senegal",
+    currency: "XOF",
+    flag: "https://flagcdn.com/w40/sn.png",
+    rate: 655.95,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  {
+    code: "ML",
+    name: "Mali",
+    currency: "XOF",
+    flag: "https://flagcdn.com/w40/ml.png",
+    rate: 655.95,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  {
+    code: "PK",
+    name: "Pakistan",
+    currency: "PKR",
+    flag: "https://flagcdn.com/w40/pk.png",
+    rate: 300.5,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  {
+    code: "BD",
+    name: "Bangladesh",
+    currency: "BDT",
+    flag: "https://flagcdn.com/w40/bd.png",
+    rate: 118.2,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  {
+    code: "MA",
+    name: "Morocco",
+    currency: "MAD",
+    flag: "https://flagcdn.com/w40/ma.png",
+    rate: 10.8,
+    deliveryMethods: ["bank"]
+  },
 ];
 
 const PROMOS = [
