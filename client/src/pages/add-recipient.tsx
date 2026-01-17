@@ -87,35 +87,35 @@ export default function AddRecipient() {
 
           <TabsContent value="bank" className="mt-6 space-y-8">
             {/* Personal Details Section */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="flex items-center gap-2 px-1">
                 <User className="h-4 w-4 text-primary" />
                 <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Personal Details</h3>
               </div>
               
-              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-50 space-y-4">
+              <div className="space-y-4 px-1">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
-                    <Input placeholder="John" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    <Input placeholder="John" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
-                    <Input placeholder="Doe" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    <Input placeholder="Doe" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                   </div>
                 </div>
 
                 {isIndia && (
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Date of Birth</Label>
-                    <Input type="date" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    <Input type="date" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                   </div>
                 )}
 
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
                   <Select>
-                    <SelectTrigger className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                    <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
                       <SelectValue placeholder="Select Relationship" />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
@@ -130,7 +130,7 @@ export default function AddRecipient() {
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
                   <div className="flex gap-2">
                     <Select defaultValue={currentCountry.dialCode}>
-                      <SelectTrigger className="w-24 h-12 border-none bg-gray-50 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                      <SelectTrigger className="w-24 h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl">
@@ -144,7 +144,7 @@ export default function AddRecipient() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <Input placeholder="123456789" className="flex-1 h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    <Input placeholder="123456789" className="flex-1 h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                   </div>
                 </div>
 
@@ -152,17 +152,19 @@ export default function AddRecipient() {
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Address Details</Label>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Input placeholder="State" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                      <Input placeholder="State" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                     </div>
                     <div className="space-y-2">
-                      <Input placeholder="City" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                      <Input placeholder="City" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Input placeholder="Zip Code" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
-                  </div>
-                  <div className="space-y-2">
-                    <Input placeholder="Full Address" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-2">
+                      <Input placeholder="Zip Code" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                    <div className="space-y-2">
+                      <Input placeholder="Full Address" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -175,11 +177,11 @@ export default function AddRecipient() {
                 <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Bank Details</h3>
               </div>
               
-              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-50 space-y-4">
+              <div className="space-y-4 px-1">
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Bank Name</Label>
                   <Select>
-                    <SelectTrigger className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                    <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
                       <SelectValue placeholder="Select Bank" />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
@@ -193,7 +195,7 @@ export default function AddRecipient() {
                 {isIndia && (
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">IFSC Code</Label>
-                    <Input placeholder="SBIN0001234" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    <Input placeholder="SBIN0001234" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                   </div>
                 )}
 
@@ -201,61 +203,91 @@ export default function AddRecipient() {
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
                     {isIndia ? "Account Number" : "Account Number / IBAN"}
                   </Label>
-                  <Input placeholder="Enter account details" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  <Input placeholder="Enter account details" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                 </div>
               </div>
             </div>
           </TabsContent>
 
-          <TabsContent value="wallet" className="mt-6 space-y-5">
-             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
-                  <Input placeholder="John" className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+          <TabsContent value="wallet" className="mt-6 space-y-8">
+             <div className="space-y-6">
+                <div className="flex items-center gap-2 px-1">
+                  <User className="h-4 w-4 text-primary" />
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Personal Details</h3>
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
-                  <Input placeholder="Doe" className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+                
+                <div className="space-y-4 px-1">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
+                      <Input placeholder="John" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
+                      <Input placeholder="Doe" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
+                    <Select>
+                      <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                        <SelectValue placeholder="Select Relationship" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {RELATIONSHIPS.map(rel => (
+                          <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-              </div>
+             </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Provider</Label>
-                <Select>
-                  <SelectTrigger className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm focus:ring-0">
-                    <SelectValue placeholder="Select Wallet" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {providers.wallets.map(wallet => (
-                      <SelectItem key={wallet} value={wallet.toLowerCase()}>{wallet}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Number / ID</Label>
-                <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input placeholder="017XX-XXXXXX" className="pl-11 h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+             <div className="space-y-6">
+                <div className="flex items-center gap-2 px-1">
+                  <Wallet className="h-4 w-4 text-primary" />
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Wallet Details</h3>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
-                <Select>
-                  <SelectTrigger className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm focus:ring-0">
-                    <SelectValue placeholder="Select Relationship" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {RELATIONSHIPS.map(rel => (
-                      <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+                <div className="space-y-4 px-1">
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Provider</Label>
+                    <Select>
+                      <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                        <SelectValue placeholder="Select Wallet" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {providers.wallets.map(wallet => (
+                          <SelectItem key={wallet} value={wallet.toLowerCase()}>{wallet}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Number / ID</Label>
+                    <div className="flex gap-2">
+                      <Select defaultValue={currentCountry.dialCode}>
+                        <SelectTrigger className="w-24 h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl">
+                          {countries.map(c => (
+                            <SelectItem key={c.code} value={c.dialCode}>
+                              <div className="flex items-center gap-2">
+                                <img src={c.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
+                                <span>{c.dialCode}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input placeholder="123456789" className="flex-1 h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                  </div>
+                </div>
+             </div>
           </TabsContent>
         </Tabs>
 
