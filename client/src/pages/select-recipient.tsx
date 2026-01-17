@@ -5,14 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function SelectRecipient() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
+  const searchParams = new URLSearchParams(window.location.search);
+  const countryFilter = searchParams.get("country");
+  const methodFilter = searchParams.get("method");
 
   const recipients = [
-    { id: 1, name: "Maria Garcia", account: "**** 1234", bank: "Chase Bank", initials: "MG", color: "bg-blue-100 text-blue-700" },
-    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "BNP Paribas", initials: "JP", color: "bg-green-100 text-green-700" },
-    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Barclays", initials: "LW", color: "bg-purple-100 text-purple-700" },
-    { id: 4, name: "Sofia Rossi", account: "**** 3456", bank: "Intesa Sanpaolo", initials: "SR", color: "bg-orange-100 text-orange-700" },
+    { id: 1, name: "Maria Garcia", account: "**** 1234", bank: "Chase Bank", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "bank" },
+    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "BNP Paribas", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "wallet" },
+    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Barclays", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank" },
+    { id: 4, name: "Sofia Rossi", account: "**** 3456", bank: "Intesa Sanpaolo", initials: "SR", color: "bg-orange-100 text-orange-700", country: "VN", method: "wallet" },
   ];
+
+  const filteredRecipients = recipients.filter(r => {
+    if (countryFilter && r.country !== countryFilter) return false;
+    if (methodFilter && r.method !== methodFilter) return false;
+    return true;
+  });
 
   return (
     <MobileLayout title="Select Recipient">
@@ -40,10 +49,19 @@ export default function SelectRecipient() {
 
         {/* Recipient List */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Recent Recipients</h3>
+          <div className="flex justify-between items-center px-1">
+            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+              {filteredRecipients.length > 0 ? "Filtered Recipients" : "Recent Recipients"}
+            </h3>
+            {countryFilter && (
+              <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
+                {countryFilter} • {methodFilter}
+              </span>
+            )}
+          </div>
           
           <div className="space-y-2">
-            {recipients.map((recipient) => (
+            {(filteredRecipients.length > 0 ? filteredRecipients : recipients).map((recipient) => (
               <div 
                 key={recipient.id}
                 onClick={() => setLocation("/source")}

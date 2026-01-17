@@ -25,12 +25,54 @@ import {
 } from "@/components/ui/drawer";
 
 const COUNTRIES = [
-  { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", rate: 1450 },
-  { code: "KE", name: "Kenya", currency: "KES", flag: "https://flagcdn.com/w40/ke.png", rate: 130 },
-  { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5 },
-  { code: "PH", name: "Philippines", currency: "PHP", flag: "https://flagcdn.com/w40/ph.png", rate: 56.2 },
-  { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", rate: 83.1 },
-  { code: "VN", name: "Vietnam", currency: "VND", flag: "https://flagcdn.com/w40/vn.png", rate: 24500 },
+  { 
+    code: "NG", 
+    name: "Nigeria", 
+    currency: "NGN", 
+    flag: "https://flagcdn.com/w40/ng.png", 
+    rate: 1450,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  { 
+    code: "KE", 
+    name: "Kenya", 
+    currency: "KES", 
+    flag: "https://flagcdn.com/w40/ke.png", 
+    rate: 130,
+    deliveryMethods: ["wallet"]
+  },
+  { 
+    code: "GH", 
+    name: "Ghana", 
+    currency: "GHS", 
+    flag: "https://flagcdn.com/w40/gh.png", 
+    rate: 12.5,
+    deliveryMethods: ["bank", "wallet"]
+  },
+  { 
+    code: "PH", 
+    name: "Philippines", 
+    currency: "PHP", 
+    flag: "https://flagcdn.com/w40/ph.png", 
+    rate: 56.2,
+    deliveryMethods: ["bank"]
+  },
+  { 
+    code: "IN", 
+    name: "India", 
+    currency: "INR", 
+    flag: "https://flagcdn.com/w40/in.png", 
+    rate: 83.1,
+    deliveryMethods: ["bank"]
+  },
+  { 
+    code: "VN", 
+    name: "Vietnam", 
+    currency: "VND", 
+    flag: "https://flagcdn.com/w40/vn.png", 
+    rate: 24500,
+    deliveryMethods: ["bank", "wallet"]
+  },
 ];
 
 const PROMOS = [
@@ -46,7 +88,13 @@ export default function SendMoney() {
   const [deliveryMethod, setDeliveryMethod] = useState("bank");
   const [promoCode, setPromoCode] = useState("");
 
-  const receiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toLocaleString();
+    const receiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toLocaleString();
+
+  const handleContinue = () => {
+    setLocation(`/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}`);
+  };
+
+  const availableMethods = selectedCountry.deliveryMethods || ["bank", "wallet"];
 
   return (
     <MobileLayout title="Send Money">
@@ -82,44 +130,61 @@ export default function SendMoney() {
             </div>
 
             <div className="space-y-2">
+              <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">Recipient Country</Label>
+              <Select 
+                value={selectedCountry.code} 
+                onValueChange={(code) => {
+                  const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
+                  setSelectedCountry(country);
+                  // Reset delivery method if not available in new country
+                  if (!country.deliveryMethods.includes(deliveryMethod)) {
+                    setDeliveryMethod(country.deliveryMethods[0]);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full h-12 rounded-xl px-4 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100 border focus:ring-0">
+                  <SelectValue>
+                    <div className="flex items-center gap-3">
+                      <img src={selectedCountry.flag} className="w-6 h-6 rounded-full object-cover shadow-sm" alt={selectedCountry.name} />
+                      <span className="font-bold text-gray-900">{selectedCountry.name}</span>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-gray-100 shadow-2xl">
+                  {COUNTRIES.map((c) => (
+                    <SelectItem key={c.code} value={c.code} className="py-3">
+                      <div className="flex items-center gap-3">
+                        <img src={c.flag} className="w-6 h-6 rounded-full object-cover shadow-sm" alt={c.name} />
+                        <div className="flex flex-col">
+                          <span className="font-bold text-gray-900">{c.name}</span>
+                          <span className="text-[10px] text-gray-400 font-medium">{c.currency}</span>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2 pt-2">
               <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">They Receive</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative overflow-hidden">
                   <Input 
                     value={receiveAmount}
                     readOnly
-                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate" 
+                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
                   />
                 </div>
-                <Select 
-                  value={selectedCountry.code} 
-                  onValueChange={(code) => setSelectedCountry(COUNTRIES.find(c => c.code === code) || COUNTRIES[0])}
-                >
-                  <SelectTrigger className="w-auto h-auto rounded-full px-3 py-2 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100 border focus:ring-0">
-                    <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.name} />
-                        <span className="font-semibold text-sm">{selectedCountry.currency}</span>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-gray-100">
-                    {COUNTRIES.map((c) => (
-                      <SelectItem key={c.code} value={c.code}>
-                        <div className="flex items-center gap-2">
-                          <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt={c.name} />
-                          <span>{c.name} ({c.currency})</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-full border border-primary/10">
+                  <span className="font-bold text-sm text-primary">{selectedCountry.currency}</span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 px-5 py-3 text-xs text-gray-500 flex justify-between items-center">
-            <span>Exchange Rate</span>
-            <span className="font-medium text-gray-900">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
+          <div className="bg-gray-50 px-5 py-3 text-[10px] text-gray-400 flex justify-between items-center border-t border-gray-100">
+            <span className="font-medium">Exchange Rate</span>
+            <span className="font-bold text-gray-900">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
           </div>
         </Card>
 
@@ -127,32 +192,36 @@ export default function SendMoney() {
         <div className="space-y-3">
           <Label className="text-base font-semibold text-gray-900">Delivery Method</Label>
           <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
-            <SelectTrigger className="w-full h-14 bg-white rounded-xl border-gray-200 focus:ring-primary">
+            <SelectTrigger className="w-full h-14 bg-white rounded-xl border-gray-200 focus:ring-primary shadow-sm">
               <SelectValue placeholder="Select delivery method" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-gray-100 shadow-xl">
-              <SelectItem value="bank" className="py-3 cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <Building2 className="h-4 w-4" />
+            <SelectContent className="rounded-xl border-gray-100 shadow-2xl">
+              {availableMethods.includes("bank") && (
+                <SelectItem value="bank" className="py-3 cursor-pointer">
+                  <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                      <Building2 className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="font-bold text-sm">Bank Deposit</span>
+                      <span className="text-[10px] text-gray-400">Arrives in 1-2 business days</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-semibold text-sm">Bank Deposit</span>
-                    <span className="text-[10px] text-gray-400">Arrives in 1-2 business days</span>
+                </SelectItem>
+              )}
+              {availableMethods.includes("wallet") && (
+                <SelectItem value="wallet" className="py-3 cursor-pointer">
+                  <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+                      <Wallet className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="font-bold text-sm">Mobile Wallet</span>
+                      <span className="text-[10px] text-gray-400">Arrives instantly</span>
+                    </div>
                   </div>
-                </div>
-              </SelectItem>
-              <SelectItem value="wallet" className="py-3 cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-                    <Wallet className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="font-semibold text-sm">Mobile Wallet</span>
-                    <span className="text-[10px] text-gray-400">Arrives instantly</span>
-                  </div>
-                </div>
-              </SelectItem>
+                </SelectItem>
+              )}
             </SelectContent>
           </Select>
         </div>
@@ -228,7 +297,7 @@ export default function SendMoney() {
         <Button 
           className="w-full h-12 text-base font-semibold rounded-xl shadow-md mt-4 bg-primary hover:bg-primary/90" 
           size="lg"
-          onClick={() => setLocation("/select-recipient")}
+          onClick={handleContinue}
         >
           Continue
         </Button>
