@@ -13,55 +13,55 @@ export default function ProfileDetails() {
           <ChevronLeft className="h-5 w-5 mr-1" /> Back
         </Button>
 
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-8 px-1 pt-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-300 uppercase">First Name</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">First Name</p>
               <p className="font-semibold text-gray-900">John</p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-300 uppercase">Last Name</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Last Name</p>
               <p className="font-semibold text-gray-900">Doe</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-300 uppercase">Date of Birth</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Date of Birth</p>
               <p className="font-semibold text-gray-900">Jan 1, 1990</p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-300 uppercase">Gender</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gender</p>
               <p className="font-semibold text-gray-900">Male</p>
             </div>
           </div>
           <div className="space-y-1">
-             <p className="text-[10px] font-bold text-gray-300 uppercase">Nationality</p>
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nationality</p>
              <p className="font-semibold text-gray-900">French</p>
           </div>
           <div className="space-y-1">
-             <p className="text-[10px] font-bold text-gray-300 uppercase">Email Address</p>
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email Address</p>
              <p className="font-semibold text-gray-900">john.doe@example.com</p>
           </div>
           <div className="space-y-1">
-             <p className="text-[10px] font-bold text-gray-300 uppercase">Mobile Number</p>
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Mobile Number</p>
              <p className="font-semibold text-gray-900">+33 6 12 34 56 78</p>
           </div>
           <div className="space-y-1">
-             <p className="text-[10px] font-bold text-gray-300 uppercase">Occupation</p>
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Occupation</p>
              <p className="font-semibold text-gray-900">Software Engineer</p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-300 uppercase">Expected Monthly</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Expected Monthly</p>
               <p className="font-semibold text-gray-900">€ 2,000</p>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-300 uppercase">Times / Month</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Times / Month</p>
               <p className="font-semibold text-gray-900">4</p>
             </div>
           </div>
           <div className="space-y-1">
-             <p className="text-[10px] font-bold text-gray-300 uppercase">Address</p>
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Address</p>
              <p className="font-semibold text-gray-900">123 Rue de la Paix, Paris, France</p>
           </div>
         </div>
