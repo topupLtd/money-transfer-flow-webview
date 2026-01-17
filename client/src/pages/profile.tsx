@@ -11,7 +11,6 @@ export default function Profile() {
 
   const menuItems = [
     { label: "Active Promotions", icon: Ticket, value: "3 active", color: "text-primary bg-primary/10" },
-    { label: "Account Security", icon: ShieldCheck, value: "Safe", color: "text-secondary bg-secondary/10" },
     { label: "Help & Support", icon: HelpCircle, value: null, color: "text-blue-500 bg-blue-50" },
   ];
 
