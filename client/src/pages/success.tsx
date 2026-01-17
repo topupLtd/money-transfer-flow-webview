@@ -1,23 +1,23 @@
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Share2, Home } from "lucide-react";
+import { Share2, Home, Clock } from "lucide-react";
 
 export default function Success() {
   const [, setLocation] = useLocation();
 
   return (
-    <MobileLayout title="Success">
+    <MobileLayout title="Processing">
       <div className="flex flex-col items-center justify-center h-[80vh] space-y-8 animate-in zoom-in-95 duration-500">
         
         <div className="relative">
-          <div className="absolute inset-0 bg-green-100 rounded-full scale-150 animate-pulse" />
-          <CheckCircle2 className="h-24 w-24 text-secondary relative z-10 bg-white rounded-full" />
+          <div className="absolute inset-0 bg-blue-100 rounded-full scale-150 animate-pulse" />
+          <Clock className="h-24 w-24 text-primary relative z-10 bg-white rounded-full p-4" />
         </div>
 
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-gray-900">Transfer Successful!</h2>
-          <p className="text-gray-500 max-w-[250px]">Your money is on its way to Maria Garcia.</p>
+          <h2 className="text-2xl font-bold text-gray-900">Transfer Initiated</h2>
+          <p className="text-gray-500 max-w-[280px]">Your transfer request has been received. We are processing your transaction.</p>
         </div>
 
         <div className="bg-gray-50 p-6 rounded-2xl w-full max-w-xs space-y-4 border border-gray-100">
