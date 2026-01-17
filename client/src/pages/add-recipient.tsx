@@ -16,7 +16,7 @@ import {
 
 const COUNTRY_PROVIDERS = {
   BD: {
-    wallets: ["bKash", "Nagad", "Rocket", "Upay"],
+    wallets: ["bKash", "Nagad"],
     banks: ["Dutch-Bangla Bank", "Sonali Bank", "BRAC Bank", "City Bank", "Islami Bank"]
   },
   NG: {
