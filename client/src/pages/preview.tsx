@@ -16,7 +16,7 @@ export default function Preview() {
         <Card className="bg-primary text-primary-foreground p-6 rounded-2xl border-none shadow-lg">
           <div className="text-center space-y-1">
             <p className="text-primary-foreground/80 text-sm">Recipient Gets</p>
-            <h2 className="text-3xl font-bold">€ 950.00</h2>
+            <h2 className="text-3xl font-bold">4,250,500.00 NGN</h2>
             <div className="flex items-center justify-center gap-2 mt-4 text-sm bg-black/10 py-1 px-3 rounded-full w-fit mx-auto">
               <span>Maria Garcia</span>
               <ArrowRight className="h-3 w-3" />
@@ -46,14 +46,14 @@ export default function Preview() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Exchange Rate</span>
-              <span className="font-medium text-primary">1 EUR = 0.95 EUR</span>
+              <span className="font-medium text-primary">1 EUR = 4,250.50 NGN</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Transfer Fee</span>
-              <span className="font-medium text-secondary">Free</span>
+              <span className="font-medium text-secondary">€ 5.00</span>
             </div>
              <div className="flex justify-between">
-              <span className="text-gray-500">Discount</span>
+              <span className="text-gray-500">Discount (100%)</span>
               <span className="font-medium text-secondary">-€ 5.00</span>
             </div>
             
@@ -61,7 +61,7 @@ export default function Preview() {
             
             <div className="flex justify-between items-center pt-1">
               <span className="font-semibold text-gray-900">Total to Pay</span>
-              <span className="text-xl font-bold text-primary">€ 995.00</span>
+              <span className="text-xl font-bold text-primary">€ 1,000.00</span>
             </div>
           </div>
         </Card>
