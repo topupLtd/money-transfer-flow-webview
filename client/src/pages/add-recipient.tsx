@@ -48,12 +48,30 @@ export default function AddRecipient() {
     banks: ["Ecobank", "Standard Chartered", "United Bank for Africa", "Barclays", "Société Générale"]
   };
 
+  const countries = [
+    { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png" },
+    { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png" },
+    { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png" },
+    { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png" },
+    { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png" },
+    { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png" },
+  ];
+
+  const currentCountry = countries.find(c => c.code === selectedCountry) || countries[0];
+
   return (
     <MobileLayout title="Add Recipient">
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => window.history.back()}>
-          <ChevronLeft className="h-5 w-5 mr-1" /> Back
-        </Button>
+        <div className="flex items-center justify-between">
+          <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => window.history.back()}>
+            <ChevronLeft className="h-5 w-5 mr-1" /> Back
+          </Button>
+          
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm">
+            <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
+            <span className="text-xs font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
+          </div>
+        </div>
 
         <Tabs defaultValue="bank" className="w-full">
           <TabsList className="w-full grid grid-cols-2 p-1 bg-gray-100 rounded-xl h-12">
