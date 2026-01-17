@@ -25,7 +25,10 @@ export default function SelectRecipient() {
         </div>
 
         {/* New Recipient */}
-        <button className="w-full flex items-center gap-4 p-4 rounded-xl border border-dashed border-gray-300 hover:bg-gray-50 transition-colors text-left group">
+        <button 
+          onClick={() => setLocation("/add-recipient")}
+          className="w-full flex items-center gap-4 p-4 rounded-xl border border-dashed border-gray-300 hover:bg-gray-50 transition-colors text-left group"
+        >
           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
             <Plus className="h-5 w-5" />
           </div>

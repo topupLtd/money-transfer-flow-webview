@@ -18,12 +18,14 @@ import Profile from "@/pages/profile";
 import ProfileDetails from "@/pages/profile-details";
 import EditProfile from "@/pages/edit-profile";
 import TransferLimits from "@/pages/transfer-limits";
+import AddRecipient from "@/pages/add-recipient";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={SendMoney} />
       <Route path="/select-recipient" component={SelectRecipient} />
+      <Route path="/add-recipient" component={AddRecipient} />
       <Route path="/recipients" component={Recipients} />
       <Route path="/recipients/:id" component={RecipientDetail} />
       <Route path="/source" component={SourceFund} />
