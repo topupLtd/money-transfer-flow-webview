@@ -45,19 +45,21 @@ export default function AddRecipient() {
   const selectedCountry = searchParams.get("country") || "BD";
   const providers = COUNTRY_PROVIDERS[selectedCountry as keyof typeof COUNTRY_PROVIDERS] || {
     wallets: ["Orange Money", "MTN MoMo", "Wave"],
-    banks: ["Ecobank", "Standard Chartered", "United Bank for Africa", "Barclays", "Société Générale"]
+    banks: ["Ecobank", "Standard Chartered", "United Bank for Africa", "Barclays", "Société Générale", "State Bank of India", "HDFC Bank", "ICICI Bank", "Axis Bank", "Punjab National Bank"]
   };
 
   const countries = [
-    { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png" },
-    { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png" },
-    { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png" },
-    { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png" },
-    { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png" },
-    { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png" },
+    { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png", dialCode: "+880" },
+    { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", dialCode: "+234" },
+    { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png", dialCode: "+233" },
+    { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png", dialCode: "+221" },
+    { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png", dialCode: "+92" },
+    { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png", dialCode: "+212" },
+    { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", dialCode: "+91" },
   ];
 
   const currentCountry = countries.find(c => c.code === selectedCountry) || countries[0];
+  const isIndia = selectedCountry === "IN";
 
   return (
     <MobileLayout title="Add Recipient">
@@ -83,65 +85,123 @@ export default function AddRecipient() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="bank" className="mt-6 space-y-5">
+          <TabsContent value="bank" className="mt-6 space-y-8">
+            {/* Personal Details Section */}
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2 px-1">
+                <User className="h-4 w-4 text-primary" />
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Personal Details</h3>
+              </div>
+              
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-50 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
+                    <Input placeholder="John" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
+                    <Input placeholder="Doe" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
+                </div>
+
+                {isIndia && (
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Date of Birth</Label>
+                    <Input type="date" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
+                )}
+
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
-                  <Input placeholder="John" className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
+                  <Select>
+                    <SelectTrigger className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                      <SelectValue placeholder="Select Relationship" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      {RELATIONSHIPS.map(rel => (
+                        <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
-                  <Input placeholder="Doe" className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
+                  <div className="flex gap-2">
+                    <Select defaultValue={currentCountry.dialCode}>
+                      <SelectTrigger className="w-24 h-12 border-none bg-gray-50 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {countries.map(c => (
+                          <SelectItem key={c.code} value={c.dialCode}>
+                            <div className="flex items-center gap-2">
+                              <img src={c.flag} className="w-4 h-3 object-cover rounded-sm" alt="" />
+                              <span>{c.dialCode}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input placeholder="123456789" className="flex-1 h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
+                </div>
+
+                <div className="space-y-4 pt-2">
+                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Address Details</Label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Input placeholder="State" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                    <div className="space-y-2">
+                      <Input placeholder="City" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Input placeholder="Zip Code" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
+                  <div className="space-y-2">
+                    <Input placeholder="Full Address" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Bank Name</Label>
-                <Select>
-                  <SelectTrigger className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm focus:ring-0">
-                    <SelectValue placeholder="Select Bank" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {providers.banks.map(bank => (
-                      <SelectItem key={bank} value={bank.toLowerCase()}>{bank}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            {/* Bank Details Section */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 px-1">
+                <Landmark className="h-4 w-4 text-primary" />
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Bank Details</h3>
               </div>
-
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Account Number / IBAN</Label>
-                <Input placeholder="Enter account details" className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
-                <Select>
-                  <SelectTrigger className="h-12 border-none bg-white rounded-xl font-semibold shadow-sm focus:ring-0">
-                    <SelectValue placeholder="Select Relationship" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {RELATIONSHIPS.map(rel => (
-                      <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
-                <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input placeholder="+880 1XXX-XXXXXX" className="pl-11 h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+              
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-50 space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Bank Name</Label>
+                  <Select>
+                    <SelectTrigger className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                      <SelectValue placeholder="Select Bank" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      {providers.banks.map(bank => (
+                        <SelectItem key={bank} value={bank.toLowerCase()}>{bank}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Address</Label>
-                <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input placeholder="Enter address" className="pl-11 h-12 border-none bg-white rounded-xl font-semibold shadow-sm" />
+                {isIndia && (
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">IFSC Code</Label>
+                    <Input placeholder="SBIN0001234" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
+                    {isIndia ? "Account Number" : "Account Number / IBAN"}
+                  </Label>
+                  <Input placeholder="Enter account details" className="h-12 border-none bg-gray-50 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
                 </div>
               </div>
             </div>
