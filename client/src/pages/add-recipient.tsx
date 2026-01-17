@@ -42,7 +42,7 @@ const RELATIONSHIPS = ["Family", "Friend", "Business", "Other"];
 export default function AddRecipient() {
   const [location, setLocation] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
-  const selectedCountry = searchParams.get("country") || "BD";
+  const selectedCountry = searchParams.get("country") || "NG";
   const selectedMethod = searchParams.get("method") || "bank";
   const providers = COUNTRY_PROVIDERS[selectedCountry as keyof typeof COUNTRY_PROVIDERS] || {
     wallets: ["Orange Money", "MTN MoMo", "Wave"],
