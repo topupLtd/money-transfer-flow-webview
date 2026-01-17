@@ -25,102 +25,34 @@ import {
 } from "@/components/ui/drawer";
 
 const COUNTRIES = [
-  { 
-    code: "NG", 
-    name: "Nigeria", 
-    currency: "NGN", 
-    flag: "https://flagcdn.com/w40/ng.png", 
-    rate: 1450,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  { 
-    code: "KE", 
-    name: "Kenya", 
-    currency: "KES", 
-    flag: "https://flagcdn.com/w40/ke.png", 
-    rate: 130,
-    deliveryMethods: ["wallet"]
-  },
-  { 
-    code: "GH", 
-    name: "Ghana", 
-    currency: "GHS", 
-    flag: "https://flagcdn.com/w40/gh.png", 
-    rate: 12.5,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  { 
-    code: "PH", 
-    name: "Philippines", 
-    currency: "PHP", 
-    flag: "https://flagcdn.com/w40/ph.png", 
-    rate: 56.2,
-    deliveryMethods: ["bank"]
-  },
-  { 
-    code: "IN", 
-    name: "India", 
-    currency: "INR", 
-    flag: "https://flagcdn.com/w40/in.png", 
-    rate: 83.1,
-    deliveryMethods: ["bank"]
-  },
-  { 
-    code: "VN", 
-    name: "Vietnam", 
-    currency: "VND", 
-    flag: "https://flagcdn.com/w40/vn.png", 
-    rate: 24500,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  {
-    code: "CI",
-    name: "Ivory Coast",
-    currency: "XOF",
-    flag: "https://flagcdn.com/w40/ci.png",
-    rate: 655.95,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  {
-    code: "SN",
-    name: "Senegal",
-    currency: "XOF",
-    flag: "https://flagcdn.com/w40/sn.png",
-    rate: 655.95,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  {
-    code: "ML",
-    name: "Mali",
-    currency: "XOF",
-    flag: "https://flagcdn.com/w40/ml.png",
-    rate: 655.95,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  {
-    code: "PK",
-    name: "Pakistan",
-    currency: "PKR",
-    flag: "https://flagcdn.com/w40/pk.png",
-    rate: 300.5,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  {
-    code: "BD",
-    name: "Bangladesh",
-    currency: "BDT",
-    flag: "https://flagcdn.com/w40/bd.png",
-    rate: 118.2,
-    deliveryMethods: ["bank", "wallet"]
-  },
-  {
-    code: "MA",
-    name: "Morocco",
-    currency: "MAD",
-    flag: "https://flagcdn.com/w40/ma.png",
-    rate: 10.8,
-    deliveryMethods: ["bank"]
-  },
+  { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
+  { code: "KE", name: "Kenya", currency: "KES", flag: "https://flagcdn.com/w40/ke.png", rate: 130, deliveryMethods: ["wallet"] },
+  { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
+  { code: "PH", name: "Philippines", currency: "PHP", flag: "https://flagcdn.com/w40/ph.png", rate: 56.2, deliveryMethods: ["bank"] },
+  { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", rate: 83.1, deliveryMethods: ["bank"] },
+  { code: "VN", name: "Vietnam", currency: "VND", flag: "https://flagcdn.com/w40/vn.png", rate: 24500, deliveryMethods: ["bank", "wallet"] },
+  { code: "CI", name: "Ivory Coast", currency: "XOF", flag: "https://flagcdn.com/w40/ci.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "ML", name: "Mali", currency: "XOF", flag: "https://flagcdn.com/w40/ml.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png", rate: 300.5, deliveryMethods: ["bank", "wallet"] },
+  { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png", rate: 118.2, deliveryMethods: ["bank", "wallet"] },
+  { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
+  { code: "CM", name: "Cameroon", currency: "XAF", flag: "https://flagcdn.com/w40/cm.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "TG", name: "Togo", currency: "XOF", flag: "https://flagcdn.com/w40/tg.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "BJ", name: "Benin", currency: "XOF", flag: "https://flagcdn.com/w40/bj.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "BF", name: "Burkina Faso", currency: "XOF", flag: "https://flagcdn.com/w40/bf.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "CD", name: "DR Congo", currency: "CDF", flag: "https://flagcdn.com/w40/cd.png", rate: 2800, deliveryMethods: ["wallet"] },
+  { code: "RW", name: "Rwanda", currency: "RWF", flag: "https://flagcdn.com/w40/rw.png", rate: 1250, deliveryMethods: ["bank", "wallet"] },
+  { code: "UG", name: "Uganda", currency: "UGX", flag: "https://flagcdn.com/w40/ug.png", rate: 4050, deliveryMethods: ["bank", "wallet"] },
+  { code: "TZ", name: "Tanzania", currency: "TZS", flag: "https://flagcdn.com/w40/tz.png", rate: 2600, deliveryMethods: ["bank", "wallet"] },
+  { code: "EG", name: "Egypt", currency: "EGP", flag: "https://flagcdn.com/w40/eg.png", rate: 52.5, deliveryMethods: ["bank"] },
+  { code: "LK", name: "Sri Lanka", currency: "LKR", flag: "https://flagcdn.com/w40/lk.png", rate: 325, deliveryMethods: ["bank", "wallet"] },
+  { code: "NP", name: "Nepal", currency: "NPR", flag: "https://flagcdn.com/w40/np.png", rate: 145, deliveryMethods: ["bank"] },
+  { code: "ID", name: "Indonesia", currency: "IDR", flag: "https://flagcdn.com/w40/id.png", rate: 17200, deliveryMethods: ["bank", "wallet"] },
+  { code: "TH", name: "Thailand", currency: "THB", flag: "https://flagcdn.com/w40/th.png", rate: 38.5, deliveryMethods: ["bank"] },
+  { code: "BR", name: "Brazil", currency: "BRL", flag: "https://flagcdn.com/w40/br.png", rate: 5.4, deliveryMethods: ["bank"] },
+  { code: "MX", name: "Mexico", currency: "MXN", flag: "https://flagcdn.com/w40/mx.png", rate: 18.2, deliveryMethods: ["bank"] },
+  { code: "CO", name: "Colombia", currency: "COP", flag: "https://flagcdn.com/w40/co.png", rate: 4200, deliveryMethods: ["bank", "wallet"] },
 ];
 
 const PROMOS = [
