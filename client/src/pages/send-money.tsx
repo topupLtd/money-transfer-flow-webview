@@ -77,7 +77,7 @@ export default function SendMoney() {
     const receiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toLocaleString();
 
   const handleContinue = () => {
-    setLocation(`/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}`);
+    setLocation(`/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}&amount=${sendAmount}`);
   };
 
   const availableMethods = selectedCountry.deliveryMethods || ["bank", "wallet"];

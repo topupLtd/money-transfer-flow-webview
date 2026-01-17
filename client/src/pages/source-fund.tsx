@@ -24,7 +24,7 @@ export default function SourceFund() {
           {sources.map((source) => (
             <div 
               key={source.id}
-              onClick={() => setLocation("/reason")}
+              onClick={() => setLocation(`/reason${window.location.search}`)}
               className="group flex items-center justify-between p-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary cursor-pointer transition-all active:scale-[0.98]"
             >
               <h4 className="font-semibold text-gray-900">{source.name}</h4>
