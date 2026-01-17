@@ -3,14 +3,91 @@ import { CheckCircle2, ChevronRight, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "wouter";
 
+export const MOCK_TRANSACTIONS = [
+  { 
+    id: 1, 
+    recipient: "Maria Garcia", 
+    amount: "€ 1,000.00", 
+    recipientGets: "450,000 NGN",
+    date: "Jan 16, 2026", 
+    status: "Completed", 
+    type: "Bank Deposit",
+    country: "Nigeria",
+    currency: "NGN",
+    fee: "Free",
+    discount: "-€ 5.00",
+    total: "€ 995.00",
+    rate: "1 EUR = 450 NGN",
+    bank: "Zenith Bank",
+    account: "**** 1234",
+    source: "MyPCS Wallet",
+    fundSource: "Savings",
+    reason: "Family Support"
+  },
+  { 
+    id: 2, 
+    recipient: "Jean Pierre", 
+    amount: "€ 1,200.00", 
+    recipientGets: "780,000 XAF",
+    date: "Jan 12, 2026", 
+    status: "Processing", 
+    type: "Mobile Wallet",
+    country: "Cameroon",
+    currency: "XAF",
+    fee: "€ 2.50",
+    discount: "€ 0.00",
+    total: "€ 1,202.50",
+    rate: "1 EUR = 650 XAF",
+    bank: "Orange Money",
+    account: "+237 678901234",
+    source: "MyPCS Wallet",
+    fundSource: "Salary",
+    reason: "Education"
+  },
+  { 
+    id: 3, 
+    recipient: "Liam Wilson", 
+    amount: "€ 450.00", 
+    recipientGets: "5,400 GHS",
+    date: "Dec 28, 2025", 
+    status: "Completed", 
+    type: "Bank Deposit",
+    country: "Ghana",
+    currency: "GHS",
+    fee: "Free",
+    discount: "€ 0.00",
+    total: "€ 450.00",
+    rate: "1 EUR = 12 GHS",
+    bank: "Ecobank Ghana",
+    account: "**** 9012",
+    source: "MyPCS Wallet",
+    fundSource: "Gift",
+    reason: "Medical Expenses"
+  },
+  { 
+    id: 4, 
+    recipient: "Sofia Rossi", 
+    amount: "€ 2,100.00", 
+    recipientGets: "11,500 BRL",
+    date: "Dec 15, 2025", 
+    status: "Completed", 
+    type: "Mobile Wallet",
+    country: "Brazil",
+    currency: "BRL",
+    fee: "€ 5.00",
+    discount: "-€ 10.00",
+    total: "€ 2,095.00",
+    rate: "1 EUR = 5.47 BRL",
+    bank: "PicPay",
+    account: "sofia.rossi@pix.br",
+    source: "MyPCS Wallet",
+    fundSource: "Savings",
+    reason: "Investment"
+  },
+];
+
 export default function Transactions() {
   const [, setLocation] = useLocation();
-  const transactions = [
-    { id: 1, recipient: "Maria Garcia", amount: "€ 950.00", date: "Jan 16, 2026", status: "Completed", type: "Bank Deposit" },
-    { id: 2, recipient: "Jean Pierre", amount: "€ 1,200.00", date: "Jan 12, 2026", status: "Processing", type: "Wallet" },
-    { id: 3, recipient: "Liam Wilson", amount: "€ 450.00", date: "Dec 28, 2025", status: "Completed", type: "Bank Deposit" },
-    { id: 4, recipient: "Sofia Rossi", amount: "€ 2,100.00", date: "Dec 15, 2025", status: "Completed", type: "Wallet" },
-  ];
 
   return (
     <MobileLayout title="Activity">
@@ -26,7 +103,7 @@ export default function Transactions() {
           <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Recent Transfers</h3>
           
           <div className="space-y-3">
-            {transactions.map((tx) => (
+            {MOCK_TRANSACTIONS.map((tx) => (
               <div 
                 key={tx.id}
                 onClick={() => setLocation(`/transactions/${tx.id}`)}
@@ -43,7 +120,7 @@ export default function Transactions() {
                     <span className="font-bold text-gray-900">{tx.amount}</span>
                   </div>
                   <div className="flex justify-between items-center text-[11px]">
-                    <span className="text-gray-400">{tx.date} • {tx.type}</span>
+                    <span className="text-gray-400">{tx.date} • {tx.type} ({tx.country})</span>
                     <span className={`px-2 py-0.5 rounded-full font-medium ${
                       tx.status === 'Processing' ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'
                     }`}>
