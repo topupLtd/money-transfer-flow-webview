@@ -1,15 +1,15 @@
 import { Link, useLocation } from "wouter";
-import { Send, Users, List, User } from "lucide-react";
+import { SendHorizonal, Contact2, History, User2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MobileLayout({ children, title }: { children: React.ReactNode; title?: string }) {
   const [location] = useLocation();
 
   const navItems = [
-    { href: "/", icon: Send, label: "Send" },
-    { href: "/recipients", icon: Users, label: "Recipients" },
-    { href: "/transactions", icon: List, label: "History" },
-    { href: "/profile", icon: User, label: "Profile" },
+    { href: "/", icon: SendHorizonal, label: "Send" },
+    { href: "/recipients", icon: Contact2, label: "Recipients" },
+    { href: "/transactions", icon: History, label: "History" },
+    { href: "/profile", icon: User2, label: "Profile" },
   ];
 
   return (

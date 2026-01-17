@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { Search, Plus, ChevronRight, User } from "lucide-react";
+import { Search, UserPlus2, ChevronRight, User2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -54,7 +54,7 @@ export default function SelectRecipient() {
           className="w-full flex items-center gap-4 p-4 rounded-xl border border-dashed border-gray-300 hover:bg-gray-50 transition-colors text-left group"
         >
           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-            <Plus className="h-5 w-5" />
+            <UserPlus2 className="h-5 w-5" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">Add New Recipient</h3>
@@ -97,7 +97,7 @@ export default function SelectRecipient() {
             ) : countryFilter ? (
               <div className="py-12 text-center space-y-3 bg-white rounded-2xl border border-dashed border-gray-200">
                 <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
-                  <User className="h-6 w-6 text-gray-300" />
+                  <User2 className="h-6 w-6 text-gray-300" />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-gray-900">No matching recipients</p>
@@ -111,7 +111,7 @@ export default function SelectRecipient() {
                   className="rounded-full text-xs font-bold border-gray-200"
                   onClick={() => setLocation("/add-recipient")}
                 >
-                  <Plus className="h-3 w-3 mr-1" /> Add New
+                  <UserPlus2 className="h-3 w-3 mr-1" /> Add New
                 </Button>
               </div>
             ) : (

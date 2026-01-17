@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { ArrowRightLeft, ChevronDown, Wallet, Building2, Tag, Percent } from "lucide-react";
+import { ArrowRightLeft, ChevronDown, Landmark, Smartphone, Ticket, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -175,7 +175,7 @@ export default function SendMoney() {
                 <SelectItem value="bank" className="py-3 cursor-pointer">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                      <Building2 className="h-4 w-4" />
+                      <Landmark className="h-4 w-4" />
                     </div>
                     <div className="flex flex-col text-left">
                       <span className="font-bold text-sm">Bank Deposit</span>
@@ -188,7 +188,7 @@ export default function SendMoney() {
                 <SelectItem value="wallet" className="py-3 cursor-pointer">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
-                      <Wallet className="h-4 w-4" />
+                      <Smartphone className="h-4 w-4" />
                     </div>
                     <div className="flex flex-col text-left">
                       <span className="font-bold text-sm">Mobile Wallet</span>
@@ -208,7 +208,7 @@ export default function SendMoney() {
              <DrawerTrigger asChild>
                <button className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                  <div className="flex items-center gap-3">
-                   <Tag className="h-5 w-5 text-primary" />
+                   <Ticket className="h-5 w-5 text-primary" />
                    <span className={promoCode ? "font-semibold text-primary" : "text-gray-400"}>
                      {promoCode ? `Applied: ${promoCode}` : "Apply Promo Code"}
                    </span>

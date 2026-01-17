@@ -3,14 +3,14 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User, Tag, ChevronRight, LogOut, Camera, ShieldCheck, HelpCircle } from "lucide-react";
+import { User2, Ticket, ChevronRight, LogOut, Camera, ShieldCheck, HelpCircle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Profile() {
   const [, setLocation] = useLocation();
 
   const menuItems = [
-    { label: "Active Promotions", icon: Tag, value: "3 active", color: "text-primary bg-primary/10" },
+    { label: "Active Promotions", icon: Ticket, value: "3 active", color: "text-primary bg-primary/10" },
     { label: "Account Security", icon: ShieldCheck, value: "Safe", color: "text-secondary bg-secondary/10" },
     { label: "Help & Support", icon: HelpCircle, value: null, color: "text-blue-500 bg-blue-50" },
   ];
@@ -41,7 +41,7 @@ export default function Profile() {
           >
             <div className="flex items-center gap-4">
               <div className="h-10 w-10 rounded-xl flex items-center justify-center text-primary bg-primary/10">
-                <User className="h-5 w-5" />
+                <User2 className="h-5 w-5" />
               </div>
               <div className="text-left">
                 <span className="font-bold text-gray-900 text-sm block">Personal Information</span>
