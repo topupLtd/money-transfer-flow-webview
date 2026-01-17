@@ -15,25 +15,141 @@ import {
 } from "@/components/ui/select";
 
 const COUNTRY_PROVIDERS = {
+  AO: {
+    wallets: ["Unitel Money", "Afrimoney"],
+    banks: ["BAI", "BFA", "Banco BIC", "Standard Bank Angola"]
+  },
   BD: {
-    wallets: ["bKash", "Nagad"],
+    wallets: ["bKash", "Nagad", "Rocket", "Upay"],
     banks: ["Dutch-Bangla Bank", "Sonali Bank", "BRAC Bank", "City Bank", "Islami Bank"]
   },
-  NG: {
-    wallets: ["Opay", "PalmPay", "Paga"],
-    banks: ["Access Bank", "Zenith Bank", "GTBank", "First Bank", "UBA"]
+  BJ: {
+    wallets: ["MTN Money", "Moov Money"],
+    banks: ["Ecobank Benin", "BOA Benin", "NSIA Banque"]
+  },
+  BR: {
+    wallets: ["Pix", "PicPay", "Mercado Pago"],
+    banks: ["Itaú Unibanco", "Banco do Brasil", "Bradesco", "Santander Brasil"]
+  },
+  BF: {
+    wallets: ["Orange Money", "Moov Money"],
+    banks: ["Ecobank Burkina", "BOA Burkina", "Coris Bank"]
+  },
+  CM: {
+    wallets: ["MTN Mobile Money", "Orange Money"],
+    banks: ["Afriland First Bank", "Société Générale Cameroun", "Ecobank Cameroon"]
+  },
+  TD: {
+    wallets: ["Moov Money", "Airtel Money"],
+    banks: ["Ecobank Chad", "BCC", "CBT"]
+  },
+  CN: {
+    wallets: ["Alipay", "WeChat Pay"],
+    banks: ["ICBC", "China Construction Bank", "Bank of China", "Agricultural Bank of China"]
+  },
+  CO: {
+    wallets: ["Nequi", "DaviPlata"],
+    banks: ["Bancolombia", "Banco de Bogotá", "Davivienda"]
+  },
+  CG: {
+    wallets: ["MTN Mobile Money", "Airtel Money"],
+    banks: ["Ecobank Congo", "BGFI Bank", "BSCA Bank"]
+  },
+  CD: {
+    wallets: ["M-Pesa", "Airtel Money", "Orange Money"],
+    banks: ["Rawbank", "Equity BCDC", "TMB"]
+  },
+  CI: {
+    wallets: ["Orange Money", "MTN Money", "Moov Money", "Wave"],
+    banks: ["SGCI", "Ecobank Côte d'Ivoire", "NSIA Banque", "BACCI"]
+  },
+  DO: {
+    wallets: ["m-peso"],
+    banks: ["Banco Popular", "Banreservas", "Banco BHD León"]
+  },
+  EG: {
+    wallets: ["Vodafone Cash", "Etisalat Cash", "Fawry"],
+    banks: ["National Bank of Egypt", "Banque Misr", "CIB", "QNB Alahli"]
+  },
+  GA: {
+    wallets: ["Airtel Money", "Moov Money"],
+    banks: ["BGFIBank", "Ecobank Gabon", "UGB"]
+  },
+  GM: {
+    wallets: ["QMoney", "AfriMoney"],
+    banks: ["Ecobank Gambia", "Standard Chartered Gambia", "GTBank Gambia"]
   },
   GH: {
     wallets: ["MTN MoMo", "Telecel Cash", "AirtelTigo Money"],
-    banks: ["GCB Bank", "Ecobank Ghana", "Stanbic Bank", "Absa Bank"]
+    banks: ["GCB Bank", "Ecobank Ghana", "Stanbic Bank", "Absa Bank", "Zenith Bank Ghana"]
   },
-  SN: {
-    wallets: ["Wave", "Orange Money", "Free Money"],
-    banks: ["CBAO", "SGBS", "Ecobank Senegal", "BIMA"]
+  GN: {
+    wallets: ["Orange Money", "MTN Mobile Money"],
+    banks: ["Ecobank Guinea", "Société Générale Guinée", "Bicigui"]
+  },
+  HT: {
+    wallets: ["MonCash", "Natcash"],
+    banks: ["Sogebank", "Unibank", "BNC"]
+  },
+  IN: {
+    wallets: ["Paytm", "PhonePe", "Google Pay (UPI)"],
+    banks: ["State Bank of India", "HDFC Bank", "ICICI Bank", "Axis Bank", "Punjab National Bank"]
+  },
+  MG: {
+    wallets: ["Mvola", "Orange Money", "Airtel Money"],
+    banks: ["BMOI", "BNI Madagascar", "Bank of Africa Madagascar"]
+  },
+  ML: {
+    wallets: ["Orange Money", "Moov Money"],
+    banks: ["BDM-SA", "BMS-SA", "Ecobank Mali"]
+  },
+  MR: {
+    wallets: ["Bankily", "Masrivi"],
+    banks: ["BMCI", "BNM", "Société Générale Mauritanie"]
+  },
+  MD: {
+    wallets: ["Bpay", "RunPay"],
+    banks: ["maib", "Moldindconbank", "Victoriabank"]
+  },
+  MA: {
+    wallets: ["Wafacash", "Maroc Telecom Cash"],
+    banks: ["Attijariwafa Bank", "Banque Populaire", "BMCE Bank"]
+  },
+  NE: {
+    wallets: ["Airtel Money", "Moov Money"],
+    banks: ["SONIBANK", "Ecobank Niger", "BIA Niger"]
+  },
+  NG: {
+    wallets: ["Opay", "PalmPay", "Paga", "Moniepoint"],
+    banks: ["Access Bank", "Zenith Bank", "GTBank", "First Bank", "UBA", "Stanbic IBTC"]
   },
   PK: {
-    wallets: ["JazzCash", "EasyPaisa", "SadaPay"],
-    banks: ["Habib Bank", "National Bank of Pakistan", "United Bank", "MCB Bank"]
+    wallets: ["JazzCash", "EasyPaisa", "SadaPay", "NayaPay"],
+    banks: ["Habib Bank", "National Bank of Pakistan", "United Bank", "MCB Bank", "Meezan Bank"]
+  },
+  PH: {
+    wallets: ["GCash", "Maya"],
+    banks: ["BDO Unibank", "BPI", "Metrobank", "Land Bank"]
+  },
+  SN: {
+    wallets: ["Wave", "Orange Money", "Free Money", "E-Money"],
+    banks: ["CBAO", "SGBS", "Ecobank Senegal", "BIMA", "Banque de l'Habitat"]
+  },
+  RS: {
+    wallets: ["iPay", "m-plati"],
+    banks: ["Banca Intesa", "OTP Banka", "NLB Komercijalna Banka"]
+  },
+  TG: {
+    wallets: ["T-Money", "Flooz"],
+    banks: ["Ecobank Togo", "Orabank Togo", "UTB"]
+  },
+  TR: {
+    wallets: ["Papara", "Param"],
+    banks: ["Ziraat Bankası", "İş Bankası", "Garanti BBVA", "Akbank"]
+  },
+  UA: {
+    wallets: ["Privat24", "Monobank"],
+    banks: ["PrivatBank", "Oschadbank", "Raiffeisen Bank"]
   }
 };
 
