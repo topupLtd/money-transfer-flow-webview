@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, Info, Landmark, Smartphone } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectTrigger } from "@/components/ui/select";
 
 export default function TransferLimits() {
   const [, setLocation] = useLocation();
@@ -119,33 +120,45 @@ export default function TransferLimits() {
               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider px-1">Recipient Limits</h3>
               <div className="grid gap-4">
                 {[
-                  { country: "Bangladesh", code: "BD", methods: ["Bank Deposit", "Mobile Wallet"], bankLimit: "250,000 BDT", walletLimit: "100,000 BDT" },
-                  { country: "Nigeria", code: "NG", methods: ["Bank Deposit"], bankLimit: "1,000,000 NGN" },
-                  { country: "Senegal", code: "SN", methods: ["Bank Deposit", "Mobile Wallet"], bankLimit: "1,000,000 XOF", walletLimit: "500,000 XOF" },
-                  { country: "Morocco", code: "MA", methods: ["Bank Deposit"], bankLimit: "50,000 MAD" },
+                  { country: "Bangladesh", code: "BD", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "250,000 BDT" }, { name: "Mobile Wallet", icon: Smartphone, limit: "100,000 BDT" }] },
+                  { country: "Nigeria", code: "NG", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "1,000,000 NGN" }] },
+                  { country: "Senegal", code: "SN", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "1,000,000 XOF" }, { name: "Mobile Wallet", icon: Smartphone, limit: "500,000 XOF" }] },
+                  { country: "Morocco", code: "MA", methods: [{ name: "Bank Deposit", icon: Landmark, limit: "50,000 MAD" }] },
                 ].map((item, idx) => (
-                  <Card key={idx} className="p-5 border-gray-100 shadow-sm space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <img src={`https://flagcdn.com/w40/${item.code.toLowerCase()}.png`} className="w-6 h-6 rounded-full object-cover" alt={item.country} />
-                        <h3 className="font-bold text-gray-900">{item.country}</h3>
-                      </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase">{item.code}</span>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      {item.methods.map((method, mIdx) => (
-                        <div key={mIdx} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                          <div className="flex items-center gap-2">
-                            {method.includes("Bank") ? <Landmark className="h-3 w-3 text-primary" /> : <Smartphone className="h-3 w-3 text-secondary" />}
-                            <span className="text-xs text-gray-500">{method}</span>
-                          </div>
-                          <span className="text-sm font-bold text-gray-900">
-                            {method.includes("Bank") ? item.bankLimit : item.walletLimit}
-                          </span>
+                  <Card key={idx} className="border-gray-100 shadow-sm overflow-hidden">
+                    <Select>
+                      <SelectTrigger className="w-full h-auto p-5 border-none shadow-none flex items-center justify-between hover:bg-gray-50 transition-colors focus:ring-0">
+                        <div className="flex items-center gap-3">
+                          <img src={`https://flagcdn.com/w40/${item.code.toLowerCase()}.png`} className="w-6 h-6 rounded-full object-cover" alt={item.country} />
+                          <h3 className="font-bold text-gray-900">{item.country}</h3>
                         </div>
-                      ))}
-                    </div>
+                      </SelectTrigger>
+                      <SelectContent className="border-gray-100 shadow-xl rounded-xl">
+                        <div className="p-2 space-y-4">
+                          {item.methods.map((method, mIdx) => (
+                            <div key={mIdx} className="space-y-3 p-3 bg-gray-50 rounded-lg">
+                              <div className="flex items-center gap-2 border-b border-gray-200 pb-2 mb-2">
+                                <method.icon className="h-4 w-4 text-primary" />
+                                <span className="font-bold text-sm text-gray-900">{method.name}</span>
+                              </div>
+                              <div className="space-y-2">
+                                {[
+                                  { label: "Single Transfer", value: method.limit },
+                                  { label: "Daily Limit", value: method.limit },
+                                  { label: "Monthly Limit", value: `5x ${method.limit}` },
+                                  { label: "Yearly Limit", value: `20x ${method.limit}` },
+                                ].map((row, rIdx) => (
+                                  <div key={rIdx} className="flex justify-between items-center text-xs">
+                                    <span className="text-gray-500">{row.label}</span>
+                                    <span className="font-bold text-gray-900">{row.value}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </SelectContent>
+                    </Select>
                   </Card>
                 ))}
               </div>
