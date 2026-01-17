@@ -13,6 +13,8 @@ export default function TransactionDetail() {
   const tx = {
     id: params.id,
     recipient: "Maria Garcia",
+    recipientCountry: "Nigeria",
+    recipientCurrency: "NGN",
     amount: "€ 1,000.00",
     recipientGets: "€ 950.00",
     fee: "Free",
@@ -25,7 +27,9 @@ export default function TransactionDetail() {
     reference: "TRX-883920",
     bank: "Chase Bank",
     account: "**** 1234",
-    paymentSource: "MyPCS Wallet"
+    paymentSource: "MyPCS Wallet",
+    sourceOfFund: "Savings",
+    transferReason: "Family Support"
   };
 
   return (
@@ -40,6 +44,7 @@ export default function TransactionDetail() {
             <CheckCircle2 className="h-10 w-10" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">{tx.recipientGets}</h2>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Recipient Gets ({tx.recipientCountry})</p>
           <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold uppercase">{tx.status}</span>
         </div>
 
@@ -50,6 +55,7 @@ export default function TransactionDetail() {
                <div className="text-right">
                  <p className="font-bold text-gray-900">{tx.recipient}</p>
                  <p className="text-xs text-gray-400">{tx.bank} • {tx.account}</p>
+                 <p className="text-[10px] font-bold text-primary uppercase mt-0.5">{tx.recipientCountry}</p>
                </div>
             </div>
             <Separator className="bg-gray-50" />
@@ -60,6 +66,15 @@ export default function TransactionDetail() {
             <div className="flex justify-between">
               <span className="text-gray-400 font-medium">Payment Source</span>
               <span className="font-bold text-gray-900">{tx.paymentSource}</span>
+            </div>
+            <Separator className="bg-gray-50" />
+            <div className="flex justify-between">
+              <span className="text-gray-400 font-medium">Source of Fund</span>
+              <span className="font-bold text-gray-900">{tx.sourceOfFund}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400 font-medium">Transfer Reason</span>
+              <span className="font-bold text-gray-900">{tx.transferReason}</span>
             </div>
             <Separator className="bg-gray-50" />
             <div className="flex justify-between">
