@@ -222,10 +222,18 @@ export default function AddRecipient() {
 
         <Tabs defaultValue={selectedMethod} className="w-full">
           <TabsList className="w-full grid grid-cols-2 p-1 bg-gray-100 rounded-xl h-12">
-            <TabsTrigger value="bank" className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm gap-2">
+            <TabsTrigger 
+              value="bank" 
+              disabled={selectedMethod === "wallet"}
+              className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Landmark className="h-4 w-4" /> Bank
             </TabsTrigger>
-            <TabsTrigger value="wallet" className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm gap-2">
+            <TabsTrigger 
+              value="wallet" 
+              disabled={selectedMethod === "bank"}
+              className="rounded-lg font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Wallet className="h-4 w-4" /> Wallet
             </TabsTrigger>
           </TabsList>
@@ -413,8 +421,8 @@ export default function AddRecipient() {
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Number / ID</Label>
                     <div className="flex gap-2">
-                      <Select defaultValue={currentCountry.dialCode}>
-                        <SelectTrigger className="w-24 h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+                      <Select defaultValue={currentCountry.dialCode} disabled>
+                        <SelectTrigger className="w-24 h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20 opacity-70 cursor-not-allowed">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl">
