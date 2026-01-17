@@ -16,12 +16,12 @@ export default function MobileLayout({ children, title }: { children: React.Reac
     <div className="min-h-screen bg-gray-50 flex justify-center">
       <div className="w-full max-w-md bg-white min-h-screen shadow-xl relative flex flex-col">
         {/* Header */}
-        <header className="bg-primary text-primary-foreground p-4 sticky top-0 z-10 shadow-sm">
-          <h1 className="text-lg font-semibold text-center">{title || "MyPCS Remit"}</h1>
+        <header className="bg-white text-secondary px-6 h-16 sticky top-0 z-10 border-b border-gray-100 flex items-center justify-center shadow-sm">
+          <h1 className="text-lg font-display font-bold text-center tracking-tight">{title || "MyPCS Remit"}</h1>
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto pb-24 px-4 py-6">
+        <main className="flex-1 overflow-y-auto pb-24 px-5 py-6 font-sans">
           {children}
         </main>
 

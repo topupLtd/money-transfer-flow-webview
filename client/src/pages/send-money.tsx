@@ -90,7 +90,7 @@ export default function SendMoney() {
         <Card className="p-0 overflow-hidden border-none shadow-lg bg-white">
           <div className="p-5 space-y-4">
             <div className="space-y-2">
-              <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">You Send</Label>
+              <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">You Send</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative">
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">€</span>
@@ -98,13 +98,13 @@ export default function SendMoney() {
                     type="number" 
                     value={sendAmount}
                     onChange={(e) => setSendAmount(e.target.value)}
-                    className="border-none shadow-none text-3xl font-bold p-0 pl-6 h-auto focus-visible:ring-0" 
+                    className="border-none shadow-none text-3xl font-bold p-0 pl-6 h-auto focus-visible:ring-0 text-secondary" 
                     placeholder="0.00"
                   />
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
                   <img src="https://flagcdn.com/w40/eu.png" className="w-5 h-5 rounded-full object-cover" alt="EUR" />
-                  <span className="font-semibold text-sm">EUR</span>
+                  <span className="font-bold text-sm text-secondary">EUR</span>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function SendMoney() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-gray-500 text-xs font-medium uppercase tracking-wider">They Receive</Label>
+              <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">They Receive</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative overflow-hidden">
                   <Input 
@@ -139,7 +139,7 @@ export default function SendMoney() {
                     <SelectValue>
                       <div className="flex items-center gap-2">
                         <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.name} />
-                        <span className="font-semibold text-sm">{selectedCountry.currency}</span>
+                        <span className="font-bold text-sm text-secondary">{selectedCountry.currency}</span>
                       </div>
                     </SelectValue>
                   </SelectTrigger>
@@ -148,7 +148,7 @@ export default function SendMoney() {
                       <SelectItem key={c.code} value={c.code}>
                         <div className="flex items-center gap-2">
                           <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt={c.name} />
-                          <span>{c.name} ({c.currency})</span>
+                          <span className="font-medium">{c.name} ({c.currency})</span>
                         </div>
                       </SelectItem>
                     ))}
@@ -158,8 +158,8 @@ export default function SendMoney() {
             </div>
           </div>
           <div className="bg-gray-50 px-5 py-3 text-[10px] text-gray-400 flex justify-between items-center border-t border-gray-100">
-            <span className="font-medium">Exchange Rate</span>
-            <span className="font-bold text-gray-900">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
+            <span className="font-bold uppercase tracking-wider">Exchange Rate</span>
+            <span className="font-bold text-secondary">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
           </div>
         </Card>
 

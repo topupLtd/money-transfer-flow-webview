@@ -4,7 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-display: 'Montserrat Alternates', sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -20,9 +21,6 @@
   
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-  
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
   
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
@@ -41,38 +39,40 @@
 }
 
 :root {
-  /* MyPCS Brand Colors */
-  /* Red #DE2314 -> 4 83% 47% */
-  /* Teal #02D39A -> 163 98% 42% */
-  /* Gold #BC9E6C -> 38 36% 58% */
+  /* MyPCS Brand Colors - Updated from PDF */
+  /* Red #e43625 -> 4 78% 52% */
+  /* Dark Navy #322b3a -> 266 15% 20% */
+  /* Deep Purple #2a1839 -> 272 41% 16% */
+  /* Light Green #89c8aa -> 151 38% 66% */
+  /* Pink #e93f69 -> 347 79% 58% */
 
   --background: 0 0% 100%;
-  --foreground: 222 47% 11%;
+  --foreground: 266 15% 20%;
 
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 266 15% 20%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 266 15% 20%;
 
-  --primary: 4 83% 47%; /* MyPCS Red */
-  --primary-foreground: 210 40% 98%;
+  --primary: 4 78% 52%; /* #e43625 */
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 163 98% 42%; /* MyPCS Teal */
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 266 15% 20%; /* #322b3a */
+  --secondary-foreground: 0 0% 100%;
 
   --muted: 210 40% 96.1%;
   --muted-foreground: 215.4 16.3% 46.9%;
 
-  --accent: 38 36% 58%; /* MyPCS Gold */
-  --accent-foreground: 222 47% 11%;
+  --accent: 347 79% 58%; /* #e93f69 */
+  --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
 
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 4 83% 47%;
+  --ring: 4 78% 52%;
 
   --radius: 0.75rem;
 }
