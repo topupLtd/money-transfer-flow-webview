@@ -38,6 +38,10 @@ export default function SelectRecipient() {
     return true;
   });
 
+  // If we have filters but no matching recipients, we should prioritize the filtered view
+  // If we have no filters at all (e.g. from general menu), we show all
+  const isFiltered = !!(countryFilter && methodFilter);
+
   return (
     <MobileLayout title="Select Recipient">
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -66,9 +70,9 @@ export default function SelectRecipient() {
         <div className="space-y-3">
           <div className="flex justify-between items-center px-1">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-              {filteredRecipients.length > 0 ? "Available Recipients" : countryFilter ? "No Recipients Found" : "Recent Recipients"}
+              {isFiltered ? (filteredRecipients.length > 0 ? "Available Recipients" : "No Recipients Found") : "Recent Recipients"}
             </h3>
-            {countryFilter && (
+            {isFiltered && (
               <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
                 {countryFilter} • {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}
               </span>
@@ -76,44 +80,46 @@ export default function SelectRecipient() {
           </div>
           
           <div className="space-y-2">
-            {filteredRecipients.length > 0 ? (
-              filteredRecipients.map((recipient) => (
-                <div 
-                  key={recipient.id}
-                  onClick={() => setLocation("/source")}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
-                >
-                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
-                    <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-gray-900">{recipient.name}</h4>
-                    <p className="text-xs text-gray-500">{recipient.bank} • {recipient.methodLabel}</p>
-                    <p className="text-[10px] text-gray-400 font-medium">{recipient.account}</p>
+            {isFiltered ? (
+              filteredRecipients.length > 0 ? (
+                filteredRecipients.map((recipient) => (
+                  <div 
+                    key={recipient.id}
+                    onClick={() => setLocation("/source")}
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
+                  >
+                    <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
+                      <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-gray-900">{recipient.name}</h4>
+                      <p className="text-xs text-gray-500">{recipient.bank} • {recipient.methodLabel}</p>
+                      <p className="text-[10px] text-gray-400 font-medium">{recipient.account}</p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
+                ))
+              ) : (
+                <div className="py-12 text-center space-y-3 bg-white rounded-2xl border border-dashed border-gray-200">
+                  <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
+                    <User2 className="h-6 w-6 text-gray-300" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-900">No matching recipients</p>
+                    <p className="text-xs text-gray-500 px-6 mt-1">
+                      We couldn't find any recipients for {countryFilter} via {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}.
+                    </p>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full text-xs font-bold border-gray-200"
+                    onClick={() => setLocation(`/add-recipient?country=${countryFilter || ''}&method=${methodFilter || 'bank'}`)}
+                  >
+                    <UserPlus2 className="h-3 w-3 mr-1" /> Add New
+                  </Button>
                 </div>
-              ))
-            ) : countryFilter ? (
-              <div className="py-12 text-center space-y-3 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
-                  <User2 className="h-6 w-6 text-gray-300" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-gray-900">No matching recipients</p>
-                  <p className="text-xs text-gray-500 px-6 mt-1">
-                    We couldn't find any recipients for {countryFilter} via {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}.
-                  </p>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="rounded-full text-xs font-bold border-gray-200"
-                  onClick={() => setLocation(`/add-recipient?country=${countryFilter || ''}&method=${methodFilter || 'bank'}`)}
-                >
-                  <UserPlus2 className="h-3 w-3 mr-1" /> Add New
-                </Button>
-              </div>
+              )
             ) : (
               recipients.map((recipient) => (
                 <div 

@@ -447,7 +447,7 @@ export default function AddRecipient() {
         <div className="pt-4">
           <Button 
             className="w-full h-12 rounded-xl font-bold shadow-md bg-primary hover:bg-primary/90" 
-            onClick={() => setLocation("/select-recipient")}
+            onClick={() => setLocation(`/select-recipient?country=${selectedCountry}&method=${selectedMethod}`)}
           >
             Save Recipient
           </Button>
