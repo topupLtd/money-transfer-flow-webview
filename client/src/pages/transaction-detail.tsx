@@ -67,11 +67,11 @@ export default function TransactionDetail() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400 font-medium">Transfer Fee</span>
-              <span className="font-bold text-green-600">{tx.fee}</span>
+              <span className="font-bold text-gray-900">{tx.fee}</span>
             </div>
             {tx.discount !== "€ 0.00" && (
               <div className="flex justify-between">
-                <span className="text-gray-400 font-medium">Discount Applied</span>
+                <span className="text-gray-400 font-medium">Fee Discount</span>
                 <span className="font-bold text-secondary">{tx.discount}</span>
               </div>
             )}
