@@ -78,23 +78,12 @@ export default function TransferLimits() {
                   </div>
                 </div>
 
-                <div className="pt-2 space-y-2">
+                <div className="pt-2 space-y-3">
                    <div className="flex justify-between text-xs">
                     <span className="text-gray-500">Transfer Count</span>
                     <span className="font-bold text-gray-900">{stat.count.sent + stat.count.pending} / {stat.count.total}</span>
                   </div>
-                  <div className="flex gap-1">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <div 
-                        key={i} 
-                        className={`h-1 flex-1 rounded-full ${
-                          i < stat.count.sent ? 'bg-primary' : 
-                          i < (stat.count.sent + stat.count.pending) ? 'bg-amber-400' : 
-                          'bg-gray-100'
-                        }`} 
-                      />
-                    ))}
-                  </div>
+                  <Progress value={((stat.count.sent + stat.count.pending) / stat.count.total) * 100} className="h-1.5" />
                 </div>
               </Card>
             ))}
