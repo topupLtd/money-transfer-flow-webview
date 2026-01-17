@@ -42,13 +42,7 @@ const RELATIONSHIPS = ["Family", "Friend", "Business", "Other"];
 export default function AddRecipient() {
   const [location, setLocation] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
-  const selectedCountry = searchParams.get("country") || "NG";
-  const selectedMethod = searchParams.get("method") || "bank";
-  const providers = COUNTRY_PROVIDERS[selectedCountry as keyof typeof COUNTRY_PROVIDERS] || {
-    wallets: ["Orange Money", "MTN MoMo", "Wave"],
-    banks: ["Ecobank", "Standard Chartered", "United Bank for Africa", "Barclays", "Société Générale", "State Bank of India", "HDFC Bank", "ICICI Bank", "Axis Bank", "Punjab National Bank"]
-  };
-
+  
   const countries = [
     { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png", dialCode: "+880" },
     { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", dialCode: "+234" },
@@ -58,6 +52,13 @@ export default function AddRecipient() {
     { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png", dialCode: "+212" },
     { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", dialCode: "+91" },
   ];
+
+  const selectedCountry = searchParams.get("country") || countries[0].code;
+  const selectedMethod = searchParams.get("method") || "bank";
+  const providers = COUNTRY_PROVIDERS[selectedCountry as keyof typeof COUNTRY_PROVIDERS] || {
+    wallets: ["Orange Money", "MTN MoMo", "Wave"],
+    banks: ["Ecobank", "Standard Chartered", "United Bank for Africa", "Barclays", "Société Générale", "State Bank of India", "HDFC Bank", "ICICI Bank", "Axis Bank", "Punjab National Bank"]
+  };
 
   const currentCountry = countries.find(c => c.code === selectedCountry) || countries[0];
   const isIndia = selectedCountry === "IN";
