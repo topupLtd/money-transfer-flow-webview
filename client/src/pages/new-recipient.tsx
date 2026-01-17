@@ -224,10 +224,25 @@ export default function NewRecipient() {
             <ChevronLeft className="h-5 w-5 mr-1" /> Back
           </Button>
           
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm">
-            <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
-            <span className="text-xs font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
-          </div>
+          <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
+            <SelectTrigger className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm w-auto h-auto focus:ring-1 focus:ring-primary/20">
+              <div className="flex items-center gap-2">
+                <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
+                <span className="text-xs font-bold text-secondary uppercase">{currentCountry.name} ({currentCountry.currency})</span>
+                <ChevronDown className="h-3 w-3 text-gray-400" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="rounded-2xl max-h-80">
+              {COUNTRIES.map(c => (
+                <SelectItem key={c.code} value={c.code} className="rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt="" />
+                    <span className="text-xs font-bold">{c.name} ({c.currency})</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
