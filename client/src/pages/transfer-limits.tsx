@@ -37,11 +37,8 @@ export default function TransferLimits() {
   ];
 
   return (
-    <MobileLayout title="Transfer Limits">
+    <MobileLayout title="Transfer Limits" onBack={() => setLocation("/profile")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => setLocation("/profile")}>
-          <ChevronLeft className="h-5 w-5 mr-1" /> Back
-        </Button>
 
         <div className="bg-blue-50 p-4 rounded-xl flex gap-3 items-start border border-blue-100">
           <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />

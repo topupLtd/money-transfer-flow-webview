@@ -7,12 +7,9 @@ export default function ProfileDetails() {
   const [, setLocation] = useLocation();
 
   return (
-    <MobileLayout title="Personal Details">
+    <MobileLayout title="Personal Details" onBack={() => setLocation("/profile")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => setLocation("/profile")}>
-          <ChevronLeft className="h-5 w-5 mr-1" /> Back
-        </Button>
-
+        
         <div className="space-y-8 px-1 pt-4">
           <div className="grid grid-cols-2 gap-x-4 gap-y-8">
             <div className="space-y-1">
