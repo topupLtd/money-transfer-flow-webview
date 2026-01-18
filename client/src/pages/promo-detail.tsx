@@ -28,8 +28,8 @@ export default function PromoDetail() {
         
         {/* Header Section */}
         <div className="flex justify-between items-center py-2 border-b border-gray-100 pb-4">
-            <h2 className="text-lg font-bold text-cyan-500">Promo code</h2>
-            <span className="text-lg font-bold text-cyan-500">{promo.id}</span>
+            <h2 className="text-lg font-bold text-primary">Promo code</h2>
+            <span className="text-lg font-bold text-primary">{promo.id}</span>
         </div>
 
         {/* Details List */}

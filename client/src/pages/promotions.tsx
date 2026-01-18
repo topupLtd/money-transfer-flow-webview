@@ -50,7 +50,7 @@ export default function Promotions() {
               placeholder="Enter code" 
               className="bg-gray-50 border-none h-12 rounded-xl focus-visible:ring-1 focus-visible:ring-primary"
             />
-            <Button className="h-12 px-6 rounded-xl font-semibold shadow-sm">
+            <Button className="h-12 px-6 rounded-xl font-semibold shadow-md bg-primary hover:bg-primary/90">
               Apply
             </Button>
           </div>
@@ -83,7 +83,7 @@ export default function Promotions() {
 
                 <button 
                   onClick={() => setLocation(`/promotions/${promo.id}`)}
-                  className="text-cyan-500 text-sm font-bold hover:underline"
+                  className="text-primary text-sm font-bold hover:underline"
                 >
                   View detail
                 </button>
