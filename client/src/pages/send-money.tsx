@@ -26,40 +26,40 @@ import {
 import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 
 const COUNTRIES = [
-  { code: "AO", name: "Angola", currency: "AOA", flag: "https://flagcdn.com/w40/ao.png", rate: 900, deliveryMethods: ["bank", "wallet"] },
-  { code: "BD", name: "Bangladesh", currency: "BDT", flag: "https://flagcdn.com/w40/bd.png", rate: 118.2, deliveryMethods: ["bank", "wallet"] },
-  { code: "BJ", name: "Benin", currency: "XOF", flag: "https://flagcdn.com/w40/bj.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "BR", name: "Brazil", currency: "BRL", flag: "https://flagcdn.com/w40/br.png", rate: 5.4, deliveryMethods: ["bank"] },
-  { code: "BF", name: "Burkina Faso", currency: "XOF", flag: "https://flagcdn.com/w40/bf.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "CM", name: "Cameroon", currency: "XAF", flag: "https://flagcdn.com/w40/cm.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "TD", name: "Chad", currency: "XAF", flag: "https://flagcdn.com/w40/td.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "CN", name: "China", currency: "CNY", flag: "https://flagcdn.com/w40/cn.png", rate: 7.8, deliveryMethods: ["bank", "wallet"] },
-  { code: "CO", name: "Colombia", currency: "COP", flag: "https://flagcdn.com/w40/co.png", rate: 4200, deliveryMethods: ["bank", "wallet"] },
-  { code: "CG", name: "Congo", currency: "XAF", flag: "https://flagcdn.com/w40/cg.png", rate: 655.95, deliveryMethods: ["wallet"] },
-  { code: "CD", name: "Congo (DRC)", currency: "CDF", flag: "https://flagcdn.com/w40/cd.png", rate: 2800, deliveryMethods: ["wallet"] },
-  { code: "CI", name: "Côte d'Ivoire", currency: "XOF", flag: "https://flagcdn.com/w40/ci.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "DO", name: "Dominican Republic", currency: "DOP", flag: "https://flagcdn.com/w40/do.png", rate: 60.5, deliveryMethods: ["bank"] },
-  { code: "EG", name: "Egypt", currency: "EGP", flag: "https://flagcdn.com/w40/eg.png", rate: 52.5, deliveryMethods: ["bank"] },
-  { code: "GA", name: "Gabon", currency: "XAF", flag: "https://flagcdn.com/w40/ga.png", rate: 655.95, deliveryMethods: ["wallet"] },
-  { code: "GM", name: "Gambia", currency: "GMD", flag: "https://flagcdn.com/w40/gm.png", rate: 70.2, deliveryMethods: ["bank", "wallet"] },
-  { code: "GH", name: "Ghana", currency: "GHS", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "GN", name: "Guinea", currency: "GNF", flag: "https://flagcdn.com/w40/gn.png", rate: 9200, deliveryMethods: ["wallet"] },
-  { code: "HT", name: "Haiti", currency: "HTG", flag: "https://flagcdn.com/w40/ht.png", rate: 142, deliveryMethods: ["bank"] },
-  { code: "IN", name: "India", currency: "INR", flag: "https://flagcdn.com/w40/in.png", rate: 83.1, deliveryMethods: ["bank"] },
-  { code: "MG", name: "Madagascar", currency: "MGA", flag: "https://flagcdn.com/w40/mg.png", rate: 4800, deliveryMethods: ["wallet"] },
-  { code: "ML", name: "Mali", currency: "XOF", flag: "https://flagcdn.com/w40/ml.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "MR", name: "Mauritania", currency: "MRU", flag: "https://flagcdn.com/w40/mr.png", rate: 42.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "MD", name: "Moldova", currency: "MDL", flag: "https://flagcdn.com/w40/md.png", rate: 19.2, deliveryMethods: ["bank"] },
-  { code: "MA", name: "Morocco", currency: "MAD", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
-  { code: "NE", name: "Niger", currency: "XOF", flag: "https://flagcdn.com/w40/ne.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "NG", name: "Nigeria", currency: "NGN", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
-  { code: "PK", name: "Pakistan", currency: "PKR", flag: "https://flagcdn.com/w40/pk.png", rate: 300.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "PH", name: "Philippines", currency: "PHP", flag: "https://flagcdn.com/w40/ph.png", rate: 56.2, deliveryMethods: ["bank"] },
-  { code: "SN", name: "Senegal", currency: "XOF", flag: "https://flagcdn.com/w40/sn.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "RS", name: "Serbia", currency: "RSD", flag: "https://flagcdn.com/w40/rs.png", rate: 117.2, deliveryMethods: ["bank"] },
-  { code: "TG", name: "Togo", currency: "XOF", flag: "https://flagcdn.com/w40/tg.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "TR", name: "Turkey", currency: "TRY", flag: "https://flagcdn.com/w40/tr.png", rate: 34.5, deliveryMethods: ["bank"] },
-  { code: "UA", name: "Ukraine", currency: "UAH", flag: "https://flagcdn.com/w40/ua.png", rate: 44.2, deliveryMethods: ["bank"] },
+  { code: "AO", name: "Angola", currency: "AOA", symbol: "Kz", flag: "https://flagcdn.com/w40/ao.png", rate: 900, deliveryMethods: ["bank", "wallet"] },
+  { code: "BD", name: "Bangladesh", currency: "BDT", symbol: "৳", flag: "https://flagcdn.com/w40/bd.png", rate: 118.2, deliveryMethods: ["bank", "wallet"] },
+  { code: "BJ", name: "Benin", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/bj.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "BR", name: "Brazil", currency: "BRL", symbol: "R$", flag: "https://flagcdn.com/w40/br.png", rate: 5.4, deliveryMethods: ["bank"] },
+  { code: "BF", name: "Burkina Faso", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/bf.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "CM", name: "Cameroon", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/cm.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "TD", name: "Chad", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/td.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "CN", name: "China", currency: "CNY", symbol: "¥", flag: "https://flagcdn.com/w40/cn.png", rate: 7.8, deliveryMethods: ["bank", "wallet"] },
+  { code: "CO", name: "Colombia", currency: "COP", symbol: "$", flag: "https://flagcdn.com/w40/co.png", rate: 4200, deliveryMethods: ["bank", "wallet"] },
+  { code: "CG", name: "Congo", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/cg.png", rate: 655.95, deliveryMethods: ["wallet"] },
+  { code: "CD", name: "Congo (DRC)", currency: "CDF", symbol: "FC", flag: "https://flagcdn.com/w40/cd.png", rate: 2800, deliveryMethods: ["wallet"] },
+  { code: "CI", name: "Côte d'Ivoire", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/ci.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "DO", name: "Dominican Republic", currency: "DOP", symbol: "RD$", flag: "https://flagcdn.com/w40/do.png", rate: 60.5, deliveryMethods: ["bank"] },
+  { code: "EG", name: "Egypt", currency: "EGP", symbol: "£", flag: "https://flagcdn.com/w40/eg.png", rate: 52.5, deliveryMethods: ["bank"] },
+  { code: "GA", name: "Gabon", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/ga.png", rate: 655.95, deliveryMethods: ["wallet"] },
+  { code: "GM", name: "Gambia", currency: "GMD", symbol: "D", flag: "https://flagcdn.com/w40/gm.png", rate: 70.2, deliveryMethods: ["bank", "wallet"] },
+  { code: "GH", name: "Ghana", currency: "GHS", symbol: "₵", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
+  { code: "GN", name: "Guinea", currency: "GNF", symbol: "FG", flag: "https://flagcdn.com/w40/gn.png", rate: 9200, deliveryMethods: ["wallet"] },
+  { code: "HT", name: "Haiti", currency: "HTG", symbol: "G", flag: "https://flagcdn.com/w40/ht.png", rate: 142, deliveryMethods: ["bank"] },
+  { code: "IN", name: "India", currency: "INR", symbol: "₹", flag: "https://flagcdn.com/w40/in.png", rate: 83.1, deliveryMethods: ["bank"] },
+  { code: "MG", name: "Madagascar", currency: "MGA", symbol: "Ar", flag: "https://flagcdn.com/w40/mg.png", rate: 4800, deliveryMethods: ["wallet"] },
+  { code: "ML", name: "Mali", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/ml.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "MR", name: "Mauritania", currency: "MRU", symbol: "UM", flag: "https://flagcdn.com/w40/mr.png", rate: 42.5, deliveryMethods: ["bank", "wallet"] },
+  { code: "MD", name: "Moldova", currency: "MDL", symbol: "L", flag: "https://flagcdn.com/w40/md.png", rate: 19.2, deliveryMethods: ["bank"] },
+  { code: "MA", name: "Morocco", currency: "MAD", symbol: "DH", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
+  { code: "NE", name: "Niger", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/ne.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "NG", name: "Nigeria", currency: "NGN", symbol: "₦", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
+  { code: "PK", name: "Pakistan", currency: "PKR", symbol: "₨", flag: "https://flagcdn.com/w40/pk.png", rate: 300.5, deliveryMethods: ["bank", "wallet"] },
+  { code: "PH", name: "Philippines", currency: "PHP", symbol: "₱", flag: "https://flagcdn.com/w40/ph.png", rate: 56.2, deliveryMethods: ["bank"] },
+  { code: "SN", name: "Senegal", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/sn.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "RS", name: "Serbia", currency: "RSD", symbol: "дин", flag: "https://flagcdn.com/w40/rs.png", rate: 117.2, deliveryMethods: ["bank"] },
+  { code: "TG", name: "Togo", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/tg.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { code: "TR", name: "Turkey", currency: "TRY", symbol: "₺", flag: "https://flagcdn.com/w40/tr.png", rate: 34.5, deliveryMethods: ["bank"] },
+  { code: "UA", name: "Ukraine", currency: "UAH", symbol: "₴", flag: "https://flagcdn.com/w40/ua.png", rate: 44.2, deliveryMethods: ["bank"] },
 ];
 
 const PROMOS = [
@@ -86,38 +86,6 @@ export default function SendMoney() {
   return (
     <MobileLayout title="Send Money">
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        
-        {/* Country Selector */}
-        <BottomSheetSelect
-          value={selectedCountry.code}
-          onValueChange={(code) => {
-            const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
-            setSelectedCountry(country);
-            if (!country.deliveryMethods.includes(deliveryMethod)) {
-              setDeliveryMethod(country.deliveryMethods[0]);
-            }
-          }}
-          title="Select Country"
-          showSearch
-          searchPlaceholder="Search countries..."
-          options={COUNTRIES.map(c => ({
-            value: c.code,
-            label: c.name,
-            sublabel: `(${c.currency})`,
-            icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt={c.name} />
-          }))}
-          renderTriggerContent={(selected) => {
-            const country = COUNTRIES.find(c => c.code === selected?.value);
-            return country ? (
-              <div className="flex items-center gap-3">
-                <img src={country.flag} className="w-5 h-5 rounded-full object-cover" alt={country.name} />
-                <span className="text-sm font-bold text-secondary">{country.name} ({country.currency})</span>
-              </div>
-            ) : (
-              <span className="text-sm text-gray-400">Select Country</span>
-            );
-          }}
-        />
 
         {/* Exchange Card */}
         <Card className="p-0 overflow-hidden border-none shadow-lg bg-white">
@@ -152,17 +120,39 @@ export default function SendMoney() {
               <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">They Receive</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative overflow-hidden">
-                  <img src={selectedCountry.flag} className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full object-cover" alt={selectedCountry.currency} />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">{selectedCountry.symbol}</span>
                   <Input 
                     value={receiveAmount}
                     readOnly
-                    className="border-none shadow-none text-2xl font-bold p-0 pl-7 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
+                    className="border-none shadow-none text-2xl font-bold p-0 pl-10 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
                   />
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
-                  <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.currency} />
-                  <span className="font-bold text-sm text-secondary">{selectedCountry.currency}</span>
-                </div>
+                <BottomSheetSelect
+                  value={selectedCountry.code}
+                  onValueChange={(code) => {
+                    const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
+                    setSelectedCountry(country);
+                    if (!country.deliveryMethods.includes(deliveryMethod)) {
+                      setDeliveryMethod(country.deliveryMethods[0]);
+                    }
+                  }}
+                  title="Select Country"
+                  showSearch
+                  searchPlaceholder="Search countries..."
+                  options={COUNTRIES.map(c => ({
+                    value: c.code,
+                    label: c.name,
+                    sublabel: `(${c.currency})`,
+                    icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt={c.name} />
+                  }))}
+                  triggerClassName="w-auto h-auto rounded-full px-3 py-2 bg-gray-50 border border-gray-100"
+                  renderTriggerContent={() => (
+                    <div className="flex items-center gap-2">
+                      <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.name} />
+                      <span className="font-bold text-sm text-secondary">{selectedCountry.currency}</span>
+                    </div>
+                  )}
+                />
               </div>
             </div>
           </div>
