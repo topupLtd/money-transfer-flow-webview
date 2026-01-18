@@ -224,19 +224,20 @@ export default function NewRecipient() {
             onValueChange={setSelectedCountryCode}
             title="Select Country"
             placeholder="Select Country"
-            searchable={true}
+            showSearch={true}
             options={COUNTRIES.map(c => ({
               value: c.code,
               label: `${c.name} (${c.currency})`,
               icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt="" />
             }))}
-            renderValue={(value) => {
-              const country = COUNTRIES.find(c => c.code === value);
+            renderTriggerContent={(option) => {
+              if (!option) return <span className="text-gray-400 text-sm font-semibold">Select Country</span>;
+              const country = COUNTRIES.find(c => c.code === option.value);
               if (!country) return null;
               return (
                 <div className="flex items-center gap-2">
                   <img src={country.flag} className="w-5 h-5 rounded-full object-cover" alt="" />
-                  <span>{country.name} ({country.currency})</span>
+                  <span className="text-sm font-semibold">{country.name} ({country.currency})</span>
                 </div>
               );
             }}
