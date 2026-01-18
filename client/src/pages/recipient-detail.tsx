@@ -4,6 +4,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Landmark, Wallet, User, Trash2, Save, Plus, CreditCard } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -312,24 +313,27 @@ export default function RecipientDetail() {
             </Button>
           </div>
 
-          <div className="space-y-4 px-1">
-            {accounts.map((account) => (
-              <div key={account.id} className="flex items-center gap-4 py-2 group">
-                <div className="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/5 group-hover:text-primary transition-colors">
-                  {account.type === "bank" ? <Landmark className="h-6 w-6" /> : <Wallet className="h-6 w-6" />}
+          <div className="space-y-0 px-1">
+            {accounts.map((account, index) => (
+              <div key={account.id}>
+                <div className="flex items-center gap-4 py-3 group">
+                  <div className="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/5 group-hover:text-primary transition-colors">
+                    {account.type === "bank" ? <Landmark className="h-6 w-6" /> : <Wallet className="h-6 w-6" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-gray-900">{account.provider}</p>
+                    <p className="text-xs text-gray-500 font-medium">{account.identifier}</p>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-9 w-9 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl"
+                    onClick={() => removeAccount(account.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-gray-900">{account.provider}</p>
-                  <p className="text-xs text-gray-500 font-medium">{account.identifier}</p>
-                </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-9 w-9 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl"
-                  onClick={() => removeAccount(account.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                {index < accounts.length - 1 && <Separator className="bg-gray-100" />}
               </div>
             ))}
           </div>
