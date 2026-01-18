@@ -1,8 +1,8 @@
 import { Link, useLocation } from "wouter";
-import { SendHorizonal, Contact2, History, User2 } from "lucide-react";
+import { SendHorizonal, Contact2, History, User2, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function MobileLayout({ children, title }: { children: React.ReactNode; title?: string }) {
+export default function MobileLayout({ children, title, onBack }: { children: React.ReactNode; title?: string; onBack?: () => void }) {
   const [location] = useLocation();
 
   const navItems = [
@@ -16,7 +16,15 @@ export default function MobileLayout({ children, title }: { children: React.Reac
     <div className="min-h-screen bg-gray-50 flex justify-center">
       <div className="w-full max-w-md bg-white min-h-screen shadow-xl relative flex flex-col">
         {/* Header */}
-        <header className="bg-white text-secondary px-6 h-16 sticky top-0 z-10 border-b border-gray-100 flex items-center justify-center shadow-sm">
+        <header className="bg-white text-secondary px-6 h-16 sticky top-0 z-10 border-b border-gray-100 flex items-center justify-center shadow-sm relative">
+          {onBack && (
+            <button 
+              onClick={onBack}
+              className="absolute left-4 p-2 -ml-2 text-gray-400 hover:text-primary transition-colors"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+          )}
           <h1 className="text-lg font-display font-bold text-center tracking-tight">{title || "MyPCS Remit"}</h1>
         </header>
 

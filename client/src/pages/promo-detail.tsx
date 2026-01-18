@@ -22,7 +22,7 @@ export default function PromoDetail() {
   }
 
   return (
-    <MobileLayout title="Promo Details">
+    <MobileLayout title="Promo Details" onBack={() => setLocation("/promotions")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Header Section */}

@@ -41,7 +41,7 @@ export default function Promotions() {
   const [, setLocation] = useLocation();
 
   return (
-    <MobileLayout title="Promotions">
+    <MobileLayout title="Promotions" onBack={() => setLocation("/profile")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Input Section */}
