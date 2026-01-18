@@ -23,6 +23,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 
 const COUNTRIES = [
   { code: "AO", name: "Angola", currency: "AOA", flag: "https://flagcdn.com/w40/ao.png", rate: 900, deliveryMethods: ["bank", "wallet"] },
@@ -86,6 +87,38 @@ export default function SendMoney() {
     <MobileLayout title="Send Money">
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
         
+        {/* Country Selector */}
+        <BottomSheetSelect
+          value={selectedCountry.code}
+          onValueChange={(code) => {
+            const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
+            setSelectedCountry(country);
+            if (!country.deliveryMethods.includes(deliveryMethod)) {
+              setDeliveryMethod(country.deliveryMethods[0]);
+            }
+          }}
+          title="Select Country"
+          showSearch
+          searchPlaceholder="Search countries..."
+          options={COUNTRIES.map(c => ({
+            value: c.code,
+            label: c.name,
+            sublabel: `(${c.currency})`,
+            icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt={c.name} />
+          }))}
+          renderTriggerContent={(selected) => {
+            const country = COUNTRIES.find(c => c.code === selected?.value);
+            return country ? (
+              <div className="flex items-center gap-3">
+                <img src={country.flag} className="w-5 h-5 rounded-full object-cover" alt={country.name} />
+                <span className="text-sm font-bold text-secondary">{country.name} ({country.currency})</span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">Select Country</span>
+            );
+          }}
+        />
+
         {/* Exchange Card */}
         <Card className="p-0 overflow-hidden border-none shadow-lg bg-white">
           <div className="p-5 space-y-4">
@@ -125,35 +158,10 @@ export default function SendMoney() {
                     className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
                   />
                 </div>
-                <Select 
-                  value={selectedCountry.code} 
-                  onValueChange={(code) => {
-                    const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
-                    setSelectedCountry(country);
-                    if (!country.deliveryMethods.includes(deliveryMethod)) {
-                      setDeliveryMethod(country.deliveryMethods[0]);
-                    }
-                  }}
-                >
-                  <SelectTrigger className="w-auto h-auto rounded-full px-3 py-2 gap-2 border-gray-200 bg-gray-50 hover:bg-gray-100 border focus:ring-0">
-                    <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.name} />
-                        <span className="font-bold text-sm text-secondary">{selectedCountry.currency}</span>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-gray-100 shadow-xl max-h-[300px] overflow-y-auto">
-                    {COUNTRIES.map((c) => (
-                      <SelectItem key={c.code} value={c.code}>
-                        <div className="flex items-center gap-2">
-                          <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt={c.name} />
-                          <span className="font-medium">{c.name} ({c.currency})</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
+                  <img src={selectedCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={selectedCountry.currency} />
+                  <span className="font-bold text-sm text-secondary">{selectedCountry.currency}</span>
+                </div>
               </div>
             </div>
           </div>
