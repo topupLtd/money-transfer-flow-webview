@@ -8,13 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Landmark, Wallet, User, Trash2, Save, Plus, CreditCard } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 
 const COUNTRY_PROVIDERS = {
   AO: { wallets: ["Unitel Money", "Afrimoney"], banks: ["BAI", "BFA", "Banco BIC", "Standard Bank Angola"] },
@@ -98,6 +92,9 @@ export default function RecipientDetail() {
   const [selectedCountryCode, setSelectedCountryCode] = useState("NG");
   const [activeTab, setActiveTab] = useState("bank");
   const [showAddNew, setShowAddNew] = useState(false);
+  const [relationship, setRelationship] = useState("family");
+  const [selectedBank, setSelectedBank] = useState("");
+  const [selectedWallet, setSelectedWallet] = useState("");
   
   // State for multiple accounts
   const [accounts, setAccounts] = useState([
@@ -151,16 +148,16 @@ export default function RecipientDetail() {
                 <div className="space-y-4 px-1">
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Bank Name</Label>
-                    <Select>
-                      <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                        <SelectValue placeholder="Select Bank" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl">
-                        {providers.banks.map(bank => (
-                          <SelectItem key={bank} value={bank.toLowerCase()}>{bank}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <BottomSheetSelect
+                      value={selectedBank}
+                      onValueChange={setSelectedBank}
+                      title="Select Bank"
+                      placeholder="Select Bank"
+                      options={providers.banks.map(bank => ({
+                        value: bank.toLowerCase(),
+                        label: bank
+                      }))}
+                    />
                   </div>
 
                   {isIndia && (
@@ -190,16 +187,16 @@ export default function RecipientDetail() {
                   <div className="space-y-4 px-1">
                     <div className="space-y-2">
                       <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Provider</Label>
-                      <Select>
-                        <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                          <SelectValue placeholder="Select Wallet" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-xl">
-                          {providers.wallets.map(wallet => (
-                            <SelectItem key={wallet} value={wallet.toLowerCase()}>{wallet}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <BottomSheetSelect
+                        value={selectedWallet}
+                        onValueChange={setSelectedWallet}
+                        title="Select Wallet"
+                        placeholder="Select Wallet"
+                        options={providers.wallets.map(wallet => ({
+                          value: wallet.toLowerCase(),
+                          label: wallet
+                        }))}
+                      />
                     </div>
 
                     <div className="space-y-2">
@@ -233,24 +230,30 @@ export default function RecipientDetail() {
   return (
     <MobileLayout title="Edit Recipient" onBack={() => setLocation("/recipients")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
-          <SelectTrigger className="w-full h-12 bg-gray-100 border-none rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-            <div className="flex items-center gap-2">
-              <img src={currentCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={currentCountry.name} />
-              <span className="text-sm font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
-            </div>
-          </SelectTrigger>
-          <SelectContent className="rounded-2xl max-h-80">
-            {COUNTRIES.map(c => (
-              <SelectItem key={c.code} value={c.code} className="rounded-xl">
-                <div className="flex items-center gap-2">
-                  <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt="" />
-                  <span className="text-sm font-bold">{c.name} ({c.currency})</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <BottomSheetSelect
+          value={selectedCountryCode}
+          onValueChange={setSelectedCountryCode}
+          title="Select Country"
+          showSearch
+          searchPlaceholder="Search countries..."
+          options={COUNTRIES.map(c => ({
+            value: c.code,
+            label: c.name,
+            sublabel: `(${c.currency})`,
+            icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt={c.name} />
+          }))}
+          renderTriggerContent={(selected) => {
+            const country = COUNTRIES.find(c => c.code === selected?.value);
+            return country ? (
+              <div className="flex items-center gap-3">
+                <img src={country.flag} className="w-5 h-5 rounded-full object-cover" alt={country.name} />
+                <span className="text-sm font-bold text-secondary">{country.name} ({country.currency})</span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">Select Country</span>
+            );
+          }}
+        />
 
         {/* Personal Details Section */}
         <section className="space-y-4">
@@ -271,16 +274,16 @@ export default function RecipientDetail() {
             </div>
             <div className="space-y-1.5">
               <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
-              <Select defaultValue="family">
-                <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  {RELATIONSHIPS.map(rel => (
-                    <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <BottomSheetSelect
+                value={relationship}
+                onValueChange={setRelationship}
+                title="Select Relationship"
+                placeholder="Select Relationship"
+                options={RELATIONSHIPS.map(rel => ({
+                  value: rel.toLowerCase(),
+                  label: rel
+                }))}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
