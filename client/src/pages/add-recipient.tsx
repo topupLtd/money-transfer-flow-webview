@@ -246,15 +246,20 @@ export default function AddRecipient() {
               </div>
               
               <div className="space-y-4 px-1">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
-                    <Input placeholder="John" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
+                      <Input placeholder="John" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
+                      <Input placeholder="Doe" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
-                    <Input placeholder="Doe" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
-                  </div>
+                  <p className="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                    Name must match recipient's official ID for successful transfer
+                  </p>
                 </div>
 
                 {isIndia && (
@@ -369,15 +374,20 @@ export default function AddRecipient() {
                 </div>
                 
                 <div className="space-y-4 px-1">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
-                      <Input placeholder="John" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">First Name</Label>
+                        <Input placeholder="John" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
+                        <Input placeholder="Doe" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Last Name</Label>
-                      <Input placeholder="Doe" className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus-visible:ring-1 focus-visible:ring-primary/20" />
-                    </div>
+                    <p className="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                      Name must match recipient's official ID for successful transfer
+                    </p>
                   </div>
 
                   <div className="space-y-2">
