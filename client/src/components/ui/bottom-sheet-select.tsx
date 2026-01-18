@@ -74,13 +74,16 @@ export function BottomSheetSelect({
         )}
         data-testid="button-bottom-sheet-trigger"
       >
-        {renderTriggerContent ? (
-          renderTriggerContent(selectedOption)
-        ) : (
-          <span className={cn("text-sm font-semibold", !selectedOption && "text-gray-400")}>
-            {selectedOption?.label || placeholder}
-          </span>
-        )}
+        <div className="flex-1">
+          {renderTriggerContent ? (
+            renderTriggerContent(selectedOption)
+          ) : (
+            <span className={cn("text-sm font-semibold", !selectedOption && "text-gray-400")}>
+              {selectedOption?.label || placeholder}
+            </span>
+          )}
+        </div>
+        <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
       </button>
 
       <Drawer open={open} onOpenChange={setOpen}>
