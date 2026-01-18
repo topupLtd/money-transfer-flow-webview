@@ -64,34 +64,39 @@ export default function Preview() {
             <p className="text-primary-foreground/80 text-sm">Recipient Gets</p>
             <h2 className="text-3xl font-bold">{receiveAmount} {selectedCountry.currency}</h2>
           </div>
+        </Card>
+
+        {/* Recipient Details */}
+        <Card className="p-5 space-y-4 border-gray-100 shadow-sm">
+          <h3 className="font-semibold text-gray-900">Recipient Details</h3>
           
-          <div className="mt-6 bg-black/10 rounded-xl p-4 text-left space-y-3">
+          <div className="space-y-4">
             <div className="space-y-1">
-              <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Recipient Name</p>
-              <p className="font-bold text-lg">Mofizur Rahman</p>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Recipient Name</p>
+              <p className="font-bold text-lg text-gray-900">Mofizur Rahman</p>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
                <div className="space-y-1">
-                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Bank Name</p>
-                <p className="font-semibold">Dutch-Bangla Bank</p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Bank Name</p>
+                <p className="font-semibold text-gray-900">Dutch-Bangla Bank</p>
               </div>
               <div className="space-y-1">
-                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Delivery Method</p>
-                <p className="font-semibold">Bank Deposit</p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Delivery Method</p>
+                <p className="font-semibold text-gray-900">Bank Deposit</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
                <div className="space-y-1">
-                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Account Number</p>
-                <p className="font-semibold">1234567890123</p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Account Number</p>
+                <p className="font-semibold text-gray-900">1234567890123</p>
               </div>
               <div className="space-y-1">
-                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Country</p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Country</p>
                 <div className="flex items-center gap-2">
                   <img src={selectedCountry.flag} alt={selectedCountry.name} className="w-4 h-3 rounded-sm object-cover" />
-                  <p className="font-semibold">{selectedCountry.name}</p>
+                  <p className="font-semibold text-gray-900">{selectedCountry.name}</p>
                 </div>
               </div>
             </div>
