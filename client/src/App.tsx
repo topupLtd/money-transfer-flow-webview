@@ -18,6 +18,7 @@ import Profile from "@/pages/profile";
 import ProfileDetails from "@/pages/profile-details";
 import EditProfile from "@/pages/edit-profile";
 import TransferLimits from "@/pages/transfer-limits";
+import Promotions from "@/pages/promotions";
 import AddRecipient from "@/pages/add-recipient";
 import NewRecipient from "@/pages/new-recipient";
 
@@ -40,6 +41,7 @@ function Router() {
       <Route path="/profile-details" component={ProfileDetails} />
       <Route path="/edit-profile" component={EditProfile} />
       <Route path="/transfer-limits" component={TransferLimits} />
+      <Route path="/promotions" component={Promotions} />
       <Route component={NotFound} />
     </Switch>
   );

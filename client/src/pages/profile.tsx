@@ -10,8 +10,8 @@ export default function Profile() {
   const [, setLocation] = useLocation();
 
   const menuItems = [
-    { label: "Active Promotions", icon: Ticket, value: "3 active", color: "text-primary bg-primary/10" },
-    { label: "Help & Support", icon: HelpCircle, value: null, color: "text-blue-500 bg-blue-50" },
+    { label: "Active Promotions", icon: Ticket, value: "3 active", color: "text-primary bg-primary/10", route: "/promotions" },
+    { label: "Help & Support", icon: HelpCircle, value: null, color: "text-blue-500 bg-blue-50", route: "/support" },
   ];
 
   return (
@@ -69,6 +69,7 @@ export default function Profile() {
           {menuItems.map((item, idx) => (
             <button 
               key={idx}
+              onClick={() => item.route && setLocation(item.route)}
               className="w-full flex items-center justify-between p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all group"
             >
               <div className="flex items-center gap-4">
