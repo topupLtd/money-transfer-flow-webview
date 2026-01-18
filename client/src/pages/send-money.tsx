@@ -167,14 +167,14 @@ export default function SendMoney() {
         <div className="space-y-3">
           <Label className="text-base font-semibold text-gray-900">Delivery Method</Label>
           <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
-            <SelectTrigger className="w-full h-auto min-h-[4rem] bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-3 px-3">
+            <SelectTrigger className="w-full h-auto min-h-[5rem] bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-3 px-3">
               <SelectValue placeholder="Select delivery method" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-gray-100 shadow-2xl p-1">
               {availableMethods.includes("bank") && (
                 <SelectItem value="bank" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                       <Landmark className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col text-left">
@@ -187,7 +187,7 @@ export default function SendMoney() {
               {availableMethods.includes("wallet") && (
                 <SelectItem value="wallet" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                    <div className="h-9 w-9 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                       <Smartphone className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col text-left">
