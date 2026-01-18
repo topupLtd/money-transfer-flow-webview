@@ -54,6 +54,10 @@ export default function Preview() {
   const fee = 5.00;
   const totalToPay = amount; // Assuming 100% fee discount for demo
 
+  const handleSendNow = () => {
+    setLocation(`/success?amount=${amount}`);
+  };
+
   return (
     <MobileLayout title="Review Transfer">
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -150,7 +154,7 @@ export default function Preview() {
         <Button 
           className="w-full h-12 text-base font-semibold rounded-xl shadow-md bg-primary hover:bg-primary/90" 
           size="lg"
-          onClick={() => setLocation("/success")}
+          onClick={handleSendNow}
         >
           Send Now
         </Button>
