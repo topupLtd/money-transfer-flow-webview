@@ -4,7 +4,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChevronLeft, Landmark, Wallet, User, Phone, MapPin, Users } from "lucide-react";
+import { Landmark, Wallet, User, Phone, MapPin, Users } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 
 const COUNTRY_PROVIDERS = {
   AO: {
@@ -207,17 +208,11 @@ export default function AddRecipient() {
   const isIndia = selectedCountry === "IN";
 
   return (
-    <MobileLayout title="Add Recipient">
+    <MobileLayout title="Add Recipient" onBack={() => window.history.back()}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <div className="flex items-center justify-between">
-          <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => window.history.back()}>
-            <ChevronLeft className="h-5 w-5 mr-1" /> Back
-          </Button>
-          
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm">
-            <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
-            <span className="text-xs font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
-          </div>
+        <div className="w-full h-12 bg-gray-100 rounded-xl px-4 flex items-center gap-3">
+          <img src={currentCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={currentCountry.name} />
+          <span className="text-sm font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
         </div>
 
         <Tabs defaultValue={selectedMethod} className="w-full">
