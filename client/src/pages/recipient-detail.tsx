@@ -234,26 +234,24 @@ export default function RecipientDetail() {
   return (
     <MobileLayout title="Edit Recipient" onBack={() => setLocation("/recipients")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <div className="flex items-center justify-end">
-          <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
-            <SelectTrigger className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm w-auto h-auto focus:ring-1 focus:ring-primary/20">
-              <div className="flex items-center gap-2">
-                <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
-                <span className="text-xs font-bold text-secondary uppercase">{currentCountry.name} ({currentCountry.currency})</span>
-              </div>
-            </SelectTrigger>
-            <SelectContent className="rounded-2xl max-h-80">
-              {COUNTRIES.map(c => (
-                <SelectItem key={c.code} value={c.code} className="rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt="" />
-                    <span className="text-xs font-bold">{c.name} ({c.currency})</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
+          <SelectTrigger className="w-full h-12 bg-gray-100 border-none rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
+            <div className="flex items-center gap-2">
+              <img src={currentCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={currentCountry.name} />
+              <span className="text-sm font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
+            </div>
+          </SelectTrigger>
+          <SelectContent className="rounded-2xl max-h-80">
+            {COUNTRIES.map(c => (
+              <SelectItem key={c.code} value={c.code} className="rounded-xl">
+                <div className="flex items-center gap-2">
+                  <img src={c.flag} className="w-4 h-4 rounded-full object-cover" alt="" />
+                  <span className="text-sm font-bold">{c.name} ({c.currency})</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         {/* Personal Details Section */}
         <section className="space-y-4">
