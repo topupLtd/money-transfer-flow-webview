@@ -1,7 +1,8 @@
 import { useLocation, useRoute } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
 import { PROMOS } from "./promotions";
-import { ChevronLeft } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function PromoDetail() {
   const [, setLocation] = useLocation();
@@ -21,71 +22,90 @@ export default function PromoDetail() {
   }
 
   return (
-    <MobileLayout 
-      title="Promo Details" 
-    >
-      <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 bg-white min-h-[85vh] -mx-5 px-5 py-6">
+    <MobileLayout title="Promo Details">
+      <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Header Section */}
-        <div className="flex justify-between items-center py-2 border-b border-gray-100 pb-4">
-            <h2 className="text-lg font-bold text-primary">Promo code</h2>
-            <span className="text-lg font-bold text-primary">{promo.id}</span>
-        </div>
+        <Card className="p-5 border-none shadow-sm bg-white">
+          <div className="flex justify-between items-center">
+            <h2 className="text-base font-bold text-gray-900">Promo Code</h2>
+            <span className="text-lg font-bold text-primary bg-primary/10 px-3 py-1 rounded-lg">{promo.id}</span>
+          </div>
+        </Card>
 
         {/* Details List */}
-        <div className="space-y-6">
+        <Card className="p-5 space-y-5 border-gray-100 shadow-sm">
+            <h3 className="font-semibold text-gray-900 pb-2">Promotion Details</h3>
             
             {/* Discount Rate */}
-            <div className="space-y-1 border-b border-gray-100 pb-4">
-                <p className="text-gray-400 text-sm">Transfer fee discount rate</p>
-                <p className="text-xl font-medium text-gray-900">{promo.details.discountRate}</p>
+            <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500 font-medium">Discount Rate</span>
+                <span className="font-bold text-gray-900">{promo.details.discountRate}</span>
             </div>
+
+            <Separator className="bg-gray-50" />
 
             {/* Max Bonus */}
-            <div className="space-y-1 border-b border-gray-100 pb-4">
-                <p className="text-gray-400 text-sm">Max bonus</p>
-                <p className="text-xl font-medium text-gray-900">{promo.details.maxBonus}</p>
+            <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500 font-medium">Max Bonus</span>
+                <span className="font-bold text-gray-900">{promo.details.maxBonus}</span>
             </div>
+
+            <Separator className="bg-gray-50" />
 
             {/* Expires */}
-            <div className="space-y-1 border-b border-gray-100 pb-4">
-                <p className="text-gray-400 text-sm">Expires</p>
-                <p className="text-lg font-medium text-gray-900">{promo.expiry}</p>
+            <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500 font-medium">Expires</span>
+                <span className="font-bold text-gray-900">{promo.expiry}</span>
             </div>
+
+            <Separator className="bg-gray-50" />
 
              {/* Max use */}
-             <div className="space-y-1 border-b border-gray-100 pb-4">
-                <p className="text-gray-400 text-sm">Max use</p>
-                <p className="text-lg font-medium text-gray-900">{promo.details.maxUse}</p>
+             <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500 font-medium">Max Usage</span>
+                <span className="font-bold text-gray-900">{promo.details.maxUse}</span>
             </div>
+
+            <Separator className="bg-gray-50" />
 
              {/* Remaining Use */}
-             <div className="space-y-1 border-b border-gray-100 pb-4">
-                <p className="text-gray-400 text-sm">Remaining Use</p>
-                <p className="text-lg font-medium text-gray-900">{promo.remaining}</p>
+             <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500 font-medium">Remaining</span>
+                <span className="font-bold text-gray-900">{promo.remaining}</span>
             </div>
+        </Card>
+
+        {/* Requirements Card */}
+        <Card className="p-5 space-y-5 border-gray-100 shadow-sm">
+            <h3 className="font-semibold text-gray-900 pb-2">Requirements</h3>
 
              {/* Eligible delivery method */}
-             <div className="space-y-2 border-b border-gray-100 pb-4">
-                <p className="text-gray-400 text-sm">Eligible delivery method</p>
-                <div className="space-y-1">
+             <div className="space-y-3">
+                <p className="text-gray-500 font-medium text-sm">Eligible Delivery Methods</p>
+                <div className="flex flex-wrap gap-2">
                     {promo.details.deliveryMethods.map((method, idx) => (
-                        <p key={idx} className="text-lg font-medium text-gray-900">{method}</p>
+                        <span key={idx} className="bg-gray-50 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-100">
+                            {method}
+                        </span>
                     ))}
                 </div>
             </div>
+
+            <Separator className="bg-gray-50" />
 
              {/* Eligible recipient countries */}
-             <div className="space-y-2 pb-4">
-                <p className="text-gray-400 text-sm">Eligible recipient countries</p>
-                 <div className="space-y-1">
+             <div className="space-y-3">
+                <p className="text-gray-500 font-medium text-sm">Eligible Countries</p>
+                 <div className="flex flex-wrap gap-2">
                     {promo.details.countries.map((country, idx) => (
-                        <p key={idx} className="text-lg font-medium text-gray-900">- {country}</p>
+                        <span key={idx} className="bg-gray-50 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-100">
+                            {country}
+                        </span>
                     ))}
                 </div>
             </div>
-
-        </div>
+        </Card>
 
       </div>
     </MobileLayout>
