@@ -119,12 +119,12 @@ export default function SendMoney() {
             <div className="space-y-2">
               <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">They Receive</Label>
               <div className="flex items-center gap-3">
-                <div className="flex-1 relative overflow-hidden">
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">{selectedCountry.symbol}</span>
+                <div className="flex-1 relative overflow-hidden flex items-center">
+                  <span className="text-lg font-bold text-gray-400 mr-2 flex-shrink-0">{selectedCountry.symbol}</span>
                   <Input 
                     value={receiveAmount}
                     readOnly
-                    className="border-none shadow-none text-2xl font-bold p-0 pl-10 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
+                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate bg-transparent flex-1" 
                   />
                 </div>
                 <BottomSheetSelect
