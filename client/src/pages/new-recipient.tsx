@@ -227,7 +227,7 @@ export default function NewRecipient() {
             searchable={true}
             options={COUNTRIES.map(c => ({
               value: c.code,
-              label: c.name,
+              label: `${c.name} (${c.currency})`,
               icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt="" />
             }))}
             renderValue={(value) => {
