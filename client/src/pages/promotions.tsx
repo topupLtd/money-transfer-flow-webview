@@ -3,6 +3,8 @@ import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Ticket } from "lucide-react";
 
 export const PROMOS = [
   {
@@ -43,8 +45,8 @@ export default function Promotions() {
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Input Section */}
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-          <h3 className="font-bold text-gray-900 text-sm">Have a promo code?</h3>
+        <Card className="p-4 border-gray-100 shadow-sm">
+          <h3 className="font-bold text-gray-900 text-sm mb-3">Have a promo code?</h3>
           <div className="flex gap-2">
             <Input 
               placeholder="Enter code" 
@@ -54,44 +56,51 @@ export default function Promotions() {
               Apply
             </Button>
           </div>
-        </div>
+        </Card>
 
         {/* Promotions List */}
         <div className="space-y-4">
-          {PROMOS.map((promo) => (
-            <div 
-              key={promo.id}
-              className="bg-white p-5 rounded-3xl shadow-sm border border-gray-200 flex justify-between gap-4"
-            >
-              <div className="flex flex-col justify-between space-y-2 flex-1">
-                <h3 className="font-bold text-gray-900 text-base leading-tight">
-                  {promo.title}
-                </h3>
-                <div className="space-y-1">
-                  <p className="text-gray-400 text-xs font-medium">{promo.minAmount}</p>
-                  <p className="text-gray-400 text-xs font-medium">Expires {promo.expiry}</p>
-                </div>
-              </div>
+          <div className="flex items-center gap-2 px-1">
+             <Ticket className="h-4 w-4 text-primary" />
+             <h3 className="text-sm font-bold text-gray-900">Available Offers</h3>
+          </div>
 
-              <div className="flex flex-col items-end justify-between shrink-0 text-right space-y-2">
-                <span className="font-bold text-gray-900 text-base">{promo.id}</span>
-                
-                <div className="flex flex-col items-end">
-                   <span className="text-gray-500 text-xs">Remaining Use</span>
-                   <span className="text-gray-900 text-sm font-medium">{promo.remaining}</span>
+          <div className="space-y-3">
+            {PROMOS.map((promo) => (
+              <Card 
+                key={promo.id}
+                className="p-5 border-gray-100 shadow-sm flex justify-between gap-4"
+              >
+                <div className="flex flex-col justify-between space-y-2 flex-1">
+                  <h3 className="font-bold text-gray-900 text-base leading-tight">
+                    {promo.title}
+                  </h3>
+                  <div className="space-y-1">
+                    <p className="text-gray-400 text-xs font-medium">{promo.minAmount}</p>
+                    <p className="text-gray-400 text-xs font-medium">Expires {promo.expiry}</p>
+                  </div>
                 </div>
 
-                <button 
-                  onClick={() => setLocation(`/promotions/${promo.id}`)}
-                  className="text-primary text-sm font-bold hover:underline"
-                >
-                  View detail
-                </button>
-              </div>
-            </div>
-          ))}
+                <div className="flex flex-col items-end justify-between shrink-0 text-right space-y-2">
+                  <span className="font-bold text-gray-900 text-base">{promo.id}</span>
+                  
+                  <div className="flex flex-col items-end">
+                     <span className="text-gray-500 text-xs">Remaining Use</span>
+                     <span className="text-gray-900 text-sm font-medium">{promo.remaining}</span>
+                  </div>
+
+                  <button 
+                    onClick={() => setLocation(`/promotions/${promo.id}`)}
+                    className="text-primary text-sm font-bold hover:underline"
+                  >
+                    View detail
+                  </button>
+                </div>
+              </Card>
+            ))}
+          </div>
+
         </div>
-
       </div>
     </MobileLayout>
   );
