@@ -63,10 +63,37 @@ export default function Preview() {
           <div className="text-center space-y-1">
             <p className="text-primary-foreground/80 text-sm">Recipient Gets</p>
             <h2 className="text-3xl font-bold">{receiveAmount} {selectedCountry.currency}</h2>
-            <div className="flex items-center justify-center gap-2 mt-4 text-sm bg-black/10 py-1 px-3 rounded-full w-fit mx-auto">
-              <span>Mofizur Rahman</span>
-              <ArrowRight className="h-3 w-3" />
-              <span>Dutch-Bangla Bank</span>
+          </div>
+          
+          <div className="mt-6 bg-black/10 rounded-xl p-4 text-left space-y-3">
+            <div className="space-y-1">
+              <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Recipient Name</p>
+              <p className="font-bold text-lg">Mofizur Rahman</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-1">
+                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Bank Name</p>
+                <p className="font-semibold">Dutch-Bangla Bank</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Delivery Method</p>
+                <p className="font-semibold">Bank Deposit</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-1">
+                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Account Number</p>
+                <p className="font-semibold">1234567890123</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] text-primary-foreground/60 font-bold uppercase tracking-wider">Country</p>
+                <div className="flex items-center gap-2">
+                  <img src={selectedCountry.flag} alt={selectedCountry.name} className="w-4 h-3 rounded-sm object-cover" />
+                  <p className="font-semibold">{selectedCountry.name}</p>
+                </div>
+              </div>
             </div>
           </div>
         </Card>
@@ -76,16 +103,6 @@ export default function Preview() {
           <h3 className="font-semibold text-gray-900">Transfer Details</h3>
           
           <div className="space-y-3 text-sm">
-            <div className="flex justify-between items-start">
-              <span className="text-gray-500">Recipient Bank</span>
-              <div className="text-right">
-                <p className="font-bold text-gray-900">Dutch-Bangla Bank</p>
-                <p className="text-[10px] text-gray-400 font-medium tracking-wide uppercase">Acc: **** 4455</p>
-              </div>
-            </div>
-            
-            <Separator className="bg-gray-50" />
-
             <div className="flex justify-between">
               <span className="text-gray-500">You Send</span>
               <span className="font-medium">€ {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
