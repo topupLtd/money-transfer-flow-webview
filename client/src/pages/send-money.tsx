@@ -124,7 +124,7 @@ export default function SendMoney() {
                   <Input 
                     value={receiveAmount}
                     readOnly
-                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate bg-transparent flex-1" 
+                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-secondary truncate bg-transparent flex-1" 
                   />
                 </div>
                 <BottomSheetSelect
