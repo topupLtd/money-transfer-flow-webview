@@ -23,7 +23,7 @@ export const PROMOS = [
   },
   {
     id: "EXTRA5",
-    title: "Enjoy Extra 5 Transfers Fee-free With Paycell!",
+    title: "Enjoy Extra 5 Transfers Fee-free!",
     minAmount: "Minimum Transaction Amount 1€",
     expiry: "30 June 2026 23:59",
     remaining: "5 Transfer",
@@ -31,7 +31,7 @@ export const PROMOS = [
       discountRate: "100%",
       maxBonus: "999€",
       maxUse: "5 Transfer",
-      deliveryMethods: ["Bank account", "Paycell - Digital Wallet", "Digital Wallet"],
+      deliveryMethods: ["Bank account", "Digital Wallet"],
       countries: ["India", "Morocco", "Nigeria"]
     }
   }
@@ -71,27 +71,27 @@ export default function Promotions() {
                 key={promo.id}
                 className="p-5 border-gray-100 shadow-sm flex justify-between gap-4"
               >
-                <div className="flex flex-col justify-between space-y-2 flex-1">
-                  <h3 className="font-bold text-gray-900 text-base leading-tight">
+                <div className="flex flex-col justify-between gap-3 flex-1">
+                  <h3 className="font-bold text-gray-900 text-sm leading-snug">
                     {promo.title}
                   </h3>
                   <div className="space-y-1">
-                    <p className="text-gray-400 text-xs font-medium">{promo.minAmount}</p>
-                    <p className="text-gray-400 text-xs font-medium">Expires {promo.expiry}</p>
+                    <p className="text-gray-400 text-[11px] font-medium">{promo.minAmount}</p>
+                    <p className="text-gray-400 text-[11px] font-medium">Expires {promo.expiry}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end justify-between shrink-0 text-right space-y-2">
-                  <span className="font-bold text-gray-900 text-base">{promo.id}</span>
+                <div className="flex flex-col items-end justify-between shrink-0 text-right gap-3">
+                  <span className="font-bold text-gray-900 text-sm">{promo.id}</span>
                   
                   <div className="flex flex-col items-end">
-                     <span className="text-gray-500 text-xs">Remaining Use</span>
-                     <span className="text-gray-900 text-sm font-medium">{promo.remaining}</span>
+                     <span className="text-gray-400 text-[10px]">Remaining Use</span>
+                     <span className="text-gray-900 text-xs font-bold">{promo.remaining}</span>
                   </div>
 
                   <button 
                     onClick={() => setLocation(`/promotions/${promo.id}`)}
-                    className="text-primary text-sm font-bold hover:underline"
+                    className="text-primary text-xs font-bold hover:underline"
                   >
                     View detail
                   </button>
