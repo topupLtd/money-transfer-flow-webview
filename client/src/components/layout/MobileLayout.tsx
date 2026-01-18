@@ -1,9 +1,17 @@
+import { useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { SendHorizonal, Contact2, History, User2, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MobileLayout({ children, title, onBack }: { children: React.ReactNode; title?: string; onBack?: () => void }) {
   const [location] = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo(0, 0);
+    }
+  }, [location]);
 
   const navItems = [
     { href: "/", icon: SendHorizonal, label: "Send" },
@@ -29,7 +37,7 @@ export default function MobileLayout({ children, title, onBack }: { children: Re
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto pb-24 px-5 py-6 font-sans">
+        <main ref={mainRef} className="flex-1 overflow-y-auto pb-24 px-5 py-6 font-sans">
           {children}
         </main>
 
