@@ -206,6 +206,10 @@ export default function AddRecipient() {
 
   const currentCountry = countries.find(c => c.code === selectedCountry) || countries[0];
   const isIndia = selectedCountry === "IN";
+  
+  const [relationship, setRelationship] = useState("");
+  const [selectedBank, setSelectedBank] = useState("");
+  const [selectedWallet, setSelectedWallet] = useState("");
 
   return (
     <MobileLayout title="Add Recipient" onBack={() => window.history.back()}>
@@ -262,16 +266,16 @@ export default function AddRecipient() {
 
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
-                  <Select>
-                    <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                      <SelectValue placeholder="Select Relationship" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      {RELATIONSHIPS.map(rel => (
-                        <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <BottomSheetSelect
+                    value={relationship}
+                    onValueChange={setRelationship}
+                    title="Select Relationship"
+                    placeholder="Select Relationship"
+                    options={RELATIONSHIPS.map(rel => ({
+                      value: rel.toLowerCase(),
+                      label: rel
+                    }))}
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -328,16 +332,16 @@ export default function AddRecipient() {
               <div className="space-y-4 px-1">
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Bank Name</Label>
-                  <Select>
-                    <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                      <SelectValue placeholder="Select Bank" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      {providers.banks.map(bank => (
-                        <SelectItem key={bank} value={bank.toLowerCase()}>{bank}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <BottomSheetSelect
+                    value={selectedBank}
+                    onValueChange={setSelectedBank}
+                    title="Select Bank"
+                    placeholder="Select Bank"
+                    options={providers.banks.map(bank => ({
+                      value: bank.toLowerCase(),
+                      label: bank
+                    }))}
+                  />
                 </div>
 
                 {isIndia && (
@@ -378,16 +382,16 @@ export default function AddRecipient() {
 
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Relationship</Label>
-                    <Select>
-                      <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                        <SelectValue placeholder="Select Relationship" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl">
-                        {RELATIONSHIPS.map(rel => (
-                          <SelectItem key={rel} value={rel.toLowerCase()}>{rel}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <BottomSheetSelect
+                      value={relationship}
+                      onValueChange={setRelationship}
+                      title="Select Relationship"
+                      placeholder="Select Relationship"
+                      options={RELATIONSHIPS.map(rel => ({
+                        value: rel.toLowerCase(),
+                        label: rel
+                      }))}
+                    />
                   </div>
                 </div>
              </div>
@@ -401,16 +405,16 @@ export default function AddRecipient() {
                 <div className="space-y-4 px-1">
                   <div className="space-y-2">
                     <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Wallet Provider</Label>
-                    <Select>
-                      <SelectTrigger className="h-12 border-none bg-gray-100 rounded-xl font-semibold focus:ring-1 focus:ring-primary/20">
-                        <SelectValue placeholder="Select Wallet" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl">
-                        {providers.wallets.map(wallet => (
-                          <SelectItem key={wallet} value={wallet.toLowerCase()}>{wallet}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <BottomSheetSelect
+                      value={selectedWallet}
+                      onValueChange={setSelectedWallet}
+                      title="Select Wallet"
+                      placeholder="Select Wallet"
+                      options={providers.wallets.map(wallet => ({
+                        value: wallet.toLowerCase(),
+                        label: wallet
+                      }))}
+                    />
                   </div>
 
                   <div className="space-y-2">
