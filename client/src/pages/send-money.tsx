@@ -167,7 +167,7 @@ export default function SendMoney() {
         <div className="space-y-3">
           <Label className="text-base font-semibold text-gray-900">Delivery Method</Label>
           <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
-            <SelectTrigger className="w-full h-16 bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-2">
+            <SelectTrigger className="w-full h-auto min-h-[4rem] bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-3 px-3">
               <SelectValue placeholder="Select delivery method" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-gray-100 shadow-2xl p-1">
