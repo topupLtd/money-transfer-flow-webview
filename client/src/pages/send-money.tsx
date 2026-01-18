@@ -167,31 +167,31 @@ export default function SendMoney() {
         <div className="space-y-3">
           <Label className="text-base font-semibold text-gray-900">Delivery Method</Label>
           <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
-            <SelectTrigger className="w-full h-14 bg-white rounded-xl border-gray-200 focus:ring-primary shadow-sm">
+            <SelectTrigger className="w-full h-16 bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-2">
               <SelectValue placeholder="Select delivery method" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-gray-100 shadow-2xl">
+            <SelectContent className="rounded-xl border-gray-100 shadow-2xl p-1">
               {availableMethods.includes("bank") && (
-                <SelectItem value="bank" className="py-3 cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                      <Landmark className="h-4 w-4" />
+                <SelectItem value="bank" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                      <Landmark className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col text-left">
-                      <span className="font-bold text-sm">Bank Deposit</span>
+                      <span className="font-bold text-sm text-gray-900">Bank Deposit</span>
                       <span className="text-[10px] text-gray-400">Arrives in 1-2 business days</span>
                     </div>
                   </div>
                 </SelectItem>
               )}
               {availableMethods.includes("wallet") && (
-                <SelectItem value="wallet" className="py-3 cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
-                      <Smartphone className="h-4 w-4" />
+                <SelectItem value="wallet" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                      <Smartphone className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col text-left">
-                      <span className="font-bold text-sm">Mobile Wallet</span>
+                      <span className="font-bold text-sm text-gray-900">Mobile Wallet</span>
                       <span className="text-[10px] text-gray-400">Arrives instantly</span>
                     </div>
                   </div>
