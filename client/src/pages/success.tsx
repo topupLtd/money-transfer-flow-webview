@@ -29,11 +29,11 @@ export default function Success() {
           <p className="text-gray-500 max-w-[280px]">Your transfer of <span className="font-bold text-gray-900">€ {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> has been initiated.</p>
         </div>
 
-        <div className="bg-white p-0 rounded-2xl w-full max-w-xs border border-gray-100 shadow-sm overflow-hidden">
-          <div className="bg-gray-50 px-5 py-3 border-b border-gray-100">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Transfer Timeline</span>
+        <div className="w-full max-w-xs">
+          <div className="pb-4">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block text-center">Transfer Timeline</span>
           </div>
-          <div className="p-5">
+          <div className="px-5">
             <div className="space-y-6 relative">
               {/* Vertical Line */}
               <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gray-100 -z-10" />
