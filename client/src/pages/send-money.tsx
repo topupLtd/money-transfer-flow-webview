@@ -174,8 +174,8 @@ export default function SendMoney() {
               {availableMethods.includes("bank") && (
                 <SelectItem value="bank" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                      <Landmark className="h-5 w-5" />
+                    <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                      <Landmark className="h-4 w-4" />
                     </div>
                     <div className="flex flex-col text-left">
                       <span className="font-bold text-sm text-gray-900">Bank Deposit</span>
@@ -187,8 +187,8 @@ export default function SendMoney() {
               {availableMethods.includes("wallet") && (
                 <SelectItem value="wallet" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                      <Smartphone className="h-5 w-5" />
+                    <div className="h-8 w-8 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                      <Smartphone className="h-4 w-4" />
                     </div>
                     <div className="flex flex-col text-left">
                       <span className="font-bold text-sm text-gray-900">Mobile Wallet</span>
