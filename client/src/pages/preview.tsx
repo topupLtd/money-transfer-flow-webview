@@ -108,21 +108,21 @@ export default function Preview() {
           <h3 className="font-semibold text-gray-900">Transfer Details</h3>
           
           <div className="space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-500">You Send</span>
-              <span className="font-medium">€ {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">You Send</span>
+              <span className="font-semibold text-gray-900">€ {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Exchange Rate</span>
-              <span className="font-medium text-primary">1 EUR = {rate} {selectedCountry.currency}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Exchange Rate</span>
+              <span className="font-semibold text-primary">1 EUR = {rate} {selectedCountry.currency}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Transfer Fee</span>
-              <span className="font-medium text-secondary">€ {fee.toFixed(2)}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Transfer Fee</span>
+              <span className="font-semibold text-secondary">€ {fee.toFixed(2)}</span>
             </div>
-             <div className="flex justify-between">
-              <span className="text-gray-500">Discount (100%)</span>
-              <span className="font-medium text-secondary">-€ {fee.toFixed(2)}</span>
+             <div className="flex justify-between items-center">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Discount (100%)</span>
+              <span className="font-semibold text-secondary">-€ {fee.toFixed(2)}</span>
             </div>
             
             <Separator />
