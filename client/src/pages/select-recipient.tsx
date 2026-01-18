@@ -43,7 +43,7 @@ export default function SelectRecipient() {
   const isFiltered = !!(countryFilter && methodFilter);
 
   return (
-    <MobileLayout title="Select Recipient">
+    <MobileLayout title="Select Recipient" onBack={() => setLocation("/")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Search */}

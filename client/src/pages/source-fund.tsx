@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { Wallet, ChevronRight, Briefcase, Stethoscope, Landmark, ShoppingBag, PiggyBank } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export default function SourceFund() {
   const [, setLocation] = useLocation();
@@ -13,8 +13,13 @@ export default function SourceFund() {
     { id: 5, name: "Property / Asset Sale" },
   ];
 
+  const handleBack = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setLocation(`/select-recipient${searchParams.toString() ? '?' + searchParams.toString() : ''}`);
+  };
+
   return (
-    <MobileLayout title="Source of Funds">
+    <MobileLayout title="Source of Funds" onBack={handleBack}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         <div className="text-center py-2">
            <p className="text-sm text-gray-500">Please declare the source of these funds</p>

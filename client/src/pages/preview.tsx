@@ -58,8 +58,12 @@ export default function Preview() {
     setLocation(`/success?amount=${amount}`);
   };
 
+  const handleBack = () => {
+    setLocation(`/reason${searchParams.toString() ? '?' + searchParams.toString() : ''}`);
+  };
+
   return (
-    <MobileLayout title="Review Transfer">
+    <MobileLayout title="Review Transfer" onBack={handleBack}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         
         {/* Main Amount Card */}

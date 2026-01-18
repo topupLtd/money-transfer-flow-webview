@@ -4,7 +4,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChevronLeft, Landmark, Wallet, User, Phone, MapPin, Users, ChevronDown, Trash2, Save, Plus, CreditCard } from "lucide-react";
+import { Landmark, Wallet, User, Trash2, Save, Plus, CreditCard } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import {
@@ -117,13 +117,9 @@ export default function RecipientDetail() {
 
   if (showAddNew) {
     return (
-      <MobileLayout title="Add Account">
+      <MobileLayout title="Add Account" onBack={() => setShowAddNew(false)}>
         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => setShowAddNew(false)}>
-              <ChevronLeft className="h-5 w-5 mr-1" /> Back
-            </Button>
-            
+          <div className="flex items-center justify-end">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm">
               <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
               <span className="text-xs font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
@@ -236,13 +232,9 @@ export default function RecipientDetail() {
   }
 
   return (
-    <MobileLayout title="Edit Recipient">
+    <MobileLayout title="Edit Recipient" onBack={() => setLocation("/recipients")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-        <div className="flex items-center justify-between">
-          <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => setLocation("/recipients")}>
-            <ChevronLeft className="h-5 w-5 mr-1" /> Back
-          </Button>
-          
+        <div className="flex items-center justify-end">
           <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
             <SelectTrigger className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm w-auto h-auto focus:ring-1 focus:ring-primary/20">
               <div className="flex items-center gap-2">

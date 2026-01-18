@@ -3,7 +3,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ChevronLeft, Share2, CheckCircle2 } from "lucide-react";
+import { Share2, CheckCircle2 } from "lucide-react";
 import { MOCK_TRANSACTIONS } from "./transactions";
 
 export default function TransactionDetail() {
@@ -13,12 +13,8 @@ export default function TransactionDetail() {
   const tx = MOCK_TRANSACTIONS.find(t => t.id === Number(params.id)) || MOCK_TRANSACTIONS[0];
 
   return (
-    <MobileLayout title="Transaction Detail">
+    <MobileLayout title="Transaction Detail" onBack={() => setLocation("/transactions")}>
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
-        <Button variant="ghost" className="p-0 h-auto hover:bg-transparent -ml-1 text-gray-500" onClick={() => setLocation("/transactions")}>
-          <ChevronLeft className="h-5 w-5 mr-1" /> Back to History
-        </Button>
-
         <div className="flex flex-col items-center justify-center py-6 space-y-3">
           <div className="h-16 w-16 bg-secondary/10 text-secondary rounded-full flex items-center justify-center">
             <CheckCircle2 className="h-10 w-10" />

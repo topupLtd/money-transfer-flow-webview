@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { Heart, Gift, Briefcase, Home, Plane, GraduationCap, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export default function TransferReason() {
   const [, setLocation] = useLocation();
@@ -14,8 +14,13 @@ export default function TransferReason() {
     { id: 6, label: "Education / Fees" },
   ];
 
+  const handleBack = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setLocation(`/source${searchParams.toString() ? '?' + searchParams.toString() : ''}`);
+  };
+
   return (
-    <MobileLayout title="Reason for Transfer">
+    <MobileLayout title="Reason for Transfer" onBack={handleBack}>
       <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
         <p className="text-sm text-gray-500 text-center">What is the purpose of this transfer?</p>
 
