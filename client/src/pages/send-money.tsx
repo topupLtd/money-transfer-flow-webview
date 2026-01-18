@@ -152,10 +152,11 @@ export default function SendMoney() {
               <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">They Receive</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative overflow-hidden">
+                  <img src={selectedCountry.flag} className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full object-cover" alt={selectedCountry.currency} />
                   <Input 
                     value={receiveAmount}
                     readOnly
-                    className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
+                    className="border-none shadow-none text-2xl font-bold p-0 pl-7 h-auto focus-visible:ring-0 text-primary truncate bg-transparent" 
                   />
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
