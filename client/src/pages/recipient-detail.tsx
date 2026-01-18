@@ -120,11 +120,9 @@ export default function RecipientDetail() {
     return (
       <MobileLayout title="Add Account" onBack={() => setShowAddNew(false)}>
         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-          <div className="flex items-center justify-end">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-full shadow-sm">
-              <img src={currentCountry.flag} className="w-4 h-4 rounded-full object-cover" alt={currentCountry.name} />
-              <span className="text-xs font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
-            </div>
+          <div className="w-full h-12 bg-gray-100 rounded-xl px-4 flex items-center gap-3">
+            <img src={currentCountry.flag} className="w-5 h-5 rounded-full object-cover" alt={currentCountry.name} />
+            <span className="text-sm font-bold text-secondary">{currentCountry.name} ({currentCountry.currency})</span>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
