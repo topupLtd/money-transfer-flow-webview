@@ -66,46 +66,39 @@ export default function Preview() {
           </div>
         </Card>
 
-        {/* Recipient Details */}
-        <Card className="p-5 space-y-4 border-gray-100 shadow-sm">
-          <h3 className="font-semibold text-gray-900">Recipient Details</h3>
-          
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Recipient Name</p>
-              <p className="font-bold text-lg text-gray-900">Mofizur Rahman</p>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-1">
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Bank Name</p>
-                <p className="font-semibold text-gray-900">Dutch-Bangla Bank</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Delivery Method</p>
-                <p className="font-semibold text-gray-900">Bank Deposit</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-1">
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Account Number</p>
-                <p className="font-semibold text-gray-900">1234567890123</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Country</p>
-                <div className="flex items-center gap-2">
-                  <img src={selectedCountry.flag} alt={selectedCountry.name} className="w-4 h-3 rounded-sm object-cover" />
-                  <p className="font-semibold text-gray-900">{selectedCountry.name}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-
         {/* Details List */}
         <Card className="p-5 space-y-4 border-gray-100 shadow-sm">
-          <h3 className="font-semibold text-gray-900">Transfer Details</h3>
+          <div className="space-y-4 pb-4 border-b border-gray-100">
+             <h3 className="font-semibold text-gray-900">Recipient Details</h3>
+             
+             <div className="space-y-3 text-sm">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Recipient Name</span>
+                  <span className="font-semibold text-gray-900">Mofizur Rahman</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Bank Name</span>
+                  <span className="font-semibold text-gray-900">Dutch-Bangla Bank</span>
+                </div>
+                 <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Delivery Method</span>
+                  <span className="font-semibold text-gray-900">Bank Deposit</span>
+                </div>
+                 <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Account Number</span>
+                  <span className="font-semibold text-gray-900">1234567890123</span>
+                </div>
+                 <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Country</span>
+                   <div className="flex items-center gap-2">
+                    <img src={selectedCountry.flag} alt={selectedCountry.name} className="w-4 h-3 rounded-sm object-cover" />
+                    <span className="font-semibold text-gray-900">{selectedCountry.name}</span>
+                  </div>
+                </div>
+             </div>
+          </div>
+
+          <h3 className="font-semibold text-gray-900 pt-2">Transfer Details</h3>
           
           <div className="space-y-3 text-sm">
             <div className="flex justify-between items-center">
