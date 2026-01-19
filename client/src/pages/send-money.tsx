@@ -71,11 +71,25 @@ const PROMOS = [
 export default function SendMoney() {
   const [, setLocation] = useLocation();
   const [sendAmount, setSendAmount] = useState("1000");
+  const [receiveAmount, setReceiveAmount] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
   const [deliveryMethod, setDeliveryMethod] = useState("bank");
   const [promoCode, setPromoCode] = useState("");
 
-    const receiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toLocaleString();
+  const calculatedReceiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toFixed(2);
+  const displayReceiveAmount = receiveAmount || calculatedReceiveAmount;
+
+  const handleSendAmountChange = (value: string) => {
+    setSendAmount(value);
+    setReceiveAmount("");
+  };
+
+  const handleReceiveAmountChange = (value: string) => {
+    setReceiveAmount(value);
+    const numValue = parseFloat(value || "0");
+    const calculatedSend = (numValue / selectedCountry.rate).toFixed(2);
+    setSendAmount(calculatedSend);
+  };
 
   const handleContinue = () => {
     setLocation(`/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}&amount=${sendAmount}`);
@@ -98,7 +112,7 @@ export default function SendMoney() {
                   <Input 
                     type="number" 
                     value={sendAmount}
-                    onChange={(e) => setSendAmount(e.target.value)}
+                    onChange={(e) => handleSendAmountChange(e.target.value)}
                     className="border-none shadow-none text-3xl font-bold p-0 pl-6 h-auto focus-visible:ring-0 text-secondary" 
                     placeholder="0.00"
                   />
@@ -122,9 +136,11 @@ export default function SendMoney() {
                 <div className="flex-1 relative overflow-hidden flex items-center">
                   <span className="text-lg font-bold text-gray-400 mr-2 flex-shrink-0">{selectedCountry.symbol}</span>
                   <Input 
-                    value={receiveAmount}
-                    readOnly
+                    type="number"
+                    value={displayReceiveAmount}
+                    onChange={(e) => handleReceiveAmountChange(e.target.value)}
                     className="border-none shadow-none text-2xl font-bold p-0 h-auto focus-visible:ring-0 text-secondary truncate bg-transparent flex-1" 
+                    placeholder="0.00"
                   />
                 </div>
                 <BottomSheetSelect
