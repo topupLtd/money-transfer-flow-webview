@@ -24,11 +24,10 @@ export default function Success() {
           <Clock className="h-20 w-20 text-primary relative z-10 bg-white rounded-full p-4 shadow-sm" />
         </div>
 
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold text-gray-900">Transfer Initiated</h2>
-          <p className="text-gray-500 max-w-[280px]">Your transfer of <span className="font-bold text-gray-900">€ {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> has been initiated.</p>
-          <p className="text-xs text-gray-400 max-w-[260px] leading-relaxed">
-            Your transfer is being processed in the background. We'll notify you once it's complete.
+          <p className="text-gray-500 max-w-[300px] leading-relaxed">
+            We've initiated your <span className="font-bold text-gray-900">€{amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> transfer. It's being processed, and we'll notify you once it's completed.
           </p>
         </div>
 
