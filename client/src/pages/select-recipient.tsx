@@ -1,17 +1,43 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { Search, UserPlus2, ChevronRight, User2 } from "lucide-react";
+import { Search, UserPlus2, ChevronRight, User2, Clock, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from "@/components/ui/drawer";
+
+type Recipient = {
+  id: number;
+  name: string;
+  account: string;
+  bank: string;
+  initials: string;
+  color: string;
+  country: string;
+  method: string;
+  methodLabel: string;
+  hasPendingTransaction?: boolean;
+  pendingAmount?: string;
+  pendingCurrency?: string;
+  pendingDate?: string;
+};
 
 export default function SelectRecipient() {
   const [location, setLocation] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
+  const [pendingWarningOpen, setPendingWarningOpen] = useState(false);
+  const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(null);
   const countryFilter = searchParams.get("country");
   const methodFilter = searchParams.get("method");
 
-  const recipients = [
+  const recipients: Recipient[] = [
     { id: 1, name: "Maria Garcia", account: "08012345678", bank: "Opay", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "wallet", methodLabel: "Opay" },
     { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "UBA Nigeria", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "bank", methodLabel: "Bank Deposit" },
     { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Ecobank Ghana", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank", methodLabel: "Bank Deposit" },
@@ -23,7 +49,7 @@ export default function SelectRecipient() {
     { id: 9, name: "Binh Nguyen", account: "0988776655", bank: "Momo VN", initials: "BN", color: "bg-emerald-100 text-emerald-700", country: "VN", method: "wallet", methodLabel: "MoMo" },
     { id: 10, name: "Ricardo Silva", account: "**** 1122", bank: "Itaú Unibanco", initials: "RS", color: "bg-orange-100 text-orange-700", country: "BR", method: "bank", methodLabel: "Bank Deposit" },
     { id: 11, name: "Rahat Ahmed", account: "01712345678", bank: "bKash", initials: "RA", color: "bg-pink-100 text-pink-700", country: "BD", method: "wallet", methodLabel: "bKash" },
-    { id: 12, name: "Nusrat Jahan", account: "01887654321", bank: "Nagad", initials: "NJ", color: "bg-orange-100 text-orange-700", country: "BD", method: "wallet", methodLabel: "Nagad" },
+    { id: 12, name: "Nusrat Jahan", account: "01887654321", bank: "Nagad", initials: "NJ", color: "bg-orange-100 text-orange-700", country: "BD", method: "wallet", methodLabel: "Nagad", hasPendingTransaction: true, pendingAmount: "5,000", pendingCurrency: "BDT", pendingDate: "Jan 18, 2026" },
     { id: 13, name: "Mofizur Rahman", account: "**** 4455", bank: "Dutch-Bangla Bank", initials: "MR", color: "bg-blue-100 text-blue-700", country: "BD", method: "bank", methodLabel: "Bank Deposit" },
     { id: 14, name: "Alpha Diallo", account: "066123456", bank: "Orange Money", initials: "AD", color: "bg-orange-100 text-orange-700", country: "CI", method: "wallet", methodLabel: "Orange Money" },
     { id: 15, name: "Jean Kouassi", account: "**** 9900", bank: "Société Générale", initials: "JK", color: "bg-blue-100 text-blue-700", country: "CI", method: "bank", methodLabel: "Bank Deposit" },
@@ -31,6 +57,20 @@ export default function SelectRecipient() {
     { id: 17, name: "Sajid Khan", account: "**** 7766", bank: "Habib Bank", initials: "SK", color: "bg-green-100 text-green-700", country: "PK", method: "bank", methodLabel: "Bank Deposit" },
     { id: 18, name: "M-Pesa User", account: "0712345678", bank: "Safaricom", initials: "MP", color: "bg-green-100 text-green-700", country: "KE", method: "wallet", methodLabel: "M-Pesa" },
   ];
+
+  const handleRecipientClick = (recipient: Recipient) => {
+    if (recipient.hasPendingTransaction) {
+      setSelectedRecipient(recipient);
+      setPendingWarningOpen(true);
+    } else {
+      navigateToSource(recipient);
+    }
+  };
+
+  const navigateToSource = (recipient: Recipient) => {
+    const country = countryFilter || recipient.country;
+    setLocation(`/source?country=${country}&amount=${searchParams.get('amount') || ''}&method=${recipient.method}&recipientId=${recipient.id}&recipientName=${encodeURIComponent(recipient.name)}&recipientBank=${encodeURIComponent(recipient.bank)}&recipientAccount=${encodeURIComponent(recipient.account)}&deliveryMethod=${recipient.method}`);
+  };
 
   const filteredRecipients = recipients.filter(r => {
     if (countryFilter && r.country !== countryFilter) return false;
@@ -85,7 +125,7 @@ export default function SelectRecipient() {
                 filteredRecipients.map((recipient) => (
                   <div 
                     key={recipient.id}
-                    onClick={() => setLocation(`/source?country=${countryFilter || ''}&amount=${searchParams.get('amount') || ''}&method=${methodFilter || ''}&recipientId=${recipient.id}&recipientName=${encodeURIComponent(recipient.name)}&recipientBank=${encodeURIComponent(recipient.bank)}&recipientAccount=${encodeURIComponent(recipient.account)}&deliveryMethod=${recipient.method}`)}
+                    onClick={() => handleRecipientClick(recipient)}
                     className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
                   >
                     <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
@@ -124,7 +164,7 @@ export default function SelectRecipient() {
               recipients.map((recipient) => (
                 <div 
                   key={recipient.id}
-                  onClick={() => setLocation(`/source?country=${recipient.country}&amount=${searchParams.get('amount') || ''}&method=${recipient.method}&recipientId=${recipient.id}&recipientName=${encodeURIComponent(recipient.name)}&recipientBank=${encodeURIComponent(recipient.bank)}&recipientAccount=${encodeURIComponent(recipient.account)}&deliveryMethod=${recipient.method}`)}
+                  onClick={() => handleRecipientClick(recipient)}
                   className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
                 >
                   <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
@@ -143,6 +183,81 @@ export default function SelectRecipient() {
         </div>
 
       </div>
+
+      {/* Pending Transaction Warning Drawer */}
+      <Drawer open={pendingWarningOpen} onOpenChange={setPendingWarningOpen}>
+        <DrawerContent className="max-w-md mx-auto">
+          <DrawerHeader className="text-center pt-6 pb-2">
+            <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-amber-100 flex items-center justify-center">
+              <Clock className="h-8 w-8 text-amber-600" />
+            </div>
+            <DrawerTitle className="text-xl font-bold text-gray-900">Pending Transaction</DrawerTitle>
+            <DrawerDescription className="text-sm text-gray-500 mt-2">
+              You have a transfer that is still being processed
+            </DrawerDescription>
+          </DrawerHeader>
+
+          {selectedRecipient && (
+            <div className="px-6 pb-6 space-y-5">
+              {/* Pending Transaction Details */}
+              <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
+                    <AvatarFallback className={selectedRecipient.color}>{selectedRecipient.initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <p className="font-bold text-gray-900 text-sm">{selectedRecipient.name}</p>
+                    <p className="text-xs text-gray-500">{selectedRecipient.bank} • {selectedRecipient.account}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between pt-2 border-t border-amber-200/50">
+                  <div>
+                    <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Pending Amount</p>
+                    <p className="text-lg font-bold text-gray-900">{selectedRecipient.pendingCurrency} {selectedRecipient.pendingAmount}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Initiated</p>
+                    <p className="text-sm font-semibold text-gray-700">{selectedRecipient.pendingDate}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Warning Message */}
+              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Sending another transfer now may result in a duplicate payment. We recommend waiting until the pending transaction is completed.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3 pt-2">
+                <Button 
+                  variant="outline"
+                  className="w-full h-12 rounded-xl font-bold border-gray-200 text-gray-700"
+                  onClick={() => setPendingWarningOpen(false)}
+                  data-testid="button-cancel-pending"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="w-full h-12 rounded-xl font-bold shadow-md"
+                  onClick={() => {
+                    setPendingWarningOpen(false);
+                    if (selectedRecipient) {
+                      navigateToSource(selectedRecipient);
+                    }
+                  }}
+                  data-testid="button-proceed-anyway"
+                >
+                  Proceed Anyway
+                </Button>
+              </div>
+            </div>
+          )}
+        </DrawerContent>
+      </Drawer>
     </MobileLayout>
   );
 }
