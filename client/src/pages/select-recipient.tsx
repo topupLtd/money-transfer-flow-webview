@@ -85,7 +85,7 @@ export default function SelectRecipient() {
                 filteredRecipients.map((recipient) => (
                   <div 
                     key={recipient.id}
-                    onClick={() => setLocation(`/source?country=${countryFilter || ''}&amount=${searchParams.get('amount') || ''}`)}
+                    onClick={() => setLocation(`/source?country=${countryFilter || ''}&amount=${searchParams.get('amount') || ''}&method=${methodFilter || ''}&recipientId=${recipient.id}&recipientName=${encodeURIComponent(recipient.name)}&recipientBank=${encodeURIComponent(recipient.bank)}&recipientAccount=${encodeURIComponent(recipient.account)}&deliveryMethod=${recipient.method}`)}
                     className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
                   >
                     <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
@@ -124,7 +124,7 @@ export default function SelectRecipient() {
               recipients.map((recipient) => (
                 <div 
                   key={recipient.id}
-                  onClick={() => setLocation(`/source?country=${countryFilter || ''}&amount=${searchParams.get('amount') || ''}`)}
+                  onClick={() => setLocation(`/source?country=${recipient.country}&amount=${searchParams.get('amount') || ''}&method=${recipient.method}&recipientId=${recipient.id}&recipientName=${encodeURIComponent(recipient.name)}&recipientBank=${encodeURIComponent(recipient.bank)}&recipientAccount=${encodeURIComponent(recipient.account)}&deliveryMethod=${recipient.method}`)}
                   className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
                 >
                   <Avatar className="h-12 w-12 border-2 border-white shadow-sm">

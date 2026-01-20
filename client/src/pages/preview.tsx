@@ -47,12 +47,17 @@ export default function Preview() {
   const searchParams = new URLSearchParams(window.location.search);
   const countryCode = searchParams.get("country") || "BD";
   const amount = parseFloat(searchParams.get("amount") || "1000");
+  const recipientName = searchParams.get("recipientName") || "Recipient";
+  const recipientBank = searchParams.get("recipientBank") || "Bank";
+  const recipientAccount = searchParams.get("recipientAccount") || "****";
+  const deliveryMethod = searchParams.get("deliveryMethod") || "bank";
   
   const selectedCountry = COUNTRIES.find(c => c.code === countryCode) || COUNTRIES[1];
   const rate = selectedCountry.rate;
   const receiveAmount = (amount * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const fee = 5.00;
   const totalToPay = amount; // Assuming 100% fee discount for demo
+  const deliveryMethodLabel = deliveryMethod === "bank" ? "Bank Deposit" : "Mobile Wallet";
 
   const handleSendNow = () => {
     setLocation(`/success?amount=${amount}`);
@@ -82,19 +87,19 @@ export default function Preview() {
              <div className="space-y-3 text-sm">
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Recipient Name</span>
-                  <span className="font-semibold text-gray-900">Mofizur Rahman</span>
+                  <span className="font-semibold text-gray-900">{recipientName}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Bank Name</span>
-                  <span className="font-semibold text-gray-900">Dutch-Bangla Bank</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{deliveryMethod === "bank" ? "Bank Name" : "Wallet Provider"}</span>
+                  <span className="font-semibold text-gray-900">{recipientBank}</span>
                 </div>
                  <div className="flex justify-between items-center">
                   <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Delivery Method</span>
-                  <span className="font-semibold text-gray-900">Bank Deposit</span>
+                  <span className="font-semibold text-gray-900">{deliveryMethodLabel}</span>
                 </div>
                  <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Account Number</span>
-                  <span className="font-semibold text-gray-900">1234567890123</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{deliveryMethod === "bank" ? "Account Number" : "Wallet Number"}</span>
+                  <span className="font-semibold text-gray-900">{recipientAccount}</span>
                 </div>
                  <div className="flex justify-between items-center">
                   <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Country</span>
