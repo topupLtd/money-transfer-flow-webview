@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { ArrowRightLeft, ChevronDown, Landmark, Smartphone, Ticket, Percent } from "lucide-react";
+import { ArrowRightLeft, ChevronDown, Landmark, Smartphone, Ticket, Percent, AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -24,42 +25,52 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
+import { useCurrencyCountries } from "@/hooks/useCurrencyCountries";
+import type { CurrencyCountry } from "@/api/types/currency";
 
-const COUNTRIES = [
+/** Shape used internally by the Send Money UI */
+interface CountryOption {
+  code: string;
+  name: string;
+  currency: string;
+  symbol: string;
+  flag: string;
+  rate: number;
+  deliveryMethods: string[];
+}
+
+/** Maps an API CurrencyCountry to the internal CountryOption shape */
+function toCountryOption(c: CurrencyCountry): CountryOption {
+  // Map pickup_methods ref_ids to delivery method keys
+  const deliveryMethods: string[] = [];
+  for (const pm of c.pickup_methods) {
+    if (pm.ref_id === "ACCOUNT" && !deliveryMethods.includes("bank")) {
+      deliveryMethods.push("bank");
+    } else if (pm.ref_id === "WALLET" && !deliveryMethods.includes("wallet")) {
+      deliveryMethods.push("wallet");
+    }
+  }
+
+  return {
+    code: c.country.code,
+    name: c.country.name,
+    currency: c.currency.code,
+    symbol: c.currency.icon ?? c.currency.code,
+    flag: c.flag
+      ? `https://paycell-test.paytop.com/storage/${c.flag}`
+      : `https://flagcdn.com/w40/${c.country.code.toLowerCase()}.png`,
+    rate: 1, // Exchange rate comes from a separate API call
+    deliveryMethods: deliveryMethods.length > 0 ? deliveryMethods : ["bank"],
+  };
+}
+
+/** Fallback countries used when the API is unavailable */
+const FALLBACK_COUNTRIES: CountryOption[] = [
   { code: "AO", name: "Angola", currency: "AOA", symbol: "Kz", flag: "https://flagcdn.com/w40/ao.png", rate: 900, deliveryMethods: ["bank", "wallet"] },
-  { code: "BD", name: "Bangladesh", currency: "BDT", symbol: "৳", flag: "https://flagcdn.com/w40/bd.png", rate: 118.2, deliveryMethods: ["bank", "wallet"] },
-  { code: "BJ", name: "Benin", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/bj.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "BR", name: "Brazil", currency: "BRL", symbol: "R$", flag: "https://flagcdn.com/w40/br.png", rate: 5.4, deliveryMethods: ["bank"] },
-  { code: "BF", name: "Burkina Faso", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/bf.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "CM", name: "Cameroon", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/cm.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "TD", name: "Chad", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/td.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "CN", name: "China", currency: "CNY", symbol: "¥", flag: "https://flagcdn.com/w40/cn.png", rate: 7.8, deliveryMethods: ["bank", "wallet"] },
-  { code: "CO", name: "Colombia", currency: "COP", symbol: "$", flag: "https://flagcdn.com/w40/co.png", rate: 4200, deliveryMethods: ["bank", "wallet"] },
-  { code: "CG", name: "Congo", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/cg.png", rate: 655.95, deliveryMethods: ["wallet"] },
-  { code: "CD", name: "Congo (DRC)", currency: "CDF", symbol: "FC", flag: "https://flagcdn.com/w40/cd.png", rate: 2800, deliveryMethods: ["wallet"] },
-  { code: "CI", name: "Côte d'Ivoire", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/ci.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "DO", name: "Dominican Republic", currency: "DOP", symbol: "RD$", flag: "https://flagcdn.com/w40/do.png", rate: 60.5, deliveryMethods: ["bank"] },
-  { code: "EG", name: "Egypt", currency: "EGP", symbol: "£", flag: "https://flagcdn.com/w40/eg.png", rate: 52.5, deliveryMethods: ["bank"] },
-  { code: "GA", name: "Gabon", currency: "XAF", symbol: "FCFA", flag: "https://flagcdn.com/w40/ga.png", rate: 655.95, deliveryMethods: ["wallet"] },
-  { code: "GM", name: "Gambia", currency: "GMD", symbol: "D", flag: "https://flagcdn.com/w40/gm.png", rate: 70.2, deliveryMethods: ["bank", "wallet"] },
-  { code: "GH", name: "Ghana", currency: "GHS", symbol: "₵", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "GN", name: "Guinea", currency: "GNF", symbol: "FG", flag: "https://flagcdn.com/w40/gn.png", rate: 9200, deliveryMethods: ["wallet"] },
-  { code: "HT", name: "Haiti", currency: "HTG", symbol: "G", flag: "https://flagcdn.com/w40/ht.png", rate: 142, deliveryMethods: ["bank"] },
-  { code: "IN", name: "India", currency: "INR", symbol: "₹", flag: "https://flagcdn.com/w40/in.png", rate: 83.1, deliveryMethods: ["bank"] },
-  { code: "MG", name: "Madagascar", currency: "MGA", symbol: "Ar", flag: "https://flagcdn.com/w40/mg.png", rate: 4800, deliveryMethods: ["wallet"] },
-  { code: "ML", name: "Mali", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/ml.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "MR", name: "Mauritania", currency: "MRU", symbol: "UM", flag: "https://flagcdn.com/w40/mr.png", rate: 42.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "MD", name: "Moldova", currency: "MDL", symbol: "L", flag: "https://flagcdn.com/w40/md.png", rate: 19.2, deliveryMethods: ["bank"] },
-  { code: "MA", name: "Morocco", currency: "MAD", symbol: "DH", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
-  { code: "NE", name: "Niger", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/ne.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "NG", name: "Nigeria", currency: "NGN", symbol: "₦", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
-  { code: "PK", name: "Pakistan", currency: "PKR", symbol: "₨", flag: "https://flagcdn.com/w40/pk.png", rate: 300.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "PH", name: "Philippines", currency: "PHP", symbol: "₱", flag: "https://flagcdn.com/w40/ph.png", rate: 56.2, deliveryMethods: ["bank"] },
+  { code: "NG", name: "Nigeria", currency: "NGN", symbol: "\u20a6", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
+  { code: "GH", name: "Ghana", currency: "GHS", symbol: "\u20b5", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
   { code: "SN", name: "Senegal", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/sn.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "RS", name: "Serbia", currency: "RSD", symbol: "дин", flag: "https://flagcdn.com/w40/rs.png", rate: 117.2, deliveryMethods: ["bank"] },
-  { code: "TG", name: "Togo", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/tg.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "TR", name: "Turkey", currency: "TRY", symbol: "₺", flag: "https://flagcdn.com/w40/tr.png", rate: 34.5, deliveryMethods: ["bank"] },
-  { code: "UA", name: "Ukraine", currency: "UAH", symbol: "₴", flag: "https://flagcdn.com/w40/ua.png", rate: 44.2, deliveryMethods: ["bank"] },
+  { code: "MA", name: "Morocco", currency: "MAD", symbol: "DH", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
 ];
 
 const PROMOS = [
@@ -68,47 +79,134 @@ const PROMOS = [
   { id: "SAVE10", label: "Summer Special", discount: "10% Off Fee" },
 ];
 
+/** Loading skeleton for the exchange card */
+function ExchangeCardSkeleton() {
+  return (
+    <Card className="p-0 overflow-hidden border-none shadow-lg bg-white">
+      <div className="p-5 space-y-4">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-16" />
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 flex-1" />
+            <Skeleton className="h-8 w-20 rounded-full" />
+          </div>
+        </div>
+        <div className="relative h-px bg-gray-100 my-4" />
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-20" />
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 flex-1" />
+            <Skeleton className="h-8 w-20 rounded-full" />
+          </div>
+        </div>
+      </div>
+      <div className="bg-gray-50 px-5 py-3 border-t border-gray-100">
+        <Skeleton className="h-3 w-40 mx-auto" />
+      </div>
+    </Card>
+  );
+}
+
+/** Error state component */
+function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <Card className="p-6 border-red-100 bg-red-50/50">
+      <div className="flex flex-col items-center gap-3 text-center">
+        <AlertCircle className="h-8 w-8 text-red-400" />
+        <p className="text-sm text-red-600 font-medium">{message}</p>
+        <Button variant="outline" size="sm" onClick={onRetry} className="gap-2">
+          <RefreshCw className="h-3 w-3" />
+          Try Again
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
 export default function SendMoney() {
   const [, setLocation] = useLocation();
   const [sendAmount, setSendAmount] = useState("1000");
   const [receiveAmount, setReceiveAmount] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(null);
   const [deliveryMethod, setDeliveryMethod] = useState("bank");
   const [promoCode, setPromoCode] = useState("");
+
+  // Fetch currency-country data from API
+  const { data: apiCountries, isLoading, isError, error, refetch } = useCurrencyCountries();
+
+  // Memoize the mapped country options — only "to" and "both" types (destination countries)
+  const countries: CountryOption[] = useMemo(() => {
+    if (!apiCountries || apiCountries.length === 0) return FALLBACK_COUNTRIES;
+    return apiCountries
+      .filter((c) => c.type === "to" || c.type === "both")
+      .map(toCountryOption);
+  }, [apiCountries]);
+
+  // Derive the selected country from the list
+  const selectedCountry = useMemo(() => {
+    if (selectedCountryCode) {
+      return countries.find((c) => c.code === selectedCountryCode) ?? countries[0];
+    }
+    return countries[0];
+  }, [selectedCountryCode, countries]);
 
   const calculatedReceiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toFixed(2);
   const displayReceiveAmount = receiveAmount || calculatedReceiveAmount;
 
-  const handleSendAmountChange = (value: string) => {
+  const handleSendAmountChange = useCallback((value: string) => {
     setSendAmount(value);
     setReceiveAmount("");
-  };
+  }, []);
 
-  const handleReceiveAmountChange = (value: string) => {
+  const handleReceiveAmountChange = useCallback((value: string) => {
     setReceiveAmount(value);
     const numValue = parseFloat(value || "0");
     const calculatedSend = (numValue / selectedCountry.rate).toFixed(2);
     setSendAmount(calculatedSend);
-  };
+  }, [selectedCountry.rate]);
 
-  const handleContinue = () => {
+  const handleContinue = useCallback(() => {
     setLocation(`/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}&amount=${sendAmount}`);
-  };
+  }, [setLocation, selectedCountry.code, deliveryMethod, sendAmount]);
 
   const availableMethods = selectedCountry.deliveryMethods || ["bank", "wallet"];
+
+  // Memoize country options for the BottomSheetSelect
+  const countrySelectOptions = useMemo(
+    () =>
+      countries.map((c) => ({
+        value: c.code,
+        label: c.name,
+        sublabel: `(${c.currency})`,
+        icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt={c.name} />,
+      })),
+    [countries],
+  );
 
   return (
     <MobileLayout title="Send Money">
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
+        {/* Loading State */}
+        {isLoading && <ExchangeCardSkeleton />}
+
+        {/* Error State */}
+        {isError && !isLoading && (
+          <ErrorState
+            message={error?.message ?? "Failed to load countries. Please try again."}
+            onRetry={() => refetch()}
+          />
+        )}
+
         {/* Exchange Card */}
+        {!isLoading && (
         <Card className="p-0 overflow-hidden border-none shadow-lg bg-white">
           <div className="p-5 space-y-4">
             <div className="space-y-2">
               <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">You Send</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative">
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">€</span>
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">\u20ac</span>
                   <Input 
                     type="number" 
                     value={sendAmount}
@@ -146,8 +244,8 @@ export default function SendMoney() {
                 <BottomSheetSelect
                   value={selectedCountry.code}
                   onValueChange={(code) => {
-                    const country = COUNTRIES.find(c => c.code === code) || COUNTRIES[0];
-                    setSelectedCountry(country);
+                    setSelectedCountryCode(code);
+                    const country = countries.find(c => c.code === code) || countries[0];
                     if (!country.deliveryMethods.includes(deliveryMethod)) {
                       setDeliveryMethod(country.deliveryMethods[0]);
                     }
@@ -155,12 +253,7 @@ export default function SendMoney() {
                   title="Select Country"
                   showSearch
                   searchPlaceholder="Search countries..."
-                  options={COUNTRIES.map(c => ({
-                    value: c.code,
-                    label: c.name,
-                    sublabel: `(${c.currency})`,
-                    icon: <img src={c.flag} className="w-5 h-5 rounded-full object-cover" alt={c.name} />
-                  }))}
+                  options={countrySelectOptions}
                   triggerClassName="w-auto h-auto rounded-full px-3 py-2 bg-gray-50 border border-gray-100"
                   renderTriggerContent={() => (
                     <div className="flex items-center gap-2">
@@ -177,6 +270,7 @@ export default function SendMoney() {
             <span className="font-bold text-secondary">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
           </div>
         </Card>
+        )}
 
         {/* Delivery Method */}
         <div className="space-y-3">
@@ -269,7 +363,7 @@ export default function SendMoney() {
                           <p className="text-xs text-gray-500">{promo.discount}</p>
                         </div>
                         {promoCode === promo.id && (
-                          <div className="h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-bold">✓</div>
+                          <div className="h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-bold">\u2713</div>
                         )}
                       </button>
                     ))}
