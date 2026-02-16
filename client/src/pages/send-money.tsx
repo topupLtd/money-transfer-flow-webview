@@ -63,7 +63,7 @@ function toCountryOption(c: CurrencyCountry): CountryOption {
     currency: c.currency.code,
     symbol: c.currency.icon ?? c.currency.code,
     flag: c.flag
-      ? `https://paycell-test.paytop.com/storage/${c.flag}`
+      ? `${config.storageBaseUrl}/${c.flag}`
       : `https://flagcdn.com/w40/${c.country.code.toLowerCase()}.png`,
     rate: 1, // Exchange rate comes from a separate API call
     deliveryMethods: deliveryMethods.length > 0 ? deliveryMethods : ["bank"],
@@ -148,6 +148,17 @@ export default function SendMoney() {
     return apiCountries
       .filter((c) => c.type === "to" || c.type === "both")
       .map(toCountryOption);
+  }, [apiCountries]);
+
+  // Derive the sender (from) country from the list — matched by config.FROM_COUNTRY_CODE
+  const fromCountry: CountryOption | undefined = useMemo(() => {
+    if (!apiCountries || apiCountries.length === 0) return undefined;
+    const fromCurrencies = apiCountries
+      .filter((c) => c.type === "from" || c.type === "both")
+      .map(toCountryOption);
+    return (
+      fromCurrencies.find((c) => c.code === config.FROM_COUNTRY_CODE) ?? fromCurrencies[0]
+    );
   }, [apiCountries]);
 
   // Derive the selected country from the list
@@ -274,7 +285,7 @@ export default function SendMoney() {
               <Label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">You Send</Label>
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative">
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">\u20ac</span>
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">{fromCountry?.symbol ?? "€"}</span>
                   <Input 
                     type="number" 
                     value={sendAmount}
@@ -284,8 +295,8 @@ export default function SendMoney() {
                   />
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
-                  <img src="https://flagcdn.com/w40/eu.png" className="w-5 h-5 rounded-full object-cover" alt="EUR" />
-                  <span className="font-bold text-sm text-secondary">EUR</span>
+                  <img src={fromCountry?.flag ?? "https://flagcdn.com/w40/eu.png"} className="w-5 h-5 rounded-full object-cover" alt={fromCountry?.currency ?? "EUR"} />
+                  <span className="font-bold text-sm text-secondary">{fromCountry?.currency ?? "EUR"}</span>
                 </div>
               </div>
             </div>
@@ -336,7 +347,7 @@ export default function SendMoney() {
           </div>
           <div className="bg-gray-50 px-5 py-3 text-[10px] text-gray-400 flex justify-between items-center border-t border-gray-100">
             <span className="font-bold uppercase tracking-wider">Exchange Rate</span>
-            <span className="font-bold text-secondary">1 EUR = {selectedCountry.rate} {selectedCountry.currency}</span>
+            <span className="font-bold text-secondary">1 {fromCountry?.currency ?? "EUR"} = {selectedCountry.rate} {selectedCountry.currency}</span>
           </div>
         </Card>
         )}
