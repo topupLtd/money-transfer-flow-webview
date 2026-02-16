@@ -13,6 +13,9 @@ export const config = {
   /** Request timeout in milliseconds */
   requestTimeout: 30_000,
 
+  /** Default selected destination country code */
+  SELECTED_TO_COUNTRY_CODE: "TR",
+
   /** Whether the app is in development mode */
   isDev: import.meta.env.DEV,
 } as const;

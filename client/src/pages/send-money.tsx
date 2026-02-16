@@ -1,7 +1,7 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { ArrowRightLeft, ChevronDown, Landmark, Smartphone, Ticket, Percent, AlertCircle, RefreshCw } from "lucide-react";
+import { ArrowRightLeft, ChevronDown, Landmark, Smartphone, Ticket, Percent, AlertCircle, RefreshCw, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -26,10 +26,15 @@ import {
 } from "@/components/ui/drawer";
 import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 import { useCurrencyCountries } from "@/hooks/useCurrencyCountries";
+import { useAvailableDeliveries } from "@/hooks/useAvailableDeliveries";
+import { config } from "@/config";
 import type { CurrencyCountry } from "@/api/types/currency";
+import type { DeliveryMethod } from "@/api/types/delivery";
 
 /** Shape used internally by the Send Money UI */
 interface CountryOption {
+  /** The currency-country pair ID from the API (used for delivery method lookups) */
+  currencyCountryId: number;
   code: string;
   name: string;
   currency: string;
@@ -52,6 +57,7 @@ function toCountryOption(c: CurrencyCountry): CountryOption {
   }
 
   return {
+    currencyCountryId: c.id,
     code: c.country.code,
     name: c.country.name,
     currency: c.currency.code,
@@ -66,11 +72,11 @@ function toCountryOption(c: CurrencyCountry): CountryOption {
 
 /** Fallback countries used when the API is unavailable */
 const FALLBACK_COUNTRIES: CountryOption[] = [
-  { code: "AO", name: "Angola", currency: "AOA", symbol: "Kz", flag: "https://flagcdn.com/w40/ao.png", rate: 900, deliveryMethods: ["bank", "wallet"] },
-  { code: "NG", name: "Nigeria", currency: "NGN", symbol: "\u20a6", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
-  { code: "GH", name: "Ghana", currency: "GHS", symbol: "\u20b5", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
-  { code: "SN", name: "Senegal", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/sn.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
-  { code: "MA", name: "Morocco", currency: "MAD", symbol: "DH", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
+  { currencyCountryId: 0, code: "AO", name: "Angola", currency: "AOA", symbol: "Kz", flag: "https://flagcdn.com/w40/ao.png", rate: 900, deliveryMethods: ["bank", "wallet"] },
+  { currencyCountryId: 0, code: "NG", name: "Nigeria", currency: "NGN", symbol: "\u20a6", flag: "https://flagcdn.com/w40/ng.png", rate: 1450, deliveryMethods: ["bank", "wallet"] },
+  { currencyCountryId: 0, code: "GH", name: "Ghana", currency: "GHS", symbol: "\u20b5", flag: "https://flagcdn.com/w40/gh.png", rate: 12.5, deliveryMethods: ["bank", "wallet"] },
+  { currencyCountryId: 0, code: "SN", name: "Senegal", currency: "XOF", symbol: "CFA", flag: "https://flagcdn.com/w40/sn.png", rate: 655.95, deliveryMethods: ["bank", "wallet"] },
+  { currencyCountryId: 0, code: "MA", name: "Morocco", currency: "MAD", symbol: "DH", flag: "https://flagcdn.com/w40/ma.png", rate: 10.8, deliveryMethods: ["bank"] },
 ];
 
 const PROMOS = [
@@ -127,8 +133,10 @@ export default function SendMoney() {
   const [, setLocation] = useLocation();
   const [sendAmount, setSendAmount] = useState("1000");
   const [receiveAmount, setReceiveAmount] = useState("");
-  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(null);
-  const [deliveryMethod, setDeliveryMethod] = useState("bank");
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(config.SELECTED_TO_COUNTRY_CODE);
+  const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState<number | null>(null);
+  const [selectedTransferTimeId, setSelectedTransferTimeId] = useState<number | null>(null);
   const [promoCode, setPromoCode] = useState("");
 
   // Fetch currency-country data from API
@@ -150,6 +158,52 @@ export default function SendMoney() {
     return countries[0];
   }, [selectedCountryCode, countries]);
 
+  // ── Available delivery methods (pickup methods + transfer times) from API ──
+  // Mirrors RateCheckScreen.js: fetchDeliveriesAndSetDefault
+  const {
+    data: deliveryMethods,
+    isLoading: isLoadingDeliveries,
+    isError: isDeliveryError,
+    error: deliveryError,
+    refetch: refetchDeliveries,
+  } = useAvailableDeliveries(selectedCountry?.currencyCountryId);
+
+  // Order deliveries by priority (asc) just like RateCheckScreen.js
+  const sortedDeliveries: DeliveryMethod[] = useMemo(() => {
+    if (!deliveryMethods || deliveryMethods.length === 0) return [];
+    return [...deliveryMethods].sort((a, b) => a.priority - b.priority);
+  }, [deliveryMethods]);
+
+  // Selected delivery objects derived from IDs
+  const selectedDeliveryItem = useMemo(
+    () => sortedDeliveries.find((d) => d.id === selectedDeliveryId) ?? sortedDeliveries[0] ?? null,
+    [sortedDeliveries, selectedDeliveryId],
+  );
+
+  const selectedTransferTimeItem = useMemo(() => {
+    if (!selectedDeliveryItem) return null;
+    return (
+      selectedDeliveryItem.transfer_time.find((t) => t.id === selectedTransferTimeId) ??
+      selectedDeliveryItem.transfer_time[0] ??
+      null
+    );
+  }, [selectedDeliveryItem, selectedTransferTimeId]);
+
+  // Auto-select first delivery method when deliveries load or change
+  // Mirrors RateCheckScreen.js: setState after fetchDeliveries
+  useEffect(() => {
+    if (sortedDeliveries.length > 0) {
+      const first = sortedDeliveries[0];
+      setSelectedDeliveryId(first.id);
+      setSelectedTransferTimeId(first.transfer_time[0]?.id ?? null);
+      setDeliveryMethod(String(first.id));
+    } else {
+      setSelectedDeliveryId(null);
+      setSelectedTransferTimeId(null);
+      setDeliveryMethod("");
+    }
+  }, [sortedDeliveries]);
+
   const calculatedReceiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toFixed(2);
   const displayReceiveAmount = receiveAmount || calculatedReceiveAmount;
 
@@ -165,11 +219,25 @@ export default function SendMoney() {
     setSendAmount(calculatedSend);
   }, [selectedCountry.rate]);
 
-  const handleContinue = useCallback(() => {
-    setLocation(`/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}&amount=${sendAmount}`);
-  }, [setLocation, selectedCountry.code, deliveryMethod, sendAmount]);
+  // Mirrors RateCheckScreen.js: setDeliveryMethod
+  const handleDeliveryMethodChange = useCallback(
+    (value: string) => {
+      const id = Number(value);
+      const item = sortedDeliveries.find((d) => d.id === id);
+      if (item) {
+        setSelectedDeliveryId(item.id);
+        setSelectedTransferTimeId(item.transfer_time[0]?.id ?? null);
+        setDeliveryMethod(value);
+      }
+    },
+    [sortedDeliveries],
+  );
 
-  const availableMethods = selectedCountry.deliveryMethods || ["bank", "wallet"];
+  const handleContinue = useCallback(() => {
+    setLocation(
+      `/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}&amount=${sendAmount}&deliveryId=${selectedDeliveryId ?? ""}&transferTimeId=${selectedTransferTimeId ?? ""}`,
+    );
+  }, [setLocation, selectedCountry.code, deliveryMethod, sendAmount, selectedDeliveryId, selectedTransferTimeId]);
 
   // Memoize country options for the BottomSheetSelect
   const countrySelectOptions = useMemo(
@@ -245,10 +313,11 @@ export default function SendMoney() {
                   value={selectedCountry.code}
                   onValueChange={(code) => {
                     setSelectedCountryCode(code);
-                    const country = countries.find(c => c.code === code) || countries[0];
-                    if (!country.deliveryMethods.includes(deliveryMethod)) {
-                      setDeliveryMethod(country.deliveryMethods[0]);
-                    }
+                    // Reset delivery selections — the useEffect on sortedDeliveries
+                    // will auto-select the first method once new data loads
+                    setSelectedDeliveryId(null);
+                    setSelectedTransferTimeId(null);
+                    setDeliveryMethod("");
                   }}
                   title="Select Country"
                   showSearch
@@ -272,42 +341,60 @@ export default function SendMoney() {
         </Card>
         )}
 
-        {/* Delivery Method */}
+        {/* Delivery Method — driven by /available-pickup-method-transfer-time API */}
         <div className="space-y-3">
           <Label className="text-base font-semibold text-gray-900">Delivery Method</Label>
-          <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
-            <SelectTrigger className="w-full h-auto min-h-[4rem] bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-3 px-3">
-              <SelectValue placeholder="Select delivery method" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-gray-100 shadow-2xl p-1">
-              {availableMethods.includes("bank") && (
-                <SelectItem value="bank" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
-                  <div className="flex items-center gap-4">
-                    <div className="h-8 w-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
-                      <Landmark className="h-4 w-4" />
+
+          {/* Loading state */}
+          {isLoadingDeliveries && (
+            <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              <span className="text-sm text-gray-400">Loading delivery methods...</span>
+            </div>
+          )}
+
+          {/* Error state */}
+          {isDeliveryError && !isLoadingDeliveries && (
+            <ErrorState
+              message={deliveryError?.message ?? "Failed to load delivery methods."}
+              onRetry={() => refetchDeliveries()}
+            />
+          )}
+
+          {/* Delivery method select */}
+          {!isLoadingDeliveries && !isDeliveryError && sortedDeliveries.length > 0 && (
+            <Select value={deliveryMethod} onValueChange={handleDeliveryMethodChange}>
+              <SelectTrigger className="w-full h-auto min-h-[4rem] bg-white rounded-xl border-gray-200 focus:ring-1 focus:ring-primary shadow-sm py-3 px-3">
+                <SelectValue placeholder="Select delivery method" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-gray-100 shadow-2xl p-1">
+                {sortedDeliveries.map((method) => (
+                  <SelectItem
+                    key={method.id}
+                    value={String(method.id)}
+                    className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="h-8 w-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
+                        {method.name.toLowerCase().includes("wallet") ? (
+                          <Smartphone className="h-4 w-4" />
+                        ) : (
+                          <Landmark className="h-4 w-4" />
+                        )}
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="font-bold text-sm text-gray-900">{method.name}</span>
+                        <span className="text-[10px] text-gray-400">
+                          {method.transfer_time[0]?.name ?? method.description}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col text-left">
-                      <span className="font-bold text-sm text-gray-900">Bank Deposit</span>
-                      <span className="text-[10px] text-gray-400">Arrives in 1-2 business days</span>
-                    </div>
-                  </div>
-                </SelectItem>
-              )}
-              {availableMethods.includes("wallet") && (
-                <SelectItem value="wallet" className="py-3 px-3 cursor-pointer rounded-lg hover:bg-gray-50 focus:bg-gray-50 my-1">
-                  <div className="flex items-center gap-4">
-                    <div className="h-8 w-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
-                      <Smartphone className="h-4 w-4" />
-                    </div>
-                    <div className="flex flex-col text-left">
-                      <span className="font-bold text-sm text-gray-900">Mobile Wallet</span>
-                      <span className="text-[10px] text-gray-400">Arrives instantly</span>
-                    </div>
-                  </div>
-                </SelectItem>
-              )}
-            </SelectContent>
-          </Select>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+
         </div>
 
         {/* Promo Code Drawer */}
