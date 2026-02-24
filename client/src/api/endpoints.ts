@@ -18,4 +18,10 @@ export const ENDPOINTS = {
 
   /** Create transaction */
   CREATE_TRANSACTION: "/transaction",
+
+  /** Recipients list */
+  RECIPIENTS: "/recipients",
+
+  /** Update transaction (PATCH) — associate recipient with quote */
+  UPDATE_TRANSACTION: "/transaction",
 } as const;

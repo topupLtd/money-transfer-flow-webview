@@ -36,6 +36,13 @@ export type {
   CreateTransactionBody,
   CreateTransactionResponse,
 } from "./types/transaction";
+export { fetchRecipients, updateTransactionWithRecipient } from "./services/recipient";
+export type {
+  Recipient,
+  RecipientsResponse,
+  UpdateTransactionWithRecipientBody,
+  UpdateTransactionResponse,
+} from "./types/recipient";
 export {
   MINIMUM_SENDING_AMOUNT,
   EXCHANGE_RATE_SENDER_ERROR_CODE,

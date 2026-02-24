@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
-import { Search, UserPlus2, ChevronRight, User2, Clock, AlertTriangle } from "lucide-react";
+import { Search, UserPlus2, ChevronRight, User2, Clock, AlertTriangle, Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Drawer,
   DrawerContent,
@@ -12,8 +14,12 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
+import { useToast } from "@/hooks/use-toast";
+import { useRecipients, useUpdateTransactionWithRecipient } from "@/hooks/useRecipients";
+import type { Recipient as ApiRecipient } from "@/api/types/recipient";
 
-type Recipient = {
+/** UI-friendly shape derived from the API recipient */
+interface RecipientDisplay {
   id: number;
   name: string;
   account: string;
@@ -21,66 +27,256 @@ type Recipient = {
   initials: string;
   color: string;
   country: string;
+  countryId: number;
+  currencyId: number | undefined;
+  pickupMethodId: number | null | undefined;
   method: string;
   methodLabel: string;
   hasPendingTransaction?: boolean;
   pendingAmount?: string;
   pendingCurrency?: string;
   pendingDate?: string;
-};
+}
+
+// Colour palette for avatar fallbacks (deterministic by id)
+const AVATAR_COLORS = [
+  "bg-blue-100 text-blue-700",
+  "bg-green-100 text-green-700",
+  "bg-purple-100 text-purple-700",
+  "bg-orange-100 text-orange-700",
+  "bg-yellow-100 text-yellow-700",
+  "bg-red-100 text-red-700",
+  "bg-indigo-100 text-indigo-700",
+  "bg-pink-100 text-pink-700",
+  "bg-emerald-100 text-emerald-700",
+];
+
+/** Maps an API Recipient to the display shape */
+function toRecipientDisplay(r: ApiRecipient): RecipientDisplay {
+  const name = `${r.first_name} ${r.last_name}`.trim();
+  const initials = `${(r.first_name?.[0] ?? "").toUpperCase()}${(r.last_name?.[0] ?? "").toUpperCase()}`;
+  const color = AVATAR_COLORS[r.id % AVATAR_COLORS.length];
+
+  // Determine method from pickup_method_id (1 = bank, 3/8 = wallet-like)
+  const isWallet = r.pickup_method_id != null && r.pickup_method_id !== 1;
+  const method = isWallet ? "wallet" : "bank";
+  const methodLabel = r.institution_name
+    ? r.institution_name
+    : isWallet
+      ? "Mobile Wallet"
+      : "Bank Deposit";
+
+  return {
+    id: r.id,
+    name,
+    account: r.account_no ?? "",
+    bank: r.institution_name ?? "",
+    initials,
+    color,
+    country: r.address?.country?.code ?? "",
+    countryId: r.address?.country?.id ?? 0,
+    currencyId: r.currency_id,
+    pickupMethodId: r.pickup_method_id,
+    method,
+    methodLabel,
+  };
+}
+
+/** Loading skeleton for the recipient list */
+function RecipientListSkeleton() {
+  return (
+    <div className="space-y-2">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50">
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-48" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Error state component */
+function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <Card className="p-6 border-red-100 bg-red-50/50">
+      <div className="flex flex-col items-center gap-3 text-center">
+        <AlertCircle className="h-8 w-8 text-red-400" />
+        <p className="text-sm text-red-600 font-medium">{message}</p>
+        <Button variant="outline" size="sm" onClick={onRetry} className="gap-2">
+          <RefreshCw className="h-3 w-3" />
+          Try Again
+        </Button>
+      </div>
+    </Card>
+  );
+}
 
 export default function SelectRecipient() {
   const [location, setLocation] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const [pendingWarningOpen, setPendingWarningOpen] = useState(false);
-  const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(null);
+  const [selectedRecipient, setSelectedRecipient] = useState<RecipientDisplay | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const { toast } = useToast();
+
+  // ── URL query params (passed from send-money.tsx handleContinue) ──
   const countryFilter = searchParams.get("country");
   const methodFilter = searchParams.get("method");
+  const deliveryIdParam = searchParams.get("deliveryId");
+  const transferTimeIdParam = searchParams.get("transferTimeId");
+  const transactionIdParam = searchParams.get("transactionId");
+  const amountParam = searchParams.get("amount");
+  const receiveAmountParam = searchParams.get("receiveAmount");
 
-  const recipients: Recipient[] = [
-    { id: 1, name: "Maria Garcia", account: "08012345678", bank: "Opay", initials: "MG", color: "bg-blue-100 text-blue-700", country: "NG", method: "wallet", methodLabel: "Opay" },
-    { id: 2, name: "Jean Pierre", account: "**** 5678", bank: "UBA Nigeria", initials: "JP", color: "bg-green-100 text-green-700", country: "NG", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 3, name: "Liam Wilson", account: "**** 9012", bank: "Ecobank Ghana", initials: "LW", color: "bg-purple-100 text-purple-700", country: "GH", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 4, name: "Sofia Rossi", account: "0912345678", bank: "MoMo Ghana", initials: "SR", color: "bg-orange-100 text-orange-700", country: "GH", method: "wallet", methodLabel: "MTN MoMo" },
-    { id: 5, name: "Amadou Diallo", account: "077889900", bank: "Orange Money", initials: "AD", color: "bg-yellow-100 text-yellow-700", country: "SN", method: "wallet", methodLabel: "Orange Money" },
-    { id: 6, name: "Fatima Zahra", account: "**** 2233", bank: "Attijariwafa Bank", initials: "FZ", color: "bg-red-100 text-red-700", country: "MA", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 7, name: "Kofi Mensah", account: "055443322", bank: "Wave", initials: "KM", color: "bg-blue-100 text-blue-700", country: "SN", method: "wallet", methodLabel: "Wave" },
-    { id: 8, name: "Suresh Kumar", account: "**** 6677", bank: "State Bank of India", initials: "SK", color: "bg-indigo-100 text-indigo-700", country: "IN", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 9, name: "Binh Nguyen", account: "0988776655", bank: "Momo VN", initials: "BN", color: "bg-emerald-100 text-emerald-700", country: "VN", method: "wallet", methodLabel: "MoMo" },
-    { id: 10, name: "Ricardo Silva", account: "**** 1122", bank: "Itaú Unibanco", initials: "RS", color: "bg-orange-100 text-orange-700", country: "BR", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 11, name: "Rahat Ahmed", account: "01712345678", bank: "bKash", initials: "RA", color: "bg-pink-100 text-pink-700", country: "BD", method: "wallet", methodLabel: "bKash" },
-    { id: 12, name: "Nusrat Jahan", account: "01887654321", bank: "Nagad", initials: "NJ", color: "bg-orange-100 text-orange-700", country: "BD", method: "wallet", methodLabel: "Nagad", hasPendingTransaction: true, pendingAmount: "5,000", pendingCurrency: "BDT", pendingDate: "Jan 18, 2026" },
-    { id: 13, name: "Mofizur Rahman", account: "**** 4455", bank: "Dutch-Bangla Bank", initials: "MR", color: "bg-blue-100 text-blue-700", country: "BD", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 14, name: "Alpha Diallo", account: "066123456", bank: "Orange Money", initials: "AD", color: "bg-orange-100 text-orange-700", country: "CI", method: "wallet", methodLabel: "Orange Money" },
-    { id: 15, name: "Jean Kouassi", account: "**** 9900", bank: "Société Générale", initials: "JK", color: "bg-blue-100 text-blue-700", country: "CI", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 16, name: "Kamran Akmal", account: "03001234567", bank: "JazzCash", initials: "KA", color: "bg-yellow-100 text-yellow-700", country: "PK", method: "wallet", methodLabel: "JazzCash" },
-    { id: 17, name: "Sajid Khan", account: "**** 7766", bank: "Habib Bank", initials: "SK", color: "bg-green-100 text-green-700", country: "PK", method: "bank", methodLabel: "Bank Deposit" },
-    { id: 18, name: "M-Pesa User", account: "0712345678", bank: "Safaricom", initials: "MP", color: "bg-green-100 text-green-700", country: "KE", method: "wallet", methodLabel: "M-Pesa" },
-  ];
+  // ── Fetch recipients from GET /v1/recipients ──
+  // Mirrors SelectRecipient.js: componentDidMount → onFetchRecipients
+  const {
+    data: apiRecipients,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useRecipients();
 
-  const handleRecipientClick = (recipient: Recipient) => {
-    if (recipient.hasPendingTransaction) {
-      setSelectedRecipient(recipient);
-      setPendingWarningOpen(true);
-    } else {
-      navigateToSource(recipient);
+  // ── PATCH /v1/transaction mutation ──
+  // Mirrors SelectRecipient.js: updateTransactionWithRecipient
+  const updateTransactionMutation = useUpdateTransactionWithRecipient();
+
+  // ── Map API recipients to display objects ──
+  const recipients: RecipientDisplay[] = useMemo(() => {
+    if (!apiRecipients || apiRecipients.length === 0) return [];
+    return apiRecipients.map(toRecipientDisplay);
+  }, [apiRecipients]);
+
+  // ── Filter recipients by country, delivery method, and search query ──
+  // Mirrors SelectRecipient.js: recipientList filter by pickup_method_id, currency_id, country
+  const filteredRecipients = useMemo(() => {
+    let list = recipients;
+
+    // Filter by delivery method ID (pickup_method_id) if present
+    if (deliveryIdParam) {
+      const deliveryId = Number(deliveryIdParam);
+      list = list.filter((r) => r.pickupMethodId === deliveryId);
     }
-  };
 
-  const navigateToSource = (recipient: Recipient) => {
-    const country = countryFilter || recipient.country;
-    setLocation(`/source?country=${country}&amount=${searchParams.get('amount') || ''}&method=${recipient.method}&recipientId=${recipient.id}&recipientName=${encodeURIComponent(recipient.name)}&recipientBank=${encodeURIComponent(recipient.bank)}&recipientAccount=${encodeURIComponent(recipient.account)}&deliveryMethod=${recipient.method}`);
-  };
+    // Filter by country code
+    if (countryFilter) {
+      list = list.filter((r) => r.country === countryFilter);
+    }
 
-  const filteredRecipients = recipients.filter(r => {
-    if (countryFilter && r.country !== countryFilter) return false;
-    if (methodFilter && r.method !== methodFilter) return false;
-    return true;
-  });
+    // Filter by method type (bank/wallet) if no deliveryId
+    if (methodFilter && !deliveryIdParam) {
+      list = list.filter((r) => r.method === methodFilter);
+    }
 
-  // If we have filters but no matching recipients, we should prioritize the filtered view
-  // If we have no filters at all (e.g. from general menu), we show all
-  const isFiltered = !!(countryFilter && methodFilter);
+    // Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (r) =>
+          r.name.toLowerCase().includes(q) ||
+          r.account.toLowerCase().includes(q) ||
+          r.bank.toLowerCase().includes(q),
+      );
+    }
+
+    return list;
+  }, [recipients, countryFilter, methodFilter, deliveryIdParam, searchQuery]);
+
+  const isFiltered = !!(countryFilter && (methodFilter || deliveryIdParam));
+
+  /**
+   * Handles recipient selection:
+   * 1. Calls PATCH /v1/transaction with { transaction_id, recipient_id }
+   * 2. On success → navigates to the reason/source page
+   *
+   * Mirrors SelectRecipient.js → handleUpdateTransaction
+   */
+  const handleSelectRecipient = useCallback(
+    async (recipient: RecipientDisplay) => {
+      if (!transactionIdParam) {
+        // No transaction in progress — navigate without patching
+        navigateToNext(recipient);
+        return;
+      }
+
+      setIsUpdating(true);
+      try {
+        const result = await updateTransactionMutation.mutateAsync({
+          transaction_id: transactionIdParam,
+          recipient_id: recipient.id,
+        });
+
+        if (result.success) {
+          navigateToNext(recipient);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Failed to select recipient",
+            description: result.message ?? "Something went wrong. Please try again.",
+          });
+        }
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "An unexpected error occurred";
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: message,
+        });
+      } finally {
+        setIsUpdating(false);
+      }
+    },
+    [transactionIdParam, updateTransactionMutation, toast],
+  );
+
+  /** Navigate to the next page after recipient selection */
+  const navigateToNext = useCallback(
+    (recipient: RecipientDisplay) => {
+      const country = countryFilter || recipient.country;
+      const params = new URLSearchParams({
+        country,
+        amount: amountParam ?? "",
+        receiveAmount: receiveAmountParam ?? "",
+        method: recipient.method,
+        recipientId: String(recipient.id),
+        recipientName: recipient.name,
+        recipientBank: recipient.bank,
+        recipientAccount: recipient.account,
+        deliveryMethod: recipient.method,
+        ...(deliveryIdParam ? { deliveryId: deliveryIdParam } : {}),
+        ...(transferTimeIdParam ? { transferTimeId: transferTimeIdParam } : {}),
+        ...(transactionIdParam ? { transactionId: transactionIdParam } : {}),
+      });
+      setLocation(`/source?${params.toString()}`);
+    },
+    [countryFilter, amountParam, receiveAmountParam, deliveryIdParam, transferTimeIdParam, transactionIdParam, setLocation],
+  );
+
+  const handleRecipientClick = useCallback(
+    (recipient: RecipientDisplay) => {
+      if (recipient.hasPendingTransaction) {
+        setSelectedRecipient(recipient);
+        setPendingWarningOpen(true);
+      } else {
+        handleSelectRecipient(recipient);
+      }
+    },
+    [handleSelectRecipient],
+  );
+
+  const navigateToSource = useCallback(
+    (recipient: RecipientDisplay) => {
+      handleSelectRecipient(recipient);
+    },
+    [handleSelectRecipient],
+  );
 
   return (
     <MobileLayout title="Select Recipient" onBack={() => setLocation("/")}>
@@ -89,7 +285,12 @@ export default function SelectRecipient() {
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input placeholder="Search name, email, or account" className="pl-9 bg-white border-none shadow-sm h-12 rounded-xl" />
+          <Input
+            placeholder="Search name, email, or account"
+            className="pl-9 bg-white border-none shadow-sm h-12 rounded-xl"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
 
         {/* New Recipient */}
@@ -106,7 +307,27 @@ export default function SelectRecipient() {
           </div>
         </button>
 
+        {/* Loading State */}
+        {isLoading && <RecipientListSkeleton />}
+
+        {/* Error State */}
+        {isError && !isLoading && (
+          <ErrorState
+            message={error?.message ?? "Failed to load recipients. Please try again."}
+            onRetry={() => refetch()}
+          />
+        )}
+
+        {/* Updating overlay */}
+        {isUpdating && (
+          <div className="flex items-center justify-center gap-2 py-4">
+            <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            <span className="text-sm text-gray-500 font-medium">Selecting recipient...</span>
+          </div>
+        )}
+
         {/* Recipient List */}
+        {!isLoading && !isError && (
         <div className="space-y-3">
           <div className="flex justify-between items-center px-1">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
@@ -114,58 +335,18 @@ export default function SelectRecipient() {
             </h3>
             {isFiltered && (
               <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">
-                {countryFilter} • {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}
+                {countryFilter} {methodFilter ? `• ${methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}` : ""}
               </span>
             )}
           </div>
           
           <div className="space-y-2">
-            {isFiltered ? (
-              filteredRecipients.length > 0 ? (
-                filteredRecipients.map((recipient) => (
-                  <div 
-                    key={recipient.id}
-                    onClick={() => handleRecipientClick(recipient)}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
-                  >
-                    <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
-                      <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-gray-900">{recipient.name}</h4>
-                      <p className="text-xs text-gray-500">{recipient.bank} • {recipient.methodLabel}</p>
-                      <p className="text-[10px] text-gray-400 font-medium">{recipient.account}</p>
-                    </div>
-                    <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
-                  </div>
-                ))
-              ) : (
-                <div className="py-12 text-center space-y-3 bg-white rounded-2xl border border-dashed border-gray-200">
-                  <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
-                    <User2 className="h-6 w-6 text-gray-300" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900">No matching recipients</p>
-                    <p className="text-xs text-gray-500 px-6 mt-1">
-                      We couldn't find any recipients for {countryFilter} via {methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}.
-                    </p>
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="rounded-full text-xs font-bold border-gray-200"
-                    onClick={() => setLocation(`/add-recipient?country=${countryFilter || ''}&method=${methodFilter || 'bank'}`)}
-                  >
-                    <UserPlus2 className="h-3 w-3 mr-1" /> Add New
-                  </Button>
-                </div>
-              )
-            ) : (
-              recipients.map((recipient) => (
+            {filteredRecipients.length > 0 ? (
+              filteredRecipients.map((recipient) => (
                 <div 
                   key={recipient.id}
-                  onClick={() => handleRecipientClick(recipient)}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group"
+                  onClick={() => !isUpdating && handleRecipientClick(recipient)}
+                  className={`flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98] group ${isUpdating ? "opacity-50 pointer-events-none" : ""}`}
                 >
                   <Avatar className="h-12 w-12 border-2 border-white shadow-sm">
                     <AvatarFallback className={recipient.color}>{recipient.initials}</AvatarFallback>
@@ -178,9 +359,36 @@ export default function SelectRecipient() {
                   <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-primary transition-colors" />
                 </div>
               ))
+            ) : (
+              <div className="py-12 text-center space-y-3 bg-white rounded-2xl border border-dashed border-gray-200">
+                <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
+                  <User2 className="h-6 w-6 text-gray-300" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-gray-900">
+                    {searchQuery ? "No search results" : "No matching recipients"}
+                  </p>
+                  <p className="text-xs text-gray-500 px-6 mt-1">
+                    {searchQuery
+                      ? `No recipients match "${searchQuery}".`
+                      : isFiltered
+                        ? `No recipients found for ${countryFilter}${methodFilter ? ` via ${methodFilter === 'bank' ? 'Bank Deposit' : 'Mobile Wallet'}` : ""}.`
+                        : "You haven't added any recipients yet."}
+                  </p>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="rounded-full text-xs font-bold border-gray-200"
+                  onClick={() => setLocation(`/add-recipient?country=${countryFilter || ''}&method=${methodFilter || 'bank'}`)}
+                >
+                  <UserPlus2 className="h-3 w-3 mr-1" /> Add New
+                </Button>
+              </div>
             )}
           </div>
         </div>
+        )}
 
       </div>
 
