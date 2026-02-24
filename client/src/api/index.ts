@@ -23,3 +23,9 @@ export type {
   DeliveryFee,
   AvailableDeliveriesResponse,
 } from "./types/delivery";
+export { getExchangeRate } from "./services/exchange-rate";
+export type {
+  ExchangeRateBody,
+  ExchangeRateData,
+  ExchangeRateResponse,
+} from "./types/exchange-rate";

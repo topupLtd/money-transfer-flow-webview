@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { useLocation } from "wouter";
 import MobileLayout from "@/components/layout/MobileLayout";
 import { ArrowRightLeft, ChevronDown, Landmark, Smartphone, Ticket, Percent, AlertCircle, RefreshCw, Clock, Loader2 } from "lucide-react";
@@ -27,6 +27,7 @@ import {
 import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 import { useCurrencyCountries } from "@/hooks/useCurrencyCountries";
 import { useAvailableDeliveries } from "@/hooks/useAvailableDeliveries";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 import { config } from "@/config";
 import type { CurrencyCountry } from "@/api/types/currency";
 import type { DeliveryMethod } from "@/api/types/delivery";
@@ -139,6 +140,16 @@ export default function SendMoney() {
   const [selectedTransferTimeId, setSelectedTransferTimeId] = useState<number | null>(null);
   const [promoCode, setPromoCode] = useState("");
 
+  // Tracks which input the user is typing in (mirrors RateCheckScreen.js `typingType`).
+  // "from" = user is typing send amount, "to" = user is typing receive amount.
+  const [typingType, setTypingType] = useState<"from" | "to" | "">("from");
+
+  // Debounced amounts for the exchange rate API call (avoids calling on every keystroke).
+  // Mirrors RateCheckScreen.js `debounce_fun`.
+  const [debouncedSendAmount, setDebouncedSendAmount] = useState("1000");
+  const [debouncedReceiveAmount, setDebouncedReceiveAmount] = useState("");
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Fetch currency-country data from API
   const { data: apiCountries, isLoading, isError, error, refetch } = useCurrencyCountries();
 
@@ -215,20 +226,90 @@ export default function SendMoney() {
     }
   }, [sortedDeliveries]);
 
-  const calculatedReceiveAmount = (parseFloat(sendAmount || "0") * selectedCountry.rate).toFixed(2);
-  const displayReceiveAmount = receiveAmount || calculatedReceiveAmount;
+  // ── Exchange Rate API ──
+  // Mirrors RateCheckScreen.js: setExchangeRate → onFetchExchangeRate
+  // Called automatically when currency, delivery method, or debounced amounts change.
+  const {
+    data: exchangeRateResponse,
+    isLoading: isLoadingRate,
+    isError: isRateError,
+    error: rateError,
+    isFetching: isFetchingRate,
+    dataUpdatedAt,
+  } = useExchangeRate({
+    userCurrencyCountryId: fromCountry?.currencyCountryId,
+    recipientCurrencyCountryId: selectedCountry?.currencyCountryId,
+    sendDeliveryMethod: 1, // default payment method ID (card), mirrors RateCheckScreen.js
+    receiveDeliveryMethod: selectedDeliveryId,
+    tranType: selectedTransferTimeId,
+    amount: typingType === "to" ? 0 : debouncedSendAmount || "0",
+    recipientAmount: typingType === "from" || typingType === "" ? 0 : debouncedReceiveAmount || "0",
+  });
+
+  // Extract the exchange rate value from the API response
+  const exchangeRate = exchangeRateResponse?.data?.rate ?? null;
+  const rateErrorMessage = exchangeRateResponse?.data?.errorMessage ?? null;
+
+  // When the exchange rate response comes back, update the calculated counterpart amount.
+  // Mirrors RateCheckScreen.js: setReceiveAmount / setSendAmount after successful fetch.
+  // We depend on `dataUpdatedAt` (not just `exchangeRate`) so the effect fires on every
+  // new API response — even when the rate number hasn't changed (e.g. user changed only
+  // the receive amount while the corridor rate stayed the same).
+  useEffect(() => {
+    if (exchangeRate == null || exchangeRate === 0) return;
+
+    if (typingType === "from" || typingType === "") {
+      // User typed a send amount → compute receive
+      const send = parseFloat(sendAmount || "0");
+      const receive = (send * exchangeRate).toFixed(2);
+      setReceiveAmount(receive);
+    } else if (typingType === "to") {
+      // User typed a receive amount → compute send
+      const recv = parseFloat(receiveAmount || "0");
+      const send = (recv / exchangeRate).toFixed(2);
+      setSendAmount(send);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exchangeRate, dataUpdatedAt]);
+
+  const displayReceiveAmount = receiveAmount || (exchangeRate ? (parseFloat(sendAmount || "0") * exchangeRate).toFixed(2) : "0.00");
+
+  // Debounce helper: updates debounced amounts after 1 s delay (mirrors RateCheckScreen.js debounce_fun)
+  const debounceSendAmount = useCallback((value: string) => {
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedSendAmount(value);
+      setDebouncedReceiveAmount("");
+    }, 1000);
+  }, []);
+
+  const debounceReceiveAmount = useCallback((value: string) => {
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedReceiveAmount(value);
+      setDebouncedSendAmount("");
+    }, 1000);
+  }, []);
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
+  }, []);
 
   const handleSendAmountChange = useCallback((value: string) => {
     setSendAmount(value);
     setReceiveAmount("");
-  }, []);
+    setTypingType("from");
+    debounceSendAmount(value);
+  }, [debounceSendAmount]);
 
   const handleReceiveAmountChange = useCallback((value: string) => {
     setReceiveAmount(value);
-    const numValue = parseFloat(value || "0");
-    const calculatedSend = (numValue / selectedCountry.rate).toFixed(2);
-    setSendAmount(calculatedSend);
-  }, [selectedCountry.rate]);
+    setTypingType("to");
+    debounceReceiveAmount(value);
+  }, [debounceReceiveAmount]);
 
   // Mirrors RateCheckScreen.js: setDeliveryMethod
   const handleDeliveryMethodChange = useCallback(
@@ -347,8 +428,29 @@ export default function SendMoney() {
           </div>
           <div className="bg-gray-50 px-5 py-3 text-[10px] text-gray-400 flex justify-between items-center border-t border-gray-100">
             <span className="font-bold uppercase tracking-wider">Exchange Rate</span>
-            <span className="font-bold text-secondary">1 {fromCountry?.currency ?? "EUR"} = {selectedCountry.rate} {selectedCountry.currency}</span>
+            {isFetchingRate ? (
+              <div className="flex items-center gap-1">
+                <Loader2 className="h-3 w-3 animate-spin text-primary" />
+                <span className="text-gray-400 font-bold">Updating...</span>
+              </div>
+            ) : isRateError ? (
+              <span className="font-bold text-red-500">Rate unavailable</span>
+            ) : exchangeRate ? (
+              <span className="font-bold text-secondary">1 {fromCountry?.currency ?? "EUR"} = {exchangeRate.toFixed(4)} {selectedCountry.currency}</span>
+            ) : (
+              <span className="font-bold text-secondary">1 {fromCountry?.currency ?? "EUR"} = -- {selectedCountry.currency}</span>
+            )}
           </div>
+
+          {/* Rate error message from API (e.g. min/max amount violations) */}
+          {rateErrorMessage && (
+            <div className="px-5 py-2 bg-red-50 border-t border-red-100">
+              <p className="text-xs text-red-600 font-medium flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                {rateErrorMessage}
+              </p>
+            </div>
+          )}
         </Card>
         )}
 

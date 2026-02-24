@@ -9,4 +9,7 @@ export const ENDPOINTS = {
 
   /** Available pickup methods & transfer times */
   AVAILABLE_PICKUP_METHOD_TRANSFER_TIME: "/available-pickup-method-transfer-time",
+
+  /** Exchange rate (v2) */
+  EXCHANGE_RATE: "/exchange-rate",
 } as const;
