@@ -51,6 +51,8 @@ export default function Preview() {
   const recipientBank = searchParams.get("recipientBank") || "Bank";
   const recipientAccount = searchParams.get("recipientAccount") || "****";
   const deliveryMethod = searchParams.get("deliveryMethod") || "bank";
+  const sourceName = searchParams.get("sourceName") || "";
+  const reasonName = searchParams.get("reasonName") || "";
   
   const selectedCountry = COUNTRIES.find(c => c.code === countryCode) || COUNTRIES[1];
   const rate = selectedCountry.rate;
@@ -110,6 +112,27 @@ export default function Preview() {
                 </div>
              </div>
           </div>
+
+          {/* Source of Fund & Transfer Reason */}
+          {(sourceName || reasonName) && (
+            <div className="space-y-4 pb-4 border-b border-gray-100">
+              <h3 className="font-semibold text-gray-900 pt-2">Additional Info</h3>
+              <div className="space-y-3 text-sm">
+                {sourceName && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Source of Funds</span>
+                    <span className="font-semibold text-gray-900">{sourceName}</span>
+                  </div>
+                )}
+                {reasonName && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Transfer Reason</span>
+                    <span className="font-semibold text-gray-900">{reasonName}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <h3 className="font-semibold text-gray-900 pt-2">Transfer Details</h3>
           
