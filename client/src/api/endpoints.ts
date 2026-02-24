@@ -24,4 +24,13 @@ export const ENDPOINTS = {
 
   /** Update transaction (PATCH) — associate recipient with quote */
   UPDATE_TRANSACTION: "/transaction",
+
+  /** Source of funds list (⚠️ SHUFFLED: swapped with transfer-reasons due to API response mismatch — swap back later) */
+  ORIGIN_OF_FUNDS: "/transfer-reasons",
+
+  /** Transfer reasons list (⚠️ SHUFFLED: swapped with origin-of-funds due to API response mismatch — swap back later) */
+  TRANSFER_REASONS: "/origin-of-funds",
+
+  /** Update transaction reason & source of funds */
+  UPDATE_REASON_SOURCE: "/transaction/reason-source",
 } as const;

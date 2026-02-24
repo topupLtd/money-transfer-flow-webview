@@ -48,3 +48,14 @@ export {
   EXCHANGE_RATE_SENDER_ERROR_CODE,
   EXCHANGE_RATE_RECEIVER_ERROR_CODE,
 } from "./types/transaction";
+export {
+  fetchSourceOfFunds,
+  fetchTransferReasons,
+  updateReasonSource,
+} from "./services/reason-source";
+export type {
+  ReasonSourceItem,
+  UpdateReasonSourceBody,
+  UpdateReasonSourceResponse,
+} from "./types/reason-source";
+export { OTHER_REASON_ID, OTHER_SOURCE_ID } from "./types/reason-source";
