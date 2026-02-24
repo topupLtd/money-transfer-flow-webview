@@ -12,4 +12,10 @@ export const ENDPOINTS = {
 
   /** Exchange rate (v2) */
   EXCHANGE_RATE: "/exchange-rate",
+
+  /** Transaction quote */
+  TRANSACTION_QUOTE: "/quote-user",
+
+  /** Create transaction */
+  CREATE_TRANSACTION: "/transaction",
 } as const;

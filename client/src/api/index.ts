@@ -29,3 +29,15 @@ export type {
   ExchangeRateData,
   ExchangeRateResponse,
 } from "./types/exchange-rate";
+export { fetchTransactionQuote, createTransaction } from "./services/transaction";
+export type {
+  TransactionQuoteBody,
+  TransactionQuoteResponse,
+  CreateTransactionBody,
+  CreateTransactionResponse,
+} from "./types/transaction";
+export {
+  MINIMUM_SENDING_AMOUNT,
+  EXCHANGE_RATE_SENDER_ERROR_CODE,
+  EXCHANGE_RATE_RECEIVER_ERROR_CODE,
+} from "./types/transaction";

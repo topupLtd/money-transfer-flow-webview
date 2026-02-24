@@ -28,7 +28,14 @@ import { BottomSheetSelect } from "@/components/ui/bottom-sheet-select";
 import { useCurrencyCountries } from "@/hooks/useCurrencyCountries";
 import { useAvailableDeliveries } from "@/hooks/useAvailableDeliveries";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
+import { useTransactionQuote, useCreateTransaction } from "@/hooks/useTransactionQuote";
+import { useToast } from "@/hooks/use-toast";
 import { config } from "@/config";
+import {
+  MINIMUM_SENDING_AMOUNT,
+  EXCHANGE_RATE_SENDER_ERROR_CODE,
+  EXCHANGE_RATE_RECEIVER_ERROR_CODE,
+} from "@/api/types/transaction";
 import type { CurrencyCountry } from "@/api/types/currency";
 import type { DeliveryMethod } from "@/api/types/delivery";
 
@@ -140,6 +147,14 @@ export default function SendMoney() {
   const [selectedTransferTimeId, setSelectedTransferTimeId] = useState<number | null>(null);
   const [promoCode, setPromoCode] = useState("");
 
+  // ── Validation & error state (mirrors RateCheckScreen.js state) ──
+  const [warning, setWarning] = useState(false);
+  const [senderErrorMessage, setSenderErrorMessage] = useState("");
+  const [receiverErrorMessage, setReceiverErrorMessage] = useState("");
+  const [isProceeding, setIsProceeding] = useState(false);
+
+  const { toast } = useToast();
+
   // Tracks which input the user is typing in (mirrors RateCheckScreen.js `typingType`).
   // "from" = user is typing send amount, "to" = user is typing receive amount.
   const [typingType, setTypingType] = useState<"from" | "to" | "">("from");
@@ -250,6 +265,11 @@ export default function SendMoney() {
   const exchangeRate = exchangeRateResponse?.data?.rate ?? null;
   const rateErrorMessage = exchangeRateResponse?.data?.errorMessage ?? null;
 
+  // ── Transaction Mutations ──
+  // Mirrors RateCheckScreen.js: fetchTransactionQuote + createTransaction (proceed)
+  const transactionQuoteMutation = useTransactionQuote();
+  const createTransactionMutation = useCreateTransaction();
+
   // When the exchange rate response comes back, update the calculated counterpart amount.
   // Mirrors RateCheckScreen.js: setReceiveAmount / setSendAmount after successful fetch.
   // We depend on `dataUpdatedAt` (not just `exchangeRate`) so the effect fires on every
@@ -325,11 +345,234 @@ export default function SendMoney() {
     [sortedDeliveries],
   );
 
-  const handleContinue = useCallback(() => {
-    setLocation(
-      `/select-recipient?country=${selectedCountry.code}&method=${deliveryMethod}&amount=${sendAmount}&deliveryId=${selectedDeliveryId ?? ""}&transferTimeId=${selectedTransferTimeId ?? ""}`,
-    );
-  }, [setLocation, selectedCountry.code, deliveryMethod, sendAmount, selectedDeliveryId, selectedTransferTimeId]);
+  /**
+   * Clears sender / receiver inline error messages.
+   * Mirrors RateCheckScreen.js `clearErrorMessage`.
+   */
+  const clearErrorMessages = useCallback(() => {
+    setSenderErrorMessage("");
+    setReceiverErrorMessage("");
+  }, []);
+
+  /**
+   * Handles the "Continue" button press.
+   *
+   * Full port of RateCheckScreen.js `proceed()`:
+   *  1. Validates that required fields are present.
+   *  2. Validates send / receive amounts (min amount, NaN checks).
+   *  3. Calls POST /v1/quote-user (fetchTransactionQuote).
+   *  4. On quote success → calls POST /v1/transaction (createTransaction).
+   *  5. On transaction success → navigates to select-recipient (or further).
+   *  6. Handles all known error codes with toasts & inline messages.
+   */
+  const handleContinue = useCallback(async () => {
+    // Reset previous errors
+    clearErrorMessages();
+    setWarning(false);
+
+    // ── 1. Required-field guard (mirrors proceed's outer if-check) ──
+    if (
+      !fromCountry?.currencyCountryId ||
+      !selectedCountry?.currencyCountryId ||
+      !selectedTransferTimeItem?.id ||
+      sendAmount === "" ||
+      !selectedDeliveryId ||
+      rateErrorMessage // block if there's a rate-level error (e.g. min/max violation)
+    ) {
+      setWarning(true);
+      toast({
+        variant: "destructive",
+        title: "Missing fields",
+        description: "Please fill in all required fields before continuing.",
+      });
+      return;
+    }
+
+    // ── 2. Amount validation (mirrors proceed's amount checks) ──
+    // Normalise comma-decimal locales to dot-decimal
+    const youSend = sendAmount.replace(",", ".");
+    const theyReceive = (receiveAmount || displayReceiveAmount).replace(",", ".");
+
+    const youSendNum = parseFloat(youSend);
+    const theyReceiveNum = parseFloat(theyReceive);
+
+    if (
+      youSendNum < MINIMUM_SENDING_AMOUNT ||
+      isNaN(youSendNum) ||
+      isNaN(theyReceiveNum) ||
+      youSend === "" ||
+      theyReceive === ""
+    ) {
+      setWarning(true);
+      toast({
+        variant: "destructive",
+        title: "Invalid amount",
+        description: `The sending amount must be at least ${MINIMUM_SENDING_AMOUNT} and both amounts must be valid numbers.`,
+      });
+      return;
+    }
+
+    // ── 3. Build quote body (mirrors proceed's `body` object) ──
+    const quoteBody = {
+      user_currency_countries_id: fromCountry.currencyCountryId,
+      recipient_currency_countries_id: selectedCountry.currencyCountryId,
+      user_amount: youSend,
+      recipient_amount: theyReceive,
+      pickup_method_id: selectedDeliveryItem?.id ?? selectedDeliveryId,
+      payment_method_id: 1, // default card payment method, mirrors RateCheckScreen.js
+      transfer_time_id: selectedTransferTimeItem.id,
+      promo_code: promoCode || null,
+    };
+
+    setIsProceeding(true);
+
+    try {
+      // ── 4. Fetch transaction quote ──
+      const quoteResult = await transactionQuoteMutation.mutateAsync(quoteBody);
+
+      if (!quoteResult.success) {
+        // Handle specific error codes (mirrors proceed's error handling)
+        const errorCode = quoteResult.errorCode;
+
+        if (errorCode === EXCHANGE_RATE_SENDER_ERROR_CODE) {
+          setSenderErrorMessage(quoteResult.message ?? "Sender amount error");
+          return;
+        }
+
+        if (errorCode === EXCHANGE_RATE_RECEIVER_ERROR_CODE) {
+          setReceiverErrorMessage(quoteResult.message ?? "Receiver amount error");
+          return;
+        }
+
+        // Transfer limit errors (80005 / 80006)
+        if (errorCode === 80005 || errorCode === 80006) {
+          toast({
+            variant: "destructive",
+            title: "Transfer limit exceeded",
+            description:
+              quoteResult.message ?? "You have exceeded your transfer limit. Please verify your account.",
+          });
+          setLocation("/transfer-limits");
+          return;
+        }
+
+        // General support-redirect errors (80001–80004)
+        if (
+          errorCode === 80001 ||
+          errorCode === 80002 ||
+          errorCode === 80003 ||
+          errorCode === 80004
+        ) {
+          toast({
+            variant: "destructive",
+            title: "Something went wrong",
+            description: quoteResult.message ?? "Please contact support.",
+          });
+          return;
+        }
+
+        // Fallback for any other unsuccessful quote
+        toast({
+          variant: "destructive",
+          title: "Quote failed",
+          description: quoteResult.message ?? "Something went wrong. Please try again.",
+        });
+        return;
+      }
+
+      // ── 5. Quote succeeded → create transaction ──
+      const transactionId = quoteResult.data?.transaction_id ?? "";
+
+      const txResult = await createTransactionMutation.mutateAsync({
+        transaction_id: transactionId,
+      });
+
+      // Error code 70002 → support redirect (mirrors makeTransaction)
+      if (txResult.errorCode === 70002) {
+        toast({
+          variant: "destructive",
+          title: "Transaction error",
+          description: txResult.message ?? "Please contact support.",
+        });
+        return;
+      }
+
+      if (txResult.success) {
+        const user = txResult.data?.user;
+
+        if (user?.email_verified_at) {
+          // ── 6. Verified user → navigate to select recipient ──
+          setLocation(
+            `/select-recipient?country=${selectedCountry.code}` +
+            `&method=${deliveryMethod}` +
+            `&amount=${youSend}` +
+            `&receiveAmount=${theyReceive}` +
+            `&deliveryId=${selectedDeliveryId ?? ""}` +
+            `&transferTimeId=${selectedTransferTimeItem.id ?? ""}` +
+            `&transactionId=${transactionId}`,
+          );
+        } else {
+          // Profile incomplete (mirrors makeTransaction's else-branch)
+          if (!user?.first_name) {
+            toast({
+              variant: "destructive",
+              title: "Profile incomplete",
+              description: "Please complete your profile to continue.",
+            });
+            setLocation("/profile-details");
+            return;
+          }
+
+          toast({
+            title: "Account verification",
+            description: "Please verify your email to continue.",
+          });
+          setLocation("/profile");
+        }
+      } else if (txResult.code === 100) {
+        // Pending transaction (mirrors makeTransaction's pending check)
+        toast({
+          variant: "destructive",
+          title: "Pending transaction",
+          description: "You have a pending transaction. Please wait for it to complete.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Transaction failed",
+          description: txResult.message ?? "Something went wrong. Please try again.",
+        });
+      }
+    } catch (err: unknown) {
+      // Network / unexpected errors
+      const message =
+        err instanceof Error ? err.message : "An unexpected error occurred";
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: message,
+      });
+    } finally {
+      setIsProceeding(false);
+    }
+  }, [
+    fromCountry,
+    selectedCountry,
+    selectedTransferTimeItem,
+    selectedDeliveryItem,
+    selectedDeliveryId,
+    sendAmount,
+    receiveAmount,
+    displayReceiveAmount,
+    deliveryMethod,
+    promoCode,
+    rateErrorMessage,
+    transactionQuoteMutation,
+    createTransactionMutation,
+    setLocation,
+    toast,
+    clearErrorMessages,
+  ]);
 
   // Memoize country options for the BottomSheetSelect
   const countrySelectOptions = useMemo(
@@ -582,9 +825,37 @@ export default function SendMoney() {
           className="w-full h-12 text-base font-semibold rounded-xl shadow-md mt-4 bg-primary hover:bg-primary/90" 
           size="lg"
           onClick={handleContinue}
+          disabled={isProceeding || isFetchingRate}
         >
-          Continue
+          {isProceeding ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Processing...
+            </span>
+          ) : (
+            "Continue"
+          )}
         </Button>
+
+        {/* Sender error message (mirrors RateCheckScreen.js senderErrorMessage) */}
+        {senderErrorMessage && (
+          <div className="px-4 py-2 bg-red-50 border border-red-100 rounded-xl">
+            <p className="text-xs text-red-600 font-medium flex items-center gap-1">
+              <AlertCircle className="h-3 w-3 shrink-0" />
+              {senderErrorMessage}
+            </p>
+          </div>
+        )}
+
+        {/* Receiver error message (mirrors RateCheckScreen.js receiverErrorMessage) */}
+        {receiverErrorMessage && (
+          <div className="px-4 py-2 bg-red-50 border border-red-100 rounded-xl">
+            <p className="text-xs text-red-600 font-medium flex items-center gap-1">
+              <AlertCircle className="h-3 w-3 shrink-0" />
+              {receiverErrorMessage}
+            </p>
+          </div>
+        )}
       </div>
     </MobileLayout>
   );
