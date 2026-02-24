@@ -54,12 +54,14 @@ export default function Preview() {
   const sourceName = searchParams.get("sourceName") || "";
   const reasonName = searchParams.get("reasonName") || "";
   
+  const receiveAmount = searchParams.get("receiveAmount") || "";
+  const fee = parseFloat(searchParams.get("fee") || "0");
+  const discount = parseFloat(searchParams.get("discount") || "0");
+  const rate = searchParams.get("rate") || "";
   const selectedCountry = COUNTRIES.find(c => c.code === countryCode) || COUNTRIES[1];
-  const rate = selectedCountry.rate;
-  const receiveAmount = (amount * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const fee = 5.00;
-  const totalToPay = amount; // Assuming 100% fee discount for demo
+  const totalToPay = amount + fee - discount;
   const deliveryMethodLabel = deliveryMethod === "bank" ? "Bank Deposit" : "Mobile Wallet";
+  const hasDiscount = discount > 0;
 
   const handleSendNow = () => {
     setLocation(`/success?amount=${amount}`);
@@ -77,7 +79,7 @@ export default function Preview() {
         <Card className="bg-primary text-primary-foreground p-6 rounded-2xl border-none shadow-lg">
           <div className="text-center space-y-1">
             <p className="text-primary-foreground/80 text-sm">Recipient Gets</p>
-            <h2 className="text-3xl font-bold">{receiveAmount} {selectedCountry.currency}</h2>
+            <h2 className="text-3xl font-bold">{parseFloat(receiveAmount || "0").toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {selectedCountry.currency}</h2>
           </div>
         </Card>
 
@@ -141,18 +143,24 @@ export default function Preview() {
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">You Send</span>
               <span className="font-semibold text-gray-900">€ {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
+            {rate && (
             <div className="flex justify-between items-center">
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Exchange Rate</span>
               <span className="font-semibold text-primary">1 EUR = {rate} {selectedCountry.currency}</span>
             </div>
+            )}
+            {fee > 0 && (
             <div className="flex justify-between items-center">
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Transfer Fee</span>
-              <span className="font-semibold text-secondary">€ {fee.toFixed(2)}</span>
+              <span className={`font-semibold ${hasDiscount ? "line-through text-gray-400" : "text-secondary"}`}>€ {fee.toFixed(2)}</span>
             </div>
-             <div className="flex justify-between items-center">
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Discount (100%)</span>
-              <span className="font-semibold text-secondary">-€ {fee.toFixed(2)}</span>
+            )}
+            {hasDiscount && (
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Discount</span>
+              <span className="font-semibold text-green-600">-€ {discount.toFixed(2)}</span>
             </div>
+            )}
             
             <Separator />
             

@@ -500,6 +500,11 @@ export default function SendMoney() {
       if (txResult.success) {
         const user = txResult.data?.user;
 
+        // Extract fee / discount from quote response (passthrough fields)
+        const quoteFee = (quoteResult.data as any)?.fee ?? 0;
+        const quoteDiscount = (quoteResult.data as any)?.discount ?? 0;
+        const quoteRate = (quoteResult.data as any)?.exchange_rate?.rate ?? "";
+
         if (user?.email_verified_at) {
           // ── 6. Verified user → navigate to select recipient ──
           setLocation(
@@ -509,7 +514,10 @@ export default function SendMoney() {
             `&receiveAmount=${theyReceive}` +
             `&deliveryId=${selectedDeliveryId ?? ""}` +
             `&transferTimeId=${selectedTransferTimeItem.id ?? ""}` +
-            `&transactionId=${transactionId}`,
+            `&transactionId=${transactionId}` +
+            `&fee=${quoteFee}` +
+            `&discount=${quoteDiscount}` +
+            `&rate=${quoteRate}`,
           );
         } else {
           // Profile incomplete (mirrors makeTransaction's else-branch)
