@@ -3,6 +3,8 @@ import { ENDPOINTS } from "../endpoints";
 import type {
   Recipient,
   RecipientsResponse,
+  ParentRecipientsData,
+  ParentRecipientsResponse,
   UpdateTransactionWithRecipientBody,
   UpdateTransactionResponse,
 } from "../types/recipient";
@@ -28,4 +30,15 @@ export async function updateTransactionWithRecipient(
   body: UpdateTransactionWithRecipientBody,
 ): Promise<UpdateTransactionResponse> {
   return api.patch<UpdateTransactionResponse>(ENDPOINTS.UPDATE_TRANSACTION, body);
+}
+
+/**
+ * Fetches parent recipients from GET /v1/recipient/parents.
+ *
+ * Mirrors RN `fetchParentRecipients` Redux action.
+ * Returns recipients grouped by parent + pickup methods for filtering.
+ */
+export async function fetchParentRecipients(): Promise<ParentRecipientsData> {
+  const raw = await api.get<ParentRecipientsResponse>(ENDPOINTS.PARENT_RECIPIENTS);
+  return raw.data;
 }

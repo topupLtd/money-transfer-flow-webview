@@ -33,4 +33,7 @@ export const ENDPOINTS = {
 
   /** Update transaction reason & source of funds */
   UPDATE_REASON_SOURCE: "/transaction/reason-source",
+
+  /** Parent recipients list (recipients grouped by parent) */
+  PARENT_RECIPIENTS: "/recipient/parents",
 } as const;

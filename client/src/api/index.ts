@@ -36,12 +36,15 @@ export type {
   CreateTransactionBody,
   CreateTransactionResponse,
 } from "./types/transaction";
-export { fetchRecipients, updateTransactionWithRecipient } from "./services/recipient";
+export { fetchRecipients, updateTransactionWithRecipient, fetchParentRecipients } from "./services/recipient";
 export type {
   Recipient,
   RecipientsResponse,
   UpdateTransactionWithRecipientBody,
   UpdateTransactionResponse,
+  ParentRecipientsData,
+  ParentRecipientsResponse,
+  PickupMethod,
 } from "./types/recipient";
 export {
   MINIMUM_SENDING_AMOUNT,

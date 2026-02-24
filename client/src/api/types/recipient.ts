@@ -68,3 +68,27 @@ export const UpdateTransactionResponseSchema = z.object({
 });
 
 export type UpdateTransactionResponse = z.infer<typeof UpdateTransactionResponseSchema>;
+
+// ── Parent Recipients (GET /v1/recipient/parents) ──
+
+export const PickupMethodSchema = z.object({
+  id: z.number(),
+  name: z.string().optional(),
+  option: z.string().optional(),
+}).passthrough();
+
+export type PickupMethod = z.infer<typeof PickupMethodSchema>;
+
+export const ParentRecipientsDataSchema = z.object({
+  recipients: z.array(RecipientSchema),
+  pickup_methods: z.array(PickupMethodSchema),
+}).passthrough();
+
+export const ParentRecipientsResponseSchema = z.object({
+  success: z.boolean().optional(),
+  data: ParentRecipientsDataSchema,
+  message: z.string().optional(),
+}).passthrough();
+
+export type ParentRecipientsData = z.infer<typeof ParentRecipientsDataSchema>;
+export type ParentRecipientsResponse = z.infer<typeof ParentRecipientsResponseSchema>;
